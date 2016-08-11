@@ -25,7 +25,9 @@
 
 \usepackage{longtable}
 
-\usepackage[pdfborder={000}, colorlinks=true,linkcolor=black]{hyperref} %referencia
+\usepackage[colorlinks=true,linkcolor=black]{hyperref} %referencia
+
+\usepackage{float}
 
 % ********************************************************************
 % Re-usable information
@@ -89,6 +91,23 @@ pdfproducer = {pdflatex}
 %simplemente poniendo \begin{teorema} \end{teorema} ...
 \newtheorem{teorema}{Teorema}[chapter]
 \newtheorem{ejemplo}{Ejemplo}[chapter]
+
+% Definición de estilo de definición
+\usepackage{amsthm}
+
+
+\newtheoremstyle{definition_wo_parentheses}
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {0pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {.}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}\thmnumber{ #2.}\thmnote{ #3}}
+  
+  
+\theoremstyle{definition_wo_parentheses}	
 \newtheorem{definicion}{Definición}[chapter]
 
 \definecolor{gray97}{gray}{.97}
@@ -178,6 +197,11 @@ pdfproducer = {pdflatex}
 \makeatother
 
 \usepackage{pdfpages}
+\usepackage{gensymb}
+\usepackage{amsfonts}
+
+
+
 
 % ****************************************************************
 % DOCUMENTO
@@ -205,8 +229,7 @@ pdfproducer = {pdflatex}
 \input{capitulos/04_Conclusiones}
 %
 %%\nocite{*}
-%\bibliography{bibliografia/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía}
-%\bibliographystyle{miunsrturl}
+\input{capitulos/Bibliografia}
 %
 %\appendix
 %\input{apendices/manual_usuario/manual_usuario}
