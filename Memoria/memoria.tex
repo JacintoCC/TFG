@@ -66,6 +66,7 @@ pdfproducer = {pdflatex}
 \usepackage{url}
 \usepackage{colortbl,longtable}
 \usepackage[stable]{footmisc}
+\usepackage{amsthm}
 %\usepackage{index}
 
 %\makeindex
@@ -89,11 +90,15 @@ pdfproducer = {pdflatex}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 %Definimos los tipos teorema, ejemplo y definición podremos usar estos tipos
 %simplemente poniendo \begin{teorema} \end{teorema} ...
-\newtheorem{teorema}{Teorema}[chapter]
 \newtheorem{ejemplo}{Ejemplo}[chapter]
+\theoremstyle{plain}
+\newtheorem{teorema}{Teorema}[chapter]
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{proposicion}[teorema]{Proposición}
+\newtheorem{corolario}[teorema]{Corolario}
 
 % Definición de estilo de definición
-\usepackage{amsthm}
+
 
 
 \newtheoremstyle{definition_wo_parentheses}
@@ -199,6 +204,7 @@ pdfproducer = {pdflatex}
 \usepackage{pdfpages}
 \usepackage{gensymb}
 \usepackage{amsfonts}
+\usepackage{amsmath}
 
 
 

@@ -8,70 +8,27 @@
 
 \chapter{Desarrollo matemático}
 
-\section{Conceptos básicos de la inferencia}
-
-	En esta primera sección se hace un breve repaso de los conceptos estadísticos necesarios para comprender el contenido de la memoria así como presentar la notación.
+\section{Introducción a la inferencia}
+	\input{capitulos/secciones/02_1_IntroduccionInferencia}	
 	
-\begin{definicion}[Inferencia estadística]
-	Rama de la estadística en la que se usan las propiedades de una muestra para extraer conclusiones de la población. 
-\end{definicion}
-
-\begin{definicion}[Espacio muestral] 
-	Conjunto de los posibles resultados de un experimento aleatorio
-\end{definicion}
-
-\begin{definicion}[Variable aleatoria]
-	Función de conjuntos cuyo dominio es los elementos de un espacio muestral sobre el cual se ha definido una función de probabilidad y cuyo rango es $\mathbb{R}$.\\
-	$X$ es una variable aleatoria (v.a.) si para $x \in \mathbb{R}$ existe una probabilidad de que el valor tomado por la variable aleatoria sea menor o igual que $x$, es decir, $P(X \leq x) = F_X (x)$, llamada función de distribución de probabilidad (\textit{cumulative distribution function}, cdf) de $X$.	
-\end{definicion}
-
-Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguientes propiedades: 
-\begin{enumerate}
-	\item $F_X$ es no decreciente: 
-			$F_X(x_1) \leq F_X(x_2) \forall x_1 \leq x_2$.
-	\item $\lim_{x \rightarrow -\infty} F_X(x) = 0$,
-			$\lim_{x \rightarrow \infty} F_X(x) = 1$
-	\item $F_X(x)$ es continua por la derecha: 
-		$\lim_{\varepsilon \rightarrow 0^+} F_X(x+\varepsilon) = F_X(x)$
-\end{enumerate}
-
-	Diremos que una v.a. es \textbf{continua} si su cdf es continua. Supondremos que una cdf continua es derivable cpd (\textit{casi por doquier}, es decir, en todo $\mathbb{R}$ salvo en un conjunto finito de puntos).
-	
-\begin{definicion}[Función de densidad]
-	Se define la función de densidad como la derivada de $F_X(x)$, $f_X(x)$. Para $X$ continua:
-	\[ F_X(x) = \int_{-\infty}^x f_X(t) dt \quad
-		f_X(x) = \frac{d}{dx}F_X(x) = F_X'(x) \geq 0 \quad
-		\int_{-\infty}^{\infty} f_X(x) dx = 1 \]
-\end{definicion}
-	
-\begin{definicion}[Función de masa]
-	Se define la función de masa de probabilidad  (\textit{probability mass function}, pmf) de una v.a. \textbf{discreta}, es decir, que sólo toma un número contable de valores como
-	\[ 
-	f_X(x) = P(X=x) = 
-		F_X(x) - 
-		\lim_{\varepsilon \rightarrow 0^+} F_X(X-\varepsilon)
-	\]
-\end{definicion}
-
-	Usaremos el término función de probabilidad (pf) para referirnos a una pdf o una pmf indistintamente.
-	
-\begin{definicion}[Esperanza matemática]
-	Se define la esperanza matemática de una función $g(X)$ o una v.a. $X$, $E[g(X)]$ como
-	\[ E[g(X)] = \left\lbrace 
-		\begin{array}{cc}
-		\int_{-\infty}^{\infty} g(x)f_X(x) dx &
-			\textit{si } X \textit{ es continua} \\
-		\sum\limits_{\textit{todo } x} g(x)f_X(x) dx &
-			\textit{si } X \textit{ es discreta} \\			
-		\end{array}\right.
-	\]
-\end{definicion}
-
-
 	
 \section{Test paramétricos}
 
+	\input{capitulos/secciones/02_2_TestParametricos}
+	
+	\input{capitulos/secciones/02_3_EstadoArteTP}
+
 \section{Test no paramétricos}
+
+	En la inferencia clásica se efectúan suposiciones sobre la población de la que se extraen muestras para realizar la inferencia. Aunque estas suposiciones están normalmente justificadas, en ocasiones no se dan las circunstancias necesarias para aplicar estas técnicas o su uso no está bien documentado. Por ello surgen las técnicas no paramétricas.
+	
+	\subsection{Comparación con test paramétricos}
+		\input{capitulos/secciones/02_4_Comparacion}
+
+	\subsection{Desarrollo de los TNP}
+		\input{capitulos/secciones/02_5_TestNoParametricos}
+	
+	\input{capitulos/secciones/02_6_EstadoArteTNP}
 
 	\subsection{Test basados en permutaciones}
 

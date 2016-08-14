@@ -1,0 +1,177 @@
+
+	En esta primera sección se hace un breve repaso de los conceptos estadísticos necesarios para comprender el contenido de la memoria así como presentar la notación.
+	
+\begin{definicion}[Inferencia estadística]
+	Rama de la estadística en la que se usan las propiedades de una muestra para extraer conclusiones de la población. 
+\end{definicion}
+
+\begin{definicion}[Espacio muestral] 
+	Conjunto de los posibles resultados de un experimento aleatorio
+\end{definicion}
+
+\begin{definicion}[Variable aleatoria]
+	Función de conjuntos cuyo dominio es los elementos de un espacio muestral sobre el cual se ha definido una función de probabilidad y cuyo rango es $\mathbb{R}$.\\
+	$X$ es una variable aleatoria (v.a.) si para $x \in \mathbb{R}$ existe una probabilidad de que el valor tomado por la variable aleatoria sea menor o igual que $x$, es decir, $P(X \leq x) = F_X (x)$, llamada función de distribución de probabilidad (\textit{cumulative distribution function}, cdf) de $X$.	
+\end{definicion}
+
+Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguientes propiedades: 
+\begin{enumerate}
+	\item $F_X$ es no decreciente: 
+			$F_X(x_1) \leq F_X(x_2) \forall x_1 \leq x_2$.
+	\item $\lim_{x \rightarrow -\infty} F_X(x) = 0$,
+			$\lim_{x \rightarrow \infty} F_X(x) = 1$
+	\item $F_X(x)$ es continua por la derecha: 
+		$\lim_{\varepsilon \rightarrow 0^+} F_X(x+\varepsilon) = F_X(x)$
+\end{enumerate}
+
+	Diremos que una v.a. es \textbf{continua} si su cdf es continua. Supondremos que una cdf continua es derivable cpd (\textit{casi por doquier}, es decir, en todo $\mathbb{R}$ salvo en un conjunto finito de puntos).
+	
+\begin{definicion}[Función de densidad]
+	Se define la función de densidad como la derivada de $F_X(x)$, $f_X(x)$. Para $X$ continua:
+	\[ F_X(x) = \int_{-\infty}^x f_X(t) dt \;
+		f_X(x) = \frac{d}{dx}F_X(x) = F_X'(x) \geq 0 \;
+		\int_{-\infty}^{\infty} f_X(x) dx = 1 \]
+\end{definicion}
+	
+\begin{definicion}[Función de masa]
+	Se define la función de masa de probabilidad  (\textit{probability mass function}, pmf) de una v.a. \textbf{discreta}, es decir, que sólo toma un número contable de valores como
+	\[ 
+	f_X(x) = P(X=x) = 
+		F_X(x) - 
+		\lim_{\varepsilon \rightarrow 0^+} F_X(X-\varepsilon)
+	\]
+\end{definicion}
+
+	Usaremos el término función de probabilidad (pf) para referirnos a una pdf o una pmf indistintamente.
+	
+\begin{definicion}[Esperanza matemática]
+	Se define la esperanza matemática de una función $g(X)$ o una variable aleatoria $X$, $E[g(X)]$ como
+	\[ E[g(X)] = \left\lbrace 
+		\begin{array}{cc}
+		\int_{-\infty}^{\infty} g(x)f_X(x) dx &
+			\textit{si } X \textit{ es continua} \\
+		\sum\limits_{x} g(x)f_X(x) dx &
+			\textit{si } X \textit{ es discreta}	
+		\end{array}\right.
+	\]
+\end{definicion}
+
+\begin{definicion}[Independencia]
+	Un conjunto de $n$ v.a. se dice independiente sii su función de probabilidad conjunta es igual al producto de las $n$ funciones de probabilidad marginales.
+\end{definicion}
+
+\begin{definicion}[Muestra aleatoria]
+	Llamamos muestra aleatoria de una v.a. $X$ a un conjunto de $n$ v.a., $(X_1, \dots, X_n)$, si son independientes e idénticamente distribuidas (i.i.d.), con lo que su distribución de probabilidad conjunta es
+	\[ 
+		f_{X}(x_1, \dots, x_n) =
+		f_{X_1, \dots, X_n}(x_1, \dots, x_n) =
+		\prod\limits_{i=1}^n f_X(x_i)
+	\]
+\end{definicion}
+	
+\begin{definicion}[Momento]
+	Es un parámetro de la población. El momento $k$-ésimo de $X$ es $\mu_k' = E[X^k]$. La media es el momento de primer orden, $\mu_1' = E[X] = \mu$. El momento $k$-ésimo central es $\mu_k = E[(X - \mu)^k]$
+\end{definicion}
+
+\begin{definicion}[Covarianza]
+	La covarianza entre dos v.a. $X,Y$, se define como
+		\[	cov(X,Y) = E[(X-\mu_X) (Y-\mu_Y)] = 
+						E[XY] - \mu_X \mu_Y 
+		\]
+\end{definicion}
+
+\begin{definicion}[Función generadora de momentos]
+	La función generadora de momentos (\textit{moment-generating function}, mgf) de una función $g(X)$ de $X$ es
+	\[ M_{g(X)}(t) = E[ \exp(tg(X)) ] \]
+\end{definicion}
+
+\begin{teorema}[Desigualdad de Chebyshev]
+	Sea $X$ una v.a. con media $\mu$ y varianza $\sigma^2 < \infty$. Entonces para $k > 0$ se cumple
+		\[ P(|X - \mu| \geq k) \leq \frac{\sigma^2}{k^2} \]
+\end{teorema}
+
+\begin{teorema}[Teorema central del límite]
+	Sea $X_1, \dots, X_n$ una muestra aleatoria de una población con media $\mu$ y varianza $\sigma^2 > 0$ y sea $\bar{X}_n$ la media de esa muestra. Entonces para $n \rightarrow \infty$ la variable aleatoria $\sqrt{n} \frac{(\bar{X}_n - \mu)}{\sigma}$ tiene como distribución límite la normal con media $0$ y varianza $1$.
+\end{teorema}
+
+\begin{definicion}[Estimador]
+	Definimos como estimador, o estimador puntual una función de v.a. cuyo valor observado es usado para estimar el valor verdadero de un parámetro de la población. 
+\end{definicion}
+
+	Sea $\hat{theta}_n = u(X_1, \dots, X_n)$ un estimador de un parámetro $\theta$. Incluimos unas propiedades deseables de $\hat{theta}_n$:
+	
+	\begin{enumerate}
+	\item \textit{Insesgadez}: 
+			$E[\hat{\theta}_n = \theta$ para todo $\theta$.
+	\item \textit{Suficiencia}: Podemos escribir
+			$f_{X_1, \dots, X_n}(x_1, \dots, x_n; \theta)$ como producto de dos funciones $f_{X_1, \dots, X_n}(x_1, \dots, x_n; \theta) = g(\hat{\theta}_n; \theta) H((x_1, \dots, x_n)$ tal que $H(x_1, \dots, x_n)$ no depende de $\theta$.
+	\item \textit{Consistencia}
+		\[ \lim_{n \rightarrow \infty} P(|\bar{\theta}_n - \theta| < \varepsilon) = 0 \quad \forall \varepsilon > 0 \]
+	\begin{enumerate}
+		\item Si $\hat{\theta}_n$ es un estimador insesgado de $\theta$ y $\lim_{n \rightarrow \infty} var(\hat{\theta}_n) = 0$, entonces $\hat{\theta}_n$ es un estimador consistente por la desigualdad de Chebyshev.
+		\item $\hat{\theta}_n$ es un estimador consistente de $\theta$ si la distribución límite es la distribución degenerada con probabilidad $1$ en $\theta$.
+	\end{enumerate}
+			
+	\item \textit{Mínimo error cuadrático} 	$E[(\hat{\theta}_n - \theta)^2] \leq E[(\hat{\theta}_n^\star - \theta)^2]$ para cualquier estimador $\hat{\theta}_n^\star$.
+	\item \textit{Mínima varianza} 	$var(\hat{\theta}_n) \leq var(\hat{\theta}^\star_n)$ para cualquier estimador $\hat{\theta}_n^\star$, siendo ambos insesgados.
+	\end{enumerate}
+	
+\begin{definicion}[Función de verosimilitud]
+	La función de verosimilitud (\textit{likelihood function}) de una muestra aleatoria de tamaño $n$ de la población $f_X(x;\theta)$ es la probabilidad conjunta de las muestras tomadas como función de $\theta$. Esto es:
+	\[ L(x_1, \dots, x_n; \theta) = 
+		\prod\limits_{i=1}^n f_X(x_i;\theta)	\]
+\end{definicion}
+
+	Un \textbf{estimador máximo verosímil} (MLE) de $\theta$ es un valor $\bar{\theta}$ tal que 
+	\[ L(x_1, \dots, x_n; \bar{\theta}) \geq 
+			L(x_1, \dots, x_n; \theta) \forall \theta 	\]
+	La relevancia de este estimador consiste en que, para unas ciertas condiciones de regularidad, un estimador máximo verosímil es suficiente, consistente y asintóticamente insesgado, con varianza mínima y con distribución normal.
+	
+	
+\begin{definicion}[Intervalo de confianza]
+	Un intervalo de confianza al $100(1-\alpha)\%$ para el parámetro $\theta$ es un intervalo aleatorio de extremos $U$ y $V$ (funciones de v.a.) tal que $P(U < \theta < V) = 1-\alpha$.
+\end{definicion}
+	
+\begin{definicion}[Hipótesis estadística]
+	Es una afirmación sobre la la función de probabilidad de una o más v.a. o una afirmación sobre las poblaciones de las cuales se han obtenido una o más muestras aleatorias. La \textbf{hipótesis nula}, $H_0$ es la hipótesis sobre la que se realizará un test. La \textbf{hipótesis alternativa}, $H_1$ es la que conclusión alcanzada si se rechaza la hipótesis nula.
+\end{definicion}
+
+\begin{definicion}[Región crítica]
+	Llamamos región crítica o región de rechazo $R$ para un test al conjunto de valores tomados por el test que conducen a rechazar la hipótesis nula. Llamamos \textbf{valores críticos} a los extremos de $R$.
+\end{definicion}
+
+\begin{definicion}[Tipos de error]\textit{}
+	\begin{description}
+	\item[Error de tipo I] La hipótesis nula es rechazada siendo cierta.
+	\item[Error de tipo II] La hipótesis nula no es rechazada siendo falsa.
+	\end{description}
+\end{definicion}
+
+	Siendo $T$ un test estadístico con hipótesis $H_0: \theta \in \omega, \ H_1: \theta \in \Omega \setminus \omega$, los errores de tipo I y II tienen probabilidad
+	\[ 
+	\alpha(\theta) = P(T \in R | \theta \in \omega); \quad
+	\beta(\theta) = 
+		P(T \not\in R | 
+				\theta \in \Omega \setminus \omega)
+	\]
+	respectivamente.
+
+\begin{definicion}[Tamaño del test]
+	Se define el tamaño del test como $\sup_{\theta \in \omega} \alpha(\theta)$.
+\end{definicion}
+
+\begin{definicion}[Potencia del test]
+	Se define la potencia del test como la probabilidad de que el test conduzca a un rechazo de $H_0$: $Pw(\theta) = P(T \in R)$. Esta medida nos interesa cuando debemos rechazar la hipótesis nula, con lo que calculamos $Pw(\theta) = P(T \in R | \theta \in \Omega \setminus \omega) = 1 - \beta(\theta)$. 
+\end{definicion}
+	
+	Diremos que un test es \textbf{más potente} para una hipótesis alternativa concreta si ningún test del mismo tamaño tiene mayor potencia contra la misma hipótesis alternativa.\\
+	A continuación definimos una aproximación alternativa a la realización de test de hipótesis, especialmente relevante en los test no paramétricos. 
+	
+\begin{definicion}[$p$-valor]
+	Probabilidad, siendo cierta la hipótesis nula $H_0$, de obtener una muestra aleatoria con un valor del parámetro $\theta$ sobre el que se realiza el test tanto o más alejado que el observado en una muestra. 
+\end{definicion}
+
+\begin{definicion}[Consistencia]
+	Diremos que un test es consistente para una hipótesis alternativa $H_1$ si la potencia del test se aproxima a 1 conforme $n \rightarrow \infty$, siendo $n$ el tamaño de la muestra.
+\end{definicion}
+	

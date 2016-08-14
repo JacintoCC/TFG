@@ -1,0 +1,109 @@
+ 
+ 	Se incluye en esta sección el desarrollo de los test no paramétricos más utilizados en aprendizaje automático.
+ 	
+ 	
+\subsubsection{Test de aleatoriedad}
+
+	Una de las condiciones para la realización de los test estadísticos, tanto de los paramétricos como de los no paramétricos, es la aleatoriedad de la muestra de partida. La hipótesis nula para los test que serán presentados en esta sección será la aleatoriedad de la muestra, mientras que la hipótesis alternativa será la presencia de un patrón. Estos test también son útiles en los estudios de series temporales y control de calidad.
+	
+\subsubsection*{Test basado en el número de rachas}
+
+	Supongamos una secuencia de $n$ elementos de dos tipos, $n_1$ del primer tipo y $n_2$ del segundo, $n = n_1 + n_2$. Sea $R_1$ el número de rachas del primer tipo, $R_2$ el número de rachas del segundo tipo, $R_ = R_1 + R_2$. Siendo cierta la hipótesis nula (la aleatoriedad de la muestra), procedemos a obtener la distribución de $R$.
+	
+\begin{lema} 
+	El número de formas distintas de distribuir $n$ objetos en $r$ posiciones consecutivas es ${n-1 \choose r-1}, n \geq r, r \geq 1$.
+\end{lema}
+
+\begin{teorema}
+	Sean $R_1$ y $R_2$ los números de rachas de los $n_1$ de tipo 1 y los $n_2$ elementos de tipo 2 respectivamente en una muestra de tamaño $n = n_1 + n_2$. La función de distribución de probabilidad conjunta de $R_1$ y $R_2$ es
+	\[ f_{R_1,R_2} (r_1, r_2) = 
+		\frac{c {n_1 - 1 \choose r_1 - 1} 
+				{n_2 - 1 \choose r_2 - 1}}
+			{{n_1 + n_2 \choose n_1}}\;
+		\begin{array}{l}
+			r_1 = 1,2, \dots, n_1 \\
+			r_2 = 1,2, \dots, n_2 \\
+			r_1 = r_2 \textit{ or } r_1 = r_2 \pm 1
+		\end{array}
+	\]
+	donde $c=2$ si $r_1 = r_2$ (hay igual número de rachas de elementos del tipo 1 y del tipo 2) y $c=1$ si $r_1 = r_2 \pm 1$ (hay una racha más del tipo 1 ó 2).
+\end{teorema}
+
+	Para muestras de un mayor tamaño (aquellas en el que $n_1, n_2 \geq 10$) se suele utilizar una aproximación utilizando la distribución asintótica supuesto cierta $H_0$.\\
+	Suponemos que el tamaño de la muestra $n \rightarrow \infty$, de forma en que $\frac{n_1}{n} \rightarrow \lambda$, $0<\lambda<1$. De aquí obtenemos
+	\[ \lim\limits_{n \rightarrow \infty} E[R/n] = 
+			2\lambda (1-\lambda) 
+				\lim\limits_{n \rightarrow \infty} 
+					var(R\sqrt{n}) =
+			4\lambda^2(1-\lambda)^2
+	\]
+	
+\begin{teorema}
+	La distribución de probabilidad de $R$, es decir, el número total de rachas en una muestra aleatoria es:
+	
+	\begin{equation}
+		f_R(r) = \left\lbrace\begin{array}{ll}
+	2 {n_1-1 \choose r/2-1} {n_2-1 \choose r/2-1} 
+		\bigg/ {n_1 + n_2 \choose n_1} &
+			\textit{ si } r \textit{ es par} \\
+	\left[
+		{n_1-1 \choose (r-1)/2} {n_2-1 \choose (r-3)/2} +  
+		{n_1-1 \choose (r-3)/2} {n_2-1 \choose (r-1)/2} 
+	\right]
+		\bigg/ {n_1 + n_2 \choose n_1} &
+			\textit{ si } r \textit{ es impar} \\		
+		\end{array}\right.
+	\end{equation}
+	para $r=2, 3, \dots, n_1 + n_2.$
+\end{teorema}
+	
+	Si llamamos $Z = \frac{R - 2n\lambda (1-\lambda)}{2 \sqrt{n}\lambda (1-\lambda)}$ y sustituimos en [], obtenemos la distribución estandarizada de $R$, $f_Z(z)$. Entonces aplicamos la fórmula de Stirling y el límite queda de la forma
+	\[ \lim\limits_{n \rightarrow \infty} ln f_Z(z)=
+			-ln \sqrt{2\pi} - \frac{1}{2} z^2	\]
+	con lo que la distribución límite de $Z$ es la normal. 
+	
+	
+\subsubsection*{Test basado en rachas crecientes y decrecientes}	
+
+	Para este test consideramos una serie de datos de tipo numérico ordenados temporalmente y queremos comprobar la hipótesis de la aleatoriedad de la muestra.\\
+	Para una muestra de $n$ elementos, supongamos que podemos ordenarlos de la forma $a_1 < \dots < a_n$ (estamos suponiendo que no hay dos iguales. Si la hipótesis nula fuese cierta, nuestra muestra se corresponderá con una de las $n!$ permutaciones con igual probabilidad. Usaremos para este test las rachas crecientes y decrecientes. Construimos la secuencia $D_{n-1}$, cuyo elemento $i$-ésimo es el signo de $x_{i+1} - x_i,\ i=1, \dots, n-1$. Sean $R_1, \dots, R_{n-1}$ el número de rachas de longitud $1, \dots, n-1$ respectivamente. $f_n(r_{n-1}, \dots, r_1)$ indica la probabilidad de obtener $r_j$ rachas de longitud $j$ supuesta cierta la hipótesis nula. Escribiremos como $u_n$ la frecuencia absoluta $f_n = \frac{u_n}{n!}$. Para obtener la función de distribución, partiremos del caso $n=3$\\
+	Sean $a_1 < a_2 < a_3$. La distribución de probabilidad será 
+	\[ 
+	f_3(r_2, r_1) = 
+		\left\lbrace\begin{array}{cc}
+			\frac{2}{6} & \text{si } r_2 = 1, r_1 = 0 \\
+			\frac{4}{6} & \text{si } r_2 = 0, r_1 = 2 
+		\end{array}\right.
+	\]
+	dado que las únicas rachas de longitud 2 son $(a_1, a_2, a_3) \rightarrow (+,+)$ y $(a_3, a_2, a_1) \rightarrow (-,-)$, siendo las demás posibles combinaciones dos rachas de longitud 1.\\
+	Las posibilidades a la hora de insertar un elemento $a_n$ en las permutaciones de $S_n$ son:
+\begin{enumerate}
+	\item Se añade una racha de longitud 1.
+	\item Una racha de longitud $i-1$ se convierte en una de longitud $i$, $i=2,\dots n-1$.
+	\item Una racha de longitud $h=2i$ se convierte en una de longitud $i$, seguida por otra de longitud $1$, seguida por otra de longitud $i$.
+	\item Una racha de longitud $h=i+j$ se convierte en
+	\begin{enumerate}
+		\item Una racha de longitud $i$ seguida por otra de longitud $1$ seguida por otra de longitud $j$.
+		\item Una racha de longitud $j$ seguida por otra de longitud $1$ seguida por otra de longitud $i$.
+	\end{enumerate}
+	con $h>i>j$, $3 \leq h \leq n-2$
+\end{enumerate}
+
+	De forma general, la frecuencia $u_n$ conocido $u_{n-1}$ sigue la siguiente relación:
+\begin{align}
+	& u_n (r_{n-1}, \dots, r_h, \dots, r_i, \dots, r_j, \dots, r_1)= 
+		2 u_{n-1}(r_{n-2}, \dots, r_1-1) \\
+	&+ \sum\limits_{i=2}^{n-1} 
+		(r_{i-1} + 1)
+		u_{n-1}(r_{n-2},\dots, r_i-1, r_{i-1}+1,\dots, r_1)\\
+	&+ \sum\limits_{i=1, h=2i}^{\lfloor (n-2)/2 \rfloor} 
+		(r_{h} + 1)
+		u_{n-1}(r_{n-2},\dots, r_h+1,\dots r_i-2,\dots, r_1-1)\\
+	&+ 2 \underbrace{\sum\limits_{i=2}^{n-3} \sum\limits_{j=1}^{i-1}}_{h=i+j, h \leq n-2}
+		(r_{h} + 1)
+		u_{n-1}(r_{n-2},\dots, r_h+1,\dots, r_i-1,\dots, r_1-1)			
+\end{align}
+	
+	Otro test que se podría realizar es el del número total de rachas, independientemente de su longitud. El número de rachas total sería $R = \sum\limits_{i=1}^{n-1} R_i$. Usando el procedimiento anterior, se llega a que la distribución asintótica nula estandarizada con media $\mu = \frac{2n-1}{3}$ y varianza $\sigma^2=\frac{16n-29}{90}$ es la normal.
+	
+\subsubsection{Test de bondad del ajuste}
