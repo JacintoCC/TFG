@@ -1,20 +1,129 @@
-%\documentclass[11pt,leqno]{book}
-%\usepackage[spanish,activeacute]{babel}
-%\usepackage[utf8]{inputenc}
-%\usepackage{enumerate}
-%\usepackage{float}
-%\usepackage{gensymb}
-%
-%\begin{document}
-
-
 \chapter{Introducción}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
 \section{Contextualización}
 
-\input{capitulos/secciones/01_1_EvaluacionAlgoritmos}
+\section{Evaluación de algoritmos}
 
+	Se incluye en esta sección una pequeña introducción sobre la evaluación de la aplicación de algoritmos sobre un problema para poder realizar así la comparación de su rendimiento con respecto al de otros algoritmos. Para realizar una correcta evaluación y comparativa entre algoritmos utilizados en aprendizaje automático debemos realizar los siguientes pasos:
 	
-%\end{document}
+	\begin{enumerate}
+		\item Selección de la medida del rendimiento
+		\item Selección del método de estimación
+		\item Realización de test estadísticos
+	\end{enumerate}
+
+\subsection{Medidas del rendimiento}
+	
+	El rendimiento de un algoritmo sobre un problema puede depender del criterio que los investigadores deseen optimizar con lo que el concepto de la \textit{calidad} de un algoritmo depende según el problema al que se aplique. Por tanto, consideraremos el problema como un problema multiobjetivo. Una posible forma de abordarlo es condensar varias medidas en una única con la que posteriormente realizar las comparaciones necesarias a través de test estadísticos. Se presenta a continuación un resumen de las medidas comúnmente utilizadas en el campo del aprendizaje automático tanto para problemas de clasificación como de regresión, indicando ventajas e inconvenientes que nos ayuden a decidir aquella medida que mejor se ajuste a nuestro problema.
+	
+\subsubsection*{Medidas para problemas de clasificación}
+
+	Las medidas utilizadas habitualmente para problemas de clasificación están basadas en la matriz de confusión (~\ref{tab:matrizconfusion}). Haremos un listado de aquellas más utilizadas sin entrar en las medidas diseñadas \textit{ad hoc} para problemas concretos. Suponemos que nos encontramos frente a un problema de clasificación binaria, aunque es posible extender la matriz de confusión y las medidas para problemas de clasificación con un mayor número de clases.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cccc}
+\cline{1-3}
+\multicolumn{1}{|c|}{}           & \multicolumn{2}{c|}{Predicción del clasificador}      &                 \\ \cline{1-3}
+\multicolumn{1}{|c|}{Clase real} & \multicolumn{1}{c|}{$y$}    & \multicolumn{1}{c|}{$\bar{y}$}    &                 \\ \cline{1-3}
+\multicolumn{1}{|c|}{$x$}          & \multicolumn{1}{c|}{$TP$} & \multicolumn{1}{c|}{$FN$} & $N^+ = TP + FN$ \\ \cline{1-3}
+\multicolumn{1}{|c|}{$\bar{x}$}          & \multicolumn{1}{c|}{$FP$} & \multicolumn{1}{c|}{$TN$} & $N^- = FP + TN$ \\ \cline{1-3}
+                                & $\hat{N}^+ = TP + FP$     & $\hat{N}^+ = FN + TN$     &   $N = N^- + N^+$             
+\end{tabular}
+\caption{Matriz de confusión}
+\label{tab:matrizconfusion}
+\end{table} 
+	
+\begin{description}
+	\item[Error de clasificación ($\varepsilon$)] $\varepsilon = \frac{FP+FN}{N}$
+	\item[\textit{Accuracy}(Acc)] $Acc=\frac{TP+TN}{N}$
+	\item[\textit{Recall}(r)] $r=\frac{TP}{N^+}$
+	\item[\textit{Specificity}(sp)] $sp=\frac{TN}{N^-}$
+	\item[\textit{Precision}(pr)] $pr=\frac{TP}{\hat{N}^+}$
+	\item[Tasa falsos positivos(fpr)] $fpr=1-sp$
+	\item[Tasa falsos negativos(fnr)] $fnr=1-r$
+	\item[Valor negativo predicho(npv)] $npv=\frac{TN}{\hat{N}^-}$
+	\item[Estadístico kappa ($\kappa$)] $\kappa = \frac{Acc-p_e}{1-p_e}$, con 
+	\[ p_e = 
+		\left( \frac{TP+FN}{N} \cdot \frac{TP+FP}{N} \right) + 
+		\left( \frac{TN+FP}{N} \cdot \frac{TN+FN}{N} \right)  \] 
+\end{description}
+	
+	Las medidas de \textit{accuracy} y el error de clasificación son comúnmente usadas debido a que representa un concepto claro y es fácil de calcular.  Es necesario indicar que estas medidas son aconsejables cuando las dos clases se dan con una frecuencia similar y son igualmente relevantes para nuestro problema. Otras medidas como \textit{recall}, \textit{specificity} o \textit{precision} son más frecuentes en dominios como el de recuperación de información y aquellos donde o bien una clase es más relevante, o sólo existen unos pocos individuos de una clase.\\
+	Para encontrar un equilibrio entre la detección de elementos de la muestra de ambas clases se han propuesto en la literatura algunas aproximaciones basadas en las anteriores medidas:
+	
+	\begin{description}
+		\item[Compensación entre \textit{recall} y \textit{specificity}] El método más popular para encontrar este equilibrio es el análisis ROC, que consta de una representación de $r$ con respecto a $fpr$. Una curva ROC puede resumirse en el valor AUC (\textit{area under the ROC curve})
+		\item[Compensación entre \textit{recall} y \textit{precision}] Depende del parámetro $\beta$ dado por el usuario :
+		\[ F_\beta = \frac{(\beta^2+1) pr \cdot r}
+						  {\beta^2 pr + r}	\]
+	\end{description}
+
+	Cuando en un problema de clasificación supervisada usamos un modelo probabilístico obtenemos la probabilidad de pertenencia a una de las clases, con lo que podemos realizar la asignación variando el umbral. Existen medidas que tratan de recoger el grado de proximidad entre esta asignación de probabilidad y la distribución real. La más conocida es la medida Brier ($BS$),
+	\[ BS = \frac{1}{N} \sum\limits_{i=1}^N 
+		\sum\limits_{j \in \{c^+,c^-\}}
+			\left( P \left( C=j|\mathbf{x}^{(i)} \right) -
+			\delta_{j,c^{(i)}} \right) ^2,\]
+	donde $P\left(C=j|\mathbf{x}^{(i)}\right)$ es la probabilidad asignada por el clasificador a la instancia $i$-ésima para la clase $j$, $\delta$ es la delta de Kronecker y $c^{(i)}$ es la clase de la instancia $i$-ésima.\\
+	Hasta ahora las medidas le han dado el mismo peso a los errores cometidos en ambos sentidos (asignar a la clase positiva una instancia negativa o viceversa), sin embargo se pueden incluir \textit{funciones de pérdida} ($\mathcal{L}$) según el coste relativo de cada tipo de fallo. Hasta ahora se puede considerar que hemos usado la función de pérdida $\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase asignada e $y$ la clase real.
+	
+\subsection*{Medidas gráficas}
+
+	Como vemos en \cite{PRATI11}, en ocasiones es recomendable utilizar una representación gráfica del rendimiento ya que evitamos así pérdida de información al condensar toda la información en un escalar. En este artículo se presenta un conjunto de representaciones gráficas según el tipo de variable predicha: clases, ranking o probabilidad de pertenencia a una clase.
+	
+\paragraph{Predicción de clases}
+	\begin{description}
+		\item[Gráficas ROC] Como se ha mencionado anteriormente, es una representación del la medida \textit{tpr} frente a \textit{fpr}. Un clasificador será mejor considerado cuanto más arriba y a la izquierda se sitúe en el gráfico. 
+		\item[Líneas de coste] Se trata de una modificación de las gráficas ROC para incluir el coste asociado a cada tipo de fallo. Se define el coste esperado para un clasificador como 
+		\[ EC = \sum\limits_{X \in \{x, \bar{x}\}} 
+		 		\sum\limits_{X \in \{x, \bar{x}\}} 
+		 			p(X,Y) \mathcal{L}(X,Y)			.\]
+	Entonces, se definen $NormEC = \frac{EC}{maxEC}$, $PC = \frac{p(x) \mathcal{L}(\bar{x},y)}{maxEC}$, donde $maxEC = p(x)\mathcal{L}(\bar{x},y)+p(\bar{x})\mathcal{L}(x,\bar{y})$.  La gráfica representa la $PC$ frente a $NormEC$. Ahora cada clasificador, representado por un punto en la gráfica ROC, es una línea. El clasificador representado por el punto $(0,0)$ en la gráfica ROC (asigna a todos los puntos la clase negativa) ahora se representa mediante la recta $NormEC=PC$ y el punto $(1,1)$ mediante la recta $NormEC= 1-PC$. Dependiendo del coste relativo de la clase positiva ($PC$), será el mejor clasificador aquel con menor $NormEC$.
+	\end{description}
+
+\paragraph{Predicción de \textit{ranking}} 	
+	\begin{description}
+		\item[Curvas ROC] Se traslada el problema a uno de clasificación mediante la asignación a la clase positiva del \textit{top} $n\%$. Se varía el porcentaje del $0\%$ al $100\%$ para obtener la curva ROC.
+		\item[Curvas de coste] Se trata de la transformación análoga a las curvas ROC para las líneas de coste.
+		\item[Curvas \textit{precision-recall}] Usadas habitualmente en el ámbito de la recuperación de información. Representan $precision$ frente a $recall$.
+		\item[Gráfica \textit{lift}] Similar a la gráfica ROC, representa $tpr$ frente a la probabilidad de asignar a un individuo la clase positiva. 
+		\item[Gráfica ROI] Similar a las gráficas \textit{lift}, pero representando en el eje $Y$ el beneficio esperado 
+		\[	TEP = N \sum\limits_{X \in \{x,\bar{x}\}}
+					\sum\limits_{Y \in \{y,\bar{y}\}}
+						p(X,Y) \mathcal{L}(X,Y) p(X) \]
+	\end{description}
+
+\paragraph{Predicción de probabilidad de pertenencia a una clase} 	
+	\begin{description}
+		\item[\textit{Reliability diagram}] Contiene dos gráficas. Una es $p(x|j)$ según $j$, que mide el grado en que concuerdan las predicciones con la frecuencia de los casos positivos. La segunda gráfica se corresponde con $p(y_j)$ según $j$, identificada con la confianza en la predicción.
+		\item[Diagrama de atributos] Para evaluar las mejoras relativas de un sistema de predicción con respecto a uno de referencia se define la $BSS$ (\textit{Brier skill score})
+			\[BSS = 1 - \frac{BS}{BS_{ref}} \]
+			El diagrama de atributos es un refinamiento del \textit{reliability diagram}, al que se le añaden tres líneas: 
+			\begin{description}
+			\item[Línea de no resolución:] línea horizontal donde $p(x|j)=p(x)$.
+			\item[Línea de máxima resolución:] línea vertical que intersecta a la diagonal en el mismo punto que la línea de no resolución.
+			\item[Clasificador de referencia:] Bisectriz entre la diagonal principal y la línea de no resolución. Representa los puntos cuya precisión (\textit{accuracy}) es menor que en el modelo de referencia.
+			\end{description}
+		\item[\textit{Discrimination diagram}] Gráfica de $P(Y|X)$ según $y_j$. Contiene las curvas de $p(y_j|x)$ y de $p(y_j|\bar{x})$. En el mejor de los casos, estas dos curvas no se solaparían y podríamos saber la clase según $y_j$.
+	\end{description}
+	
+	
+\subsection*{Medidas para problemas de regresión}
+
+	Las medidas para un problema de regresión están basadas en la distancia entre el valor real de la instancia y el valor predicho. Consideraremos que calculamos el error de la predicción del algoritmo $f$ aplicado a los datos $x_1, \dots, x_N$ con valor $y_1, \dots, y_N$ respectivamente.
+	
+\begin{description}
+	\item[\textit{Mean squared error} (MSE)]: Error cuadrático medio
+		\[ MSE(f) = \frac{1}{N} \sum\limits_{i=1}^N
+								(y_i - f(x_i))^2	\]
+	\item[\textit{Root mean squared error} (RMSE)]: Raíz del error cuadrático medio
+		\[ RMSE(f) = \sqrt{\frac{1}{N} \sum\limits_{i=1}^N (y_i - f(x_i))^2}	\]
+		
+	\item[\textit{Mean absolute error} (MAD) ]: Error absoluto medio
+		\[ MAD(f) = \frac{1}{N} \sum\limits_{i=1}^N
+								|y_i - f(x_i)|	\]
+\end{description}
+
+	Las medidas $MSE$ y $RMSE$ son más utilizadas debido a la penalización de los errores mayores. 

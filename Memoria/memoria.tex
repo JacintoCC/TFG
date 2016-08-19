@@ -205,9 +205,17 @@ pdfproducer = {pdflatex}
 \usepackage{gensymb}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{enumerate}
 
+% Comandos para la escritura 
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\var}{\text{var}}
+\newcommand{\cov}{\text{cov}}
 
-
+% Pseudocódigo
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 % ****************************************************************
 % DOCUMENTO
@@ -215,8 +223,8 @@ pdfproducer = {pdflatex}
 
 \begin{document}
 \pagenumbering{roman}
-\input{portada/portada}
-\input{prefacios/prefacio}
+%\input{portada/portada}
+%\input{prefacios/prefacio}
 %\frontmatter
 \tableofcontents
 %\listoffigures
@@ -230,9 +238,9 @@ pdfproducer = {pdflatex}
 %
 \input{capitulos/02_DesarrolloMatematico}
 %
-\input{capitulos/03_DesarrolloInformatico}
+%\input{capitulos/03_DesarrolloInformatico}
 %
-\input{capitulos/04_Conclusiones}
+%\input{capitulos/04_Conclusiones}
 %
 %%\nocite{*}
 \input{capitulos/Bibliografia}

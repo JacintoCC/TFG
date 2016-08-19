@@ -9,25 +9,633 @@
 \chapter{Desarrollo matemático}
 
 \section{Introducción a la inferencia}
-	\input{capitulos/secciones/02_1_IntroduccionInferencia}	
+
+
+	En esta primera sección se hace un breve repaso de los conceptos estadísticos necesarios para comprender el contenido de la memoria así como presentar la notación.
+	
+\begin{definicion}[Inferencia estadística]
+	Rama de la estadística en la que se usan las propiedades de una muestra para extraer conclusiones de la población. 
+\end{definicion}
+
+\begin{definicion}[Variable aleatoria]
+	Función de conjuntos cuyo dominio es los elementos de un espacio muestral sobre el cual se ha definido una función de probabilidad y cuyo rango es $\mathbb{R}$.\\
+	$X$ es una variable aleatoria (v.a.) si para $x \in \mathbb{R}$ existe una probabilidad de que el valor tomado por la variable aleatoria sea menor o igual que $x$, es decir, $P(X \leq x) = F_X (x)$, llamada función de distribución de probabilidad (\textit{cumulative distribution function}, cdf) de $X$.	
+\end{definicion}
+
+Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguientes propiedades: 
+\begin{enumerate}
+	\item $F_X$ es no decreciente: 
+			$F_X(x_1) \leq F_X(x_2) \ \forall x_1 \leq x_2$.
+	\item $\underset{x \rightarrow -\infty}{\lim} F_X(x) = 0$,
+			$\underset{x \rightarrow \infty}{\lim} F_X(x) = 1$
+	\item $F_X(x)$ es continua por la derecha: 
+		$\underset{\varepsilon \rightarrow 0^+}{\lim} F_X(x+\varepsilon) = F_X(x)$
+\end{enumerate}
+
+	Diremos que una v.a. es \textbf{continua} si su cdf es continua. Supondremos que una cdf continua es derivable cpd (\textit{casi por doquier}, es decir, en todo $\mathbb{R}$ salvo en un conjunto finito de puntos).
+	
+\begin{definicion}[Función de densidad]
+	Se define la función de densidad como la derivada de $F_X(x)$, $f_X(x)$. Para $X$ continua:
+	\[ F_X(x) = \int_{-\infty}^x f_X(t) dt; \;
+		f_X(x) = \frac{d}{dx}F_X(x) = F_X'(x) \geq 0; \;
+		\int_{-\infty}^{\infty} f_X(x) dx = 1 \]
+\end{definicion}
+	
+\begin{definicion}[Función de masa]
+	Se define la función de masa de probabilidad  (\textit{probability mass function}, pmf) de una v.a. \textbf{discreta}, es decir, que sólo toma un número contable de valores como
+	\[ 
+	f_X(x) = P(X=x) = 
+		F_X(x) - 
+		\lim_{\varepsilon \rightarrow 0^+} F_X(X-\varepsilon)
+	\]
+\end{definicion}
+
+\begin{definicion}[Muestra aleatoria]
+	Llamamos muestra aleatoria de una v.a. $X$ a un conjunto de $n$ v.a., $(X_1, \dots, X_n)$, si son independientes e idénticamente distribuidas (i.i.d.), con lo que su distribución de probabilidad conjunta es
+	\[ 
+		f_{X}(x_1, \dots, x_n) =
+		f_{X_1, \dots, X_n}(x_1, \dots, x_n) =
+		\prod\limits_{i=1}^n f_X(x_i)
+	\]
+\end{definicion}
+	
+\begin{definicion}[Momento]
+	Es un parámetro de la población. El momento $k$-ésimo de $X$ es $\mu_k' = E[X^k]$. La media es el momento de primer orden, $\mu_1' = E[X] = \mu$. El momento $k$-ésimo central es $\mu_k = E[(X - \mu)^k]$
+\end{definicion}
+
+\begin{teorema}[Teorema central del límite]
+	Sea $X_1, \dots, X_n$ una muestra aleatoria de una población con media $\mu$ y varianza $\sigma^2 > 0$ y sea $\bar{X}_n$ la media de esa muestra. Entonces para $n \rightarrow \infty$ la variable aleatoria $\sqrt{n} \frac{(\bar{X}_n - \mu)}{\sigma}$ tiene como distribución límite la normal con media $0$ y varianza $1$.
+\end{teorema}
+
+\begin{definicion}[Estimador]
+	Definimos como estimador, o estimador puntual una función de v.a. cuyo valor observado es usado para estimar el valor verdadero de un parámetro de la población. 
+\end{definicion}
+
+	Sea $\hat{\theta}_n = u(X_1, \dots, X_n)$ un estimador de un parámetro $\theta$. Incluimos unas propiedades deseables de $\hat{\theta}_n$:
+	
+	\begin{enumerate}
+	\item \textit{Insesgadez}: 
+			$E[\hat{\theta}_n] = \theta$ para todo $\theta$.
+	\item \textit{Suficiencia}: Podemos escribir
+			$f_{X_1, \dots, X_n}(x_1, \dots, x_n; \theta)$ como producto de dos funciones $f_{X_1, \dots, X_n}(x_1, \dots, x_n; \theta) = g(\hat{\theta}_n; \theta) H((x_1, \dots, x_n)$ tal que $H(x_1, \dots, x_n)$ no depende de $\theta$.
+	\item \textit{Consistencia}
+		\[ \lim_{n \rightarrow \infty} P(|\bar{\theta}_n - \theta| < \varepsilon) = 0 \quad \forall \varepsilon > 0 \]
+	\begin{enumerate}
+		\item Si $\hat{\theta}_n$ es un estimador insesgado de $\theta$ y $\underset{n \rightarrow \infty}{\lim} var(\hat{\theta}_n) = 0$, entonces $\hat{\theta}_n$ es un estimador consistente por la desigualdad de Chebyshev.
+		\item $\hat{\theta}_n$ es un estimador consistente de $\theta$ si la distribución límite es la distribución degenerada con probabilidad $1$ en $\theta$.
+	\end{enumerate}
+			
+	\item \textit{Mínimo error cuadrático} 	$E[(\hat{\theta}_n - \theta)^2] \leq E[(\hat{\theta}_n^\star - \theta)^2]$ para cualquier estimador $\hat{\theta}_n^\star$.
+	\item \textit{Mínima varianza} 	$var(\hat{\theta}_n) \leq var(\hat{\theta}^\star_n)$ para cualquier estimador $\hat{\theta}_n^\star$, siendo ambos insesgados.
+	\end{enumerate}
+	
+\begin{definicion}[Función de verosimilitud]
+	La función de verosimilitud (\textit{likelihood function}) de una muestra aleatoria de tamaño $n$ de la población $f_X(x;\theta)$ es la probabilidad conjunta de las muestras tomadas como función de $\theta$. Esto es:
+	\[ L(x_1, \dots, x_n; \theta) = 
+		\prod\limits_{i=1}^n f_X(x_i;\theta)	\]
+\end{definicion}
+
+	Un \textbf{estimador máximo verosímil} (MLE) de $\theta$ es un valor $\bar{\theta}$ tal que 
+	\[ L(x_1, \dots, x_n; \bar{\theta}) \geq 
+			L(x_1, \dots, x_n; \theta) \ \forall \theta 	\]
+	La relevancia de este estimador consiste en que, para unas ciertas condiciones de regularidad, un estimador máximo verosímil es suficiente, consistente y asintóticamente insesgado, con varianza mínima y con distribución normal.
+	
+	
+\begin{definicion}[Intervalo de confianza]
+	Un intervalo de confianza al $100(1-\alpha)\%$ para el parámetro $\theta$ es un intervalo aleatorio de extremos $U$ y $V$ (funciones de v.a.) tal que $P(U < \theta < V) = 1-\alpha$.
+\end{definicion}
+	
+\begin{definicion}[Hipótesis estadística]
+	Es una afirmación sobre la la función de probabilidad de una o más v.a. o una afirmación sobre las poblaciones de las cuales se han obtenido una o más muestras aleatorias. La \textbf{hipótesis nula}, $H_0$ es la hipótesis sobre la que se realizará un test. La \textbf{hipótesis alternativa}, $H_1$ es la que conclusión alcanzada si se rechaza la hipótesis nula.
+\end{definicion}
+
+\begin{definicion}[Región crítica]
+	Llamamos región crítica o región de rechazo $R$ para un test al conjunto de valores tomados por el test que conducen a rechazar la hipótesis nula. Llamamos \textbf{valores críticos} a los extremos de $R$.
+\end{definicion}
+
+\begin{definicion}[Tipos de error]\textit{}
+	\begin{description}
+	\item[Error de tipo I] La hipótesis nula es rechazada siendo cierta.
+	\item[Error de tipo II] La hipótesis nula no es rechazada siendo falsa.
+	\end{description}
+\end{definicion}
+
+	Siendo $T$ un test estadístico con hipótesis $H_0: \theta \in \omega, \ H_1: \theta \in \Omega \setminus \omega$, los errores de tipo I y II tienen probabilidad
+	\[ 
+	\alpha(\theta) = P(T \in R | \theta \in \omega); \quad
+	\beta(\theta) = 
+		P(T \not\in R | 
+				\theta \in \Omega \setminus \omega)
+	\]
+	respectivamente.
+
+\begin{definicion}[Tamaño del test]
+	Se define el tamaño del test como $\underset{\theta \in \omega}\sup \alpha(\theta)$.
+\end{definicion}
+
+\begin{definicion}[Potencia del test]
+	Se define la potencia del test como la probabilidad de que el test conduzca a un rechazo de $H_0$: $Pw(\theta) = P(T \in R)$. Esta medida nos interesa cuando debemos rechazar la hipótesis nula, con lo que calculamos $Pw(\theta) = P(T \in R | \theta \in \Omega \setminus \omega) = 1 - \beta(\theta)$. 
+\end{definicion}
+	
+	Diremos que un test es \textbf{más potente} para una hipótesis alternativa concreta si ningún test del mismo tamaño tiene mayor potencia contra la misma hipótesis alternativa.\\
+	A continuación definimos una aproximación alternativa a la realización de test de hipótesis, especialmente relevante en los test no paramétricos. 
+	
+\begin{definicion}[$p$-valor]
+	Probabilidad de obtener, siendo cierta la hipótesis nula $H_0$, una muestra aleatoria tan alejada o más de la hipotesis nula que la muestra aleatoria observada.
+\end{definicion}
+
+\begin{definicion}[Consistencia]
+	Diremos que un test es consistente para una hipótesis alternativa $H_1$ si la potencia del test se aproxima a 1 conforme $n \rightarrow \infty$, siendo $n$ el tamaño de la muestra.
+\end{definicion}
 	
 	
 \section{Test paramétricos}
-
-	\input{capitulos/secciones/02_2_TestParametricos}
-	
-	\input{capitulos/secciones/02_3_EstadoArteTP}
 
 \section{Test no paramétricos}
 
 	En la inferencia clásica se efectúan suposiciones sobre la población de la que se extraen muestras para realizar la inferencia. Aunque estas suposiciones están normalmente justificadas, en ocasiones no se dan las circunstancias necesarias para aplicar estas técnicas o su uso no está bien documentado. Por ello surgen las técnicas no paramétricas.
 	
 	\subsection*{Comparación con test paramétricos}
-		\input{capitulos/secciones/02_4_Comparacion}
-
-	\input{capitulos/secciones/02_5_TestNoParametricos}
 	
-	\input{capitulos/secciones/02_6_EstadoArteTNP}
+ 	La principal ventaja de los test no paramétricos es que las hipótesis son más generales con lo que se pueden aplicar en un mayor número de problemas. Una de las condiciones habituales es la continuidad, aunque hay otras condiciones más estrictas como que la población sea simétrica para según qué test. Esto repercute en que se le pueden aplicar funciones a las muestras obtenidas para la realización de los test, a diferencia de en los test paramétricos dado que las muestras deben generalmente provenir de una población de forma conocida.\\
+ 	
+ 	Hay test de hipótesis que no están relacionados con valores de parámetros (a diferencia de los paramétricos). Son más simples de aplicar, las matemáticas, menos sofisticadas y basadas en la combinatoria, están relacionadas con las propiedades usadas en el proceso inductivo. Los libros de recetas no son necesarios, pues con la mera definición del test queda suficientemente claro cómo aplicar el test no paramétrico. Además, las distribuciones asintóticas son distribuciones conocidas como la normal o la chi cuadrado. Al relajar las condiciones sobre los datos de entrada, es menos sensible al \textit{dirty-data}, datos con errores usados en el entrenamiento del clasificador. Esto implica una mayor robustez en los test no paramétricos.\\
+ 	
+ 	Correctamente aplicados, los test paramétricos, al disponer de mayor información tienen una mayor potencia, sin embargo, cuando se disponen de menos datos, y por tanto es más difícil que se den las condiciones de los test paramétricos, la potencia es similar.
+
+
+ 	Se incluye en esta sección el desarrollo de los test no paramétricos más utilizados en aprendizaje automático.
+ 	
+ 	
+\subsection{Test de aleatoriedad}
+
+	Una de las condiciones para la realización de los test estadísticos, tanto de los paramétricos como de los no paramétricos, es la aleatoriedad de la muestra de partida. La hipótesis nula para los test que serán presentados en esta sección será la aleatoriedad de la muestra, mientras que la hipótesis alternativa será la presencia de un patrón. Estos test también son útiles en los estudios de series temporales y control de calidad.
+	
+\subsubsection{Test basado en el número de rachas}
+
+	Supongamos una secuencia de $n$ elementos de dos tipos, $n_1$ del primer tipo y $n_2$ del segundo, $n = n_1 + n_2$. Sea $R_1$ el número de rachas del primer tipo, $R_2$ el número de rachas del segundo tipo, $R = R_1 + R_2$. Siendo cierta la hipótesis nula (la aleatoriedad de la muestra), procedemos a obtener la distribución de $R$.
+	
+\begin{lema} 
+	El número de formas distintas de distribuir $n$ objetos en $r$ posiciones consecutivas es ${n-1 \choose r-1}, n \geq r, r \geq 1$.
+\end{lema}
+
+\begin{teorema}
+	Sean $R_1$ y $R_2$ los números de rachas de los $n_1$ de tipo 1 y los $n_2$ elementos de tipo 2 respectivamente en una muestra de tamaño $n = n_1 + n_2$. La función de distribución de probabilidad conjunta de $R_1$ y $R_2$ es
+	\[ f_{R_1,R_2} (r_1, r_2) = 
+		\frac{c {n_1 - 1 \choose r_1 - 1} 
+				{n_2 - 1 \choose r_2 - 1}}
+			{{n_1 + n_2 \choose n_1}}\;
+		\begin{array}{l}
+			r_1 = 1,2, \dots, n_1 \\
+			r_2 = 1,2, \dots, n_2 \\
+			r_1 = r_2 \text{ ó } r_1 = r_2 \pm 1
+		\end{array}
+	\]
+	donde $c=2$ si $r_1 = r_2$ (hay igual número de rachas de elementos del tipo 1 y del tipo 2) y $c=1$ si $r_1 = r_2 \pm 1$ (hay una racha más del tipo 1 ó 2).
+\end{teorema}
+
+	Para muestras de un mayor tamaño (aquellas en el que $n_1, n_2 \geq 10$) se suele utilizar una aproximación utilizando la distribución asintótica supuesto cierta $H_0$.\\
+	Suponemos que el tamaño de la muestra $n \rightarrow \infty$, de forma en que $\frac{n_1}{n} \rightarrow \lambda$, $0<\lambda<1$. De aquí obtenemos
+	\[ \underset{n \rightarrow \infty}{\lim} E[R/n] = 
+			2\lambda (1-\lambda) 
+				\underset{n \rightarrow \infty}{\lim} 
+					var(R\sqrt{n}) =
+			4\lambda^2(1-\lambda)^2
+	\]
+	
+\begin{teorema}
+	La distribución de probabilidad de $R$, es decir, el número total de rachas en una muestra aleatoria es:
+	
+	\begin{equation}
+		f_R(r) = \left\lbrace\begin{array}{ll}
+	2 {n_1-1 \choose r/2-1} {n_2-1 \choose r/2-1} 
+		\big/ {n_1 + n_2 \choose n_1} &
+			\textit{ si } r \text{ es par} \\
+	\left[
+		{n_1-1 \choose (r-1)/2} {n_2-1 \choose (r-3)/2} +  
+		{n_1-1 \choose (r-3)/2} {n_2-1 \choose (r-1)/2} 
+	\right]
+		\big/ {n_1 + n_2 \choose n_1} &
+			\textit{ si } r \text{ es impar} \\		
+		\end{array}\right.
+	\label{th-dist-R}
+	\end{equation}
+	para $r=2, 3, \dots, n_1 + n_2.$
+\end{teorema}
+	
+	Si llamamos $Z = \frac{R - 2n\lambda (1-\lambda)}{2 \sqrt{n}\lambda (1-\lambda)}$ y sustituimos en \ref{th-dist-R}, obtenemos la distribución estandarizada de $R$, $f_Z(z)$. Entonces aplicamos la fórmula de Stirling y el límite queda de la forma
+	\[ \underset{n \rightarrow \infty}{\lim} \log f_Z(z)=
+			-\log \sqrt{2\pi} - \frac{1}{2} z^2	\]
+	con lo que la distribución límite de $Z$ es la normal. 
+	
+	
+\subsubsection{Test basado en rachas crecientes y decrecientes}	
+
+	Para este test consideramos una serie de datos de tipo numérico ordenados temporalmente y queremos comprobar la hipótesis de la aleatoriedad de la muestra.\\
+	Para una muestra de $n$ elementos, supongamos que podemos ordenarlos de la forma $a_1 < \dots < a_n$ (estamos suponiendo que no hay dos iguales. Si la hipótesis nula fuese cierta, nuestra muestra se corresponderá con una de las $n!$ permutaciones con igual probabilidad. Usaremos para este test las rachas crecientes y decrecientes. Construimos la secuencia $D_{n-1}$, cuyo elemento $i$-ésimo es el signo de $x_{i+1} - x_i,\ i=1, \dots, n-1$. Sean $R_1, \dots, R_{n-1}$ el número de rachas de longitud $1, \dots, n-1$ respectivamente. $f_n(r_{n-1}, \dots, r_1)$ indica la probabilidad de obtener $r_j$ rachas de longitud $j$ supuesta cierta la hipótesis nula. Escribiremos como $u_n$ la frecuencia absoluta $f_n = \frac{u_n}{n!}$. Para obtener la función de distribución, partiremos del caso $n=3$\\
+	Sean $a_1 < a_2 < a_3$. La distribución de probabilidad será 
+	\[ 
+	f_3(r_2, r_1) = 
+		\left\lbrace\begin{array}{cc}
+			\frac{2}{6} & \text{si } r_2 = 1, r_1 = 0 \\
+			\frac{4}{6} & \text{si } r_2 = 0, r_1 = 2 
+		\end{array}\right.
+	\]
+	dado que las únicas rachas de longitud 2 son $(a_1, a_2, a_3) \rightarrow (+,+)$ y $(a_3, a_2, a_1) \rightarrow (-,-)$, siendo las demás posibles combinaciones dos rachas de longitud 1.\\
+	Las posibilidades a la hora de insertar un elemento $a_n$ en las permutaciones de $S_n$ son:
+\begin{enumerate}
+	\item Se añade una racha de longitud 1.
+	\item Una racha de longitud $i-1$ se convierte en una de longitud $i$, $i=2,\dots n-1$.
+	\item Una racha de longitud $h=2i$ se convierte en una de longitud $i$, seguida por otra de longitud $1$, seguida por otra de longitud $i$.
+	\item Una racha de longitud $h=i+j$ se convierte en
+	\begin{enumerate}
+		\item Una racha de longitud $i$ seguida por otra de longitud $1$ seguida por otra de longitud $j$.
+		\item Una racha de longitud $j$ seguida por otra de longitud $1$ seguida por otra de longitud $i$.
+	\end{enumerate}
+	con $h>i>j$, $3 \leq h \leq n-2$
+\end{enumerate}
+
+	De forma general, la frecuencia $u_n$ conocido $u_{n-1}$ sigue la siguiente relación:
+\begin{align*}
+	& u_n (r_{n-1}, \dots, r_h, \dots, r_i, \dots, r_j, \dots, r_1)= 
+		2 u_{n-1}(r_{n-2}, \dots, r_1-1) \\
+	&+ \sum\limits_{i=2}^{n-1} 
+		(r_{i-1} + 1)
+		u_{n-1}(r_{n-2},\dots, r_i-1, r_{i-1}+1,\dots, r_1)\\
+	&+ \sum\limits_{i=1, h=2i}^{\lfloor (n-2)/2 \rfloor} 
+		(r_{h} + 1)
+		u_{n-1}(r_{n-2},\dots, r_h+1,\dots r_i-2,\dots, r_1-1)\\
+	&+ 2 \underbrace{\sum\limits_{i=2}^{n-3} \sum\limits_{j=1}^{i-1}}_{h=i+j, h \leq n-2}
+		(r_{h} + 1)
+		u_{n-1}(r_{n-2},\dots, r_h+1,\dots, r_i-1,\dots, r_1-1)			
+\end{align*}
+	
+	Otro test que se podría realizar es el del número total de rachas, independientemente de su longitud. El número de rachas total sería $R = \sum\limits_{i=1}^{n-1} R_i$. Usando el procedimiento anterior, se llega a que la distribución asintótica nula estandarizada con media $\mu = \frac{2n-1}{3}$ y varianza $\sigma^2=\frac{16n-29}{90}$ es la normal estándar.
+	
+\subsection{Test de bondad del ajuste}
+
+	Una cuestión relevante en la estadística es la obtención de la forma de la población de la que se obtiene una muestra. En los test paramétricos, como se ha mencionado previamente, es habitual que la información relativa a la forma de la población se incluya entre las condiciones, por ejemplo en el test basado en la distribución $t$ de Student es necesaria la normalidad de la población. Por consiguiente, nos interesa disponer de test que nos indiquen cómo de confiable es la hipótesis de la normalidad para nuestra muestra. Los test de bondad del ajuste se ocupan de la forma de la población y no de la distribución concreta incluyendo parámetros de escala o localización.
+	
+\subsubsection{Chi cuadrado}
+
+	Sea una muestra aleatoria de tamaño $n$ obtenida de una población con función de distribución desconocida $F_X$. El test tendrá como hipótesis nula
+		\[ H_0: F_X(x) = F_0(x) \ \forall x \]
+	con $F_0$ conocida contra
+		\[ H_1: F_X(x) \neq F_0(x) \text{ para algún }  x \]
+	Para realizar este test, los datos deben disponerse en categorías, bien mediante los valores que toma la variable para distribuciones discretas o mediante rangos especificados al realizar el experimento para distribuciones continuas. Una vez realizadas estas categorías podemos obtener las frecuencia esperada si la hipótesis nula es cierta de $F_0(x)$.\\
+	
+	Supongamos que disponemos de $n$ muestras clasificadas en $k$ categorías mutuamente excluyentes. Sea $f_i$ la frecuencia observada y $e_i$ la frecuencia esperada para cada muestra. El estadístico que definimos para la realización de este test es $Q = \sum\limits_{i=1}^k \frac{(f_i-e_i)^2}{e_i}$, para el cual estudiaremos su distribución asintótica.\\
+	
+	Sean $\theta_1, \dots, \theta_k$ las probabilidades de pertenencia a cada clase y $f_1, \dots, f_k$ los valores observados. La función de verosimilitud será:
+	
+	\[ L(\theta_1, \dots, \theta_k) = 
+			\prod\limits_{i=1}^k \theta_i^{f_i},\			
+	   \text{ con } f_i = 0, 1, \dots, n; \
+	   \sum\limits_{i=1}^k \theta_i = 1, \
+	   \sum\limits_{i=1}^k f_i = n
+	 \]
+	 
+	 Podemos por tanto escribir la hipótesis nula de la siguiente forma:
+	 
+	 \[ H_0 = \theta_i = \theta_i^0,\ i = 1, \dots, k \]
+	 
+	 habiendo obtenido cada $\theta_i^0$ de $F_0$. El estimador de máxima verosimilitud es $\hat{\theta}_i = \frac{f_i}{n}$. Entonces el ratio de verosimilitud es
+	 
+	 \[ 
+	 T = \frac{L(\hat{\omega})}{L(\hat{\Omega})}
+	   = \frac{L(\theta_1^0, \dots, \theta_k^0)}
+	   		{L(\hat{\theta}_1^0, \dots, \hat{\theta}_k^0)}
+	   = \prod\limits_{i=1}^k
+	   		\left( 
+	 			\frac{\theta_i^0}{\hat{\theta_i}} 
+	 		\right)^{f_i}
+	 \]
+	 
+	 y la distribución de la v.a. $-2 \log T$ puede ser aproximada por la distribución chi cuadrado. Debido a que estimamos $k-1$ parámetros (el parámetro restante se deduce de la restricción $\sum\limits_{i=1}^k \theta_i = 1$). Tenemos entonces
+	 \begin{equation}
+	 2 \log T = 
+	 		-2 \sum\limits_{i=1}^k
+	 			f_i \left(
+	 					\log \theta_i^0 - \log \frac{f_i}{n}
+	 				\right)
+	 \label{2logT}
+	 \end{equation}
+	y mostramos a continuación que esta expresión es equivalente asintóticamente a la expresión de $Q$.\\
+	
+	La serie de Taylor de $\log \theta_i$ centrada en $\hat{\theta}_i = f_i/n$ es
+	\[ \log \theta_i = 
+			\log \hat{\theta}_i +
+			(\theta_i - \hat{\theta}_i)
+				\frac{1}{\hat{\theta}_i} +
+			\frac{(\theta_i - \hat{\theta}_i)^2}{2!}
+				\left(-\frac{1}{\hat{\theta}_i^2}\right) +
+			\dots
+	\]
+	
+	con lo que
+	
+	\begin{align*}	
+	 \log \theta_i^0 - \log \frac{f_i}{n} & = 
+			\left(
+				\theta_i^0 - \frac{f_i}{n}
+			\right) \frac{n}{f_i} -
+			\left(
+				\theta_i^0 - \frac{f_i}{n}
+			\right)^2 \frac{n^2}{2f_i^2} + \epsilon \\
+		&= \frac{n\theta_i^0 - f_i}{f_i} -
+			\frac{(n\theta_i^0 - f_i)^2}{2f_i^2} +\epsilon
+	\end{align*}
+	
+	con $\epsilon = \sum\limits_{j=3}^\infty
+			(-1)^{j+1} 
+			\left( \theta_i^0 - \frac{f_i}{n}\right)^j
+			\frac{n^j}{j!f_i^j}$. Sustituyendo en \ref{2logT} nos queda
+			
+	\begin{align*}
+	-2 \log T &= 
+		-2 \sum\limits_{i=1}^k n\theta_i^0 - f_i -
+		\sum\limits_{i=1}^k 
+			\frac{(n\theta_i^0 - f_i)^2}{f_i} + 
+		\sum\limits_{i=1}^k \epsilon' = \\
+	&= 0 + 
+	   \sum\limits_{i=1}^k \frac{(f_i-e_i)^2}{f_i} +
+	   \epsilon''	
+	\end{align*}	 
+	
+	Por la ley de los grandes números, $F_i/n$ es un estimador consistente de $\theta_i$, es decir
+	
+	\[ \lim_{n \rightarrow \infty} \left[
+			P \left(
+				\abs{ \frac{F_i}{n} - \theta_i } 
+					> \varepsilon
+			\right) \right] = 0 \; \forall \varepsilon > 0 \]
+	
+	\subsubsection{Kolmogorov-Smirnov}
+	
+	En el test anterior sólo se realizaban $k$ comparaciones a pesar de disponer de $n$ ($n \geq k$) observaciones. Si las $n$ muestras provienen de una distribución continua, podríamos realizar la comparación entre la función de distribución que constituye la hipótesis nula y la \textbf{función de distribución empírica} (edf) $S_n$ definida de la siguiente forma:
+	\[ S_n(x) = \frac{\text{número de muestras} \leq x}{n} \]
+	Para una definición formal introducimos notación sobre estadísticos ordinales. Sea $X_1, \dots, X_n$ una muestra aleatoria de una población con función de distribución continua $F_X$. Sea $X_{(1)}$ el menor valor de $X_1, \dots, X_n; X_{(2)}$ el segundo menor;$ \dots; X_{(n)}$ el mayor. Entonces se puede definir $S_n(x)$ como:
+	\[ S_n(x) = 
+		\left\lbrace\begin{array}{ll}
+			0 & \text{si } x < X_{(1)} \\
+			i/n & \text{si } X_{(i)} < x <X_{(i+1)},
+				i = 1, \dots, n-1 \\
+			1 & \text{si } x > X_{(n)} \\
+	\end{array}\right.
+	\]
+	
+	$S_n(x)$ es un estimador consistente para $F_X(x)$ y conforme $n$ crece, se aproxima a $F_X(x)$ para todo $x$. Entonces cabe esperar que el error vaya disminuyendo. Se define el estadístico
+	\[ D_n = \underset{x}{\sup} 
+				\vert S_n(x) - F_0(x) \vert, \]
+	que si la hipótesis nula es cierta es un buen indicador de la precisión de la estimación. El estadístico $D_n$ es especialmente útil en la inferencia no paramétrica debido a que la distribución de $D_n$ no depende de $F_0(x)$ mientras sea continua. Se definen las desviaciones direccionales
+	\[ D_n^+ = \underset{x}{\sup} [S_n(x) - F_0(x)]
+		D_n^- = \underset{x}{\sup} [F_0(x) - S_n(x)]\]
+	
+\begin{teorema}
+	Los estadísticos $D_n, D_n^+$ y $D_n^-$ son libres de distribución para cualquier función de distribución continua $F_0$.
+\end{teorema}
+	
+\begin{teorema}
+	Si $F_X$ es una función de distribución continua, entonces para cada $d>0$
+	\[ \underset{n \rightarrow \infty}{lim}
+			P(D_n \leq d/\sqrt{n}) = L(d) \]
+	con
+	\[ L(d) = 1 - 2 \sum\limits_{i=1}^\infty 
+			(-1)^{i-1} e^{-2i^2d^2}	\]
+\end{teorema}
+
+\begin{teorema}
+	Si $F_0$ es una función de distribución continua, entonces bajo $H_0$ para cada $d>0$
+	\[ \underset{n \rightarrow \infty}{lim}
+			P(D_n^+ < d/\sqrt{n}) = 1-e^{-2d^2} \]
+\end{teorema}	
+	Como consecuencia de este teorema podemos usar las tablas de la distribución chi cuadrado:
+	
+\begin{corolario}
+	Si $F_0$ es una función de distribución continua, entonces para cada $d \geq 0$, la distribución límite de $V = 4n {D_n^+}^2$ para $n \rightarrow \infty$ es la distribución chi cuadrado con dos grados de libertad.
+\end{corolario}	
+	
+	
+\subsection{Test basados en una muestra y en muestras emparejadas}
+	
+	En este apartado presentaremos los test no paramétricos análogos a test paramétricos como el test $t$ de Student para las hipótesis nulas $H_0: \mu = \mu_0$ para una única muestra y $H_0: \mu_X - \mu_Y = \mu_0$ para muestras emparejadas. En los test no paramétricos sólo serán necesarias condiciones sobre la continuidad de la población. 
+	
+\subsubsection{Test de signo}
+
+	Supongamos una muestra de $n$ elementos de una población $F_X$ con mediana desconocida $M$, donde suponemos que $F_X$ es continua y estrictamente creciente al menos en el entorno de $M$. Esto significa que $F_X^{-1}(0.5) = M$. La hipótesis nula a comprobar se corresponde con el valor de la mediana:
+	\[ H_0: M = M_0	\text{ o equivalentemente }
+			\theta = P(X > M_0) = 0.5 \]
+	con $M_0$ un valor dado. Como hemos supuesto que $F_X$ tiene una única mediana, la hipótesis significa que $M_0$ divide el área de la función de densidad en dos partes iguales. Denotamos por $K$ el número de observaciones mayores que $M_0$. Podemos considerar entonces que estamos obteniendo una muestra de una v.a. $K$ que sigue una distribución de Bernouilli con parámetros $n$ y $\theta=P(X>M_0)$, y $\theta=0.5$ si la hipótesis nula es cierta. Se llama test de signo debido a que $K$ es el número de signos positivos en $X_i - M_0, i = 1, \dots, n$. La hipótesis alternativa queda por tanto
+	\[ H_1: M \neq M_0	\text{ ó }
+			\theta = P(X > M_0) \neq 0.5 \]
+	La región crítica, para $\alpha$ el nivel de significación, es $K \geq k_{\alpha/2}$ ó $K \leq k_{\alpha/2}'$, con $k_{\alpha/2}$ y $k_{\alpha/2}'$ el menor y el mayor entero respectivamente tales que
+	\[ \sum\limits_{i=k_{alpha/2}}^n
+			{n \choose i}(0.5)^n \leq \frac{\alpha}{2}
+		\text{ y }
+		\sum\limits_{i=0}^{k_{alpha/2}'}
+			{n \choose i}(0.5)^n \leq \frac{\alpha}{2}
+	\]
+
+\subsubsection{\textit{Signed-Rank test} de Wilcoxon}
+
+	El test anterior usa únicamente el signo de la diferencia de la muestra a la mediana, sin considerar la distancia. Para este test sí consideramos la distancia a la mediana aunque necesitamos suponer la simetría de la población. \\
+	Sea $X_1, \dots, X_n$ una muestra de una función de distribución continua $F$ con mediana $M$. De ser cierta la hipótesis nula $H_0: M = M_0$ las diferencias $D_i = X_i - M_0$ estarían distribuidas de manera simétrica en torno a 0.\\
+	Supongamos que ordenamos las diferencias absolutas $|D_1|, \dots, |D_n|$ del valor absoluto más pequeño al más grande y le asignamos los puestos $1, 2, \dots, n$. Sea $T^+$ el valor esperado de la suma de los puestos con diferencias positivas, $T^-$ la de aquellos con diferencias negativas. Supuesta cierta la hipótesis nula, al ser la población simétrica, $T^+ = T^-$. Para realizar el test, notaremos por$r(\cdot)$ la función que asigna el puesto de la v.a.. Definimos
+	\[ T^+ = \sum\limits_{i=1}^n Z_i r(|D_i|); \quad
+	   T^- = \sum\limits_{i=1}^n (1-Z_i) r(|D_i|) \]
+	   
+	 con $ Z_i = \left\lbrace \begin{array}{ll}
+	 				1 & \text{si } D_i > 0 \\
+	 				0 & \text{si } D_i \leq 0
+	 		\end{array} \right.$. Entonces,
+	 		
+	\[ T^+  - T^- = 2 \sum\limits_{i=1}^n
+					 Z_i r(|D_i|) - \frac{N(N+1)}{2} \]
+	
+	Bajo la hipótesis nula, $Z_i$ sigue una di stribución de Bernoulli con $E(Z_i) = 1/2$ y $var(Z_i) = 1/4$. Usando que $T^+$ es una combinación lineal de las variables $Z_i$, tenemos
+	\[ E[ T^+ | H_0 ] = \sum\limits_{i=1}^n 
+						\frac{r(|D_i|)}{2} 
+					= \frac{n(n+1)}{4}			\]
+	y
+	
+	\[ var( T^+ | H_0 ) = \sum\limits_{i=1}^n 
+						\frac{[r(|D_i|)]^2}{4} 
+					= \frac{n(n+1)(2n+1)}{24}	\]
+					
+	Para la aplicación de este test se obtiene el estadístico $T = \min \{ T^+, T^- \}$. En la tabla de los valores críticos de $T$ para el test \textit{signed-rank} de Wilcoxon \cite[Tabla A5]{SHESKIN11} se encuentran aquellos valores para nivel de significación 0.05 y 0.01 para los cuales debemos rechazar la hipótesis nula si $T$ es menor que el valor correspondiente en la tabla.\\
+	
+\paragraph{Valores iguales a la mediana} En este test se han considerado los valores iguales a la mediana como negativos. Como las diferencias con la mediana están ordenadas de manera creciente, estos valores estarán necesariamente al principio y el impacto será menor. Sin embargo, podemos considerar la siguiente modificación,
+
+	\[ Z_i = \left\lbrace \begin{array}{ll}
+	 				1 & \text{si } D_i > 0 \\
+	 				0 & \text{si } D_i < 0 \\
+	 				1/2 & \text{si } D_i = 0 
+	 		\end{array} \right. 					\]
+	
+	para repartir así entre $T^+$ y $T^-$ estas puntuaciones. 
+	
+\subsubsection{Tratamiento de empates}
+	
+	Al realizar la suposición de que la muestra se obtiene de una población continua, la probabilidad teórica de obtener dos valores idénticos es nula. Sin embargo en la práctica podemos obtener empates debido a que la población sea discreta o limitaciones en la precisión. Presentamos a continuación algunos métodos para solventar esta situación:
+	
+\paragraph{Aleatorización} Se selecciona un orden aleatorio para los elementos con igual valor.
+
+\paragraph{\textit{Midranks}} Asigna a cada individuo de un grupo de valores empatados la media de los puestos de la clasificación que tendrían de ser distintos. Es decir, si hay tres valores con la tercera menor distancia a la mediana, ocuparían los puestos 3,4 y 5 y por tanto el valor asignado a cada uno de ellos sería $\frac{3+4+5}{3}=4$. Es el método más utilizado debido a su simplicidad. 
+
+\paragraph{Estadístico medio} Se realiza el test estadístico para todas las posibles asignaciones para los términos empatados y se realiza la media de estos test.
+
+\paragraph{Estadístico menos favorable} Habiendo encontrado todos los posibles valores del test, se escoge aquel con menor probabilidad de rechazar la hipótesis nula. Es la opción más conservadora al minimizar la probabilidad de cometer un error de tipo I.
+
+\paragraph{Rango de probabilidad} Se devuelve el valor menos favorable a rechazar la hipótesis nula y el más favorable. No conduce a una única decisión a no ser que ambos valores caigan en la región crítica o fuera de ella.
+
+\paragraph{Omisión de los valores empatados} Otra posibilidad es descartar los valores empatados. Conlleva una pérdida de información y generalmente introduce un sesgo hacia rechazar la hipótesis nula.
+	
+	
+\subsection{Medidas de asociación en clasificaciones múltiples}	
+
+	En este apartado presentamos la versión no paramétrica para el problema del análisis de la varianza. Enfocado al problema abordado en este trabajo, nos será muy útil para comparar el rendimiento de varios algoritmos en distintas bases de datos. Los datos se presentan en una tabla $n \times k$ con entradas $X_{ij}$. En esta distribución influyen dos factores que llamaremos el efecto por filas y por columnas.\\
+	 Para nuestro problema, consideraremos que las filas se corresponden con bases de datos y que las columnas constituyen los algoritmos utilizados. Un enfoque similar sería considerar cada fila una porción de tierra y cada columna un tratamiento distinto aplicado a un cultivo.
+	
+\subsubsection{Análisis bidimensional de la varianza mediante clasificaciones en una tabla $k \times n$ y comparaciones múltiples de Friedman}
+
+	Partimos de una matriz $n \times k$. Consideraremos que las filas son independientes, pero no las columnas (en nuestro problema esto significa que las bases de datos sí son independientes pero cada algoritmo los resultados guardan correlación). Friedman sugirió cambiar cada valor de la matriz por la clasificación de cada fila.
+	
+	\[ \left( \begin{matrix}
+		R_{11} & R_{12} & \dots & R_{1k} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		R_{n1} & R_{k2} & \dots & R_{nk}
+		\end{matrix} \right)	\]
+
+	Entonces, $R_{i1}, \dots, R_{ik}$ es una permutación de los $k$ primeros números (salvo en caso de empate). Escribimos como $R_j$ el total para la columna $j$. Consideraremos la distribución de la muestra de la v.a. 
+	\begin{equation}
+		 S = \sum\limits_{j=1}^k
+				\left[
+					R_j - \frac{n(k+1)}{2}
+				\right]^2 =
+			\sum\limits_{j=1}^k \left[
+				\sum\limits_{i=1}^n \left(
+					R_{ij} - \frac{k+1}{2}
+				\right)
+			\right]^2
+	\label{S-Friedman}
+	\end{equation}
+	
+	bajo la hipótesis nula $H_0: \theta_1 = \dots = \theta_k$. En el caso de que no hubiera empates por filas habría un total de $(k!)^n$ posibles entradas igualmente probables. Las posibilidades se pueden enumerar y calcular el valor de $S$ para cada una de ellas, con lo que la distribución de probabilidad de $S$ sería $f_S(s) = \frac{u_s}{(k!)^n}$, con $u_s$ el número de asignaciones que tienen como suma de los cuadrados de las desviaciones totales por columnas $s$. Existe un método para obtener $u_s$ de $k$ y $n$ a partir de $k$ y $n-1$, y tablas con valores. Para los valores que exceden estas tablas se usa una aproximación de la distribución.\\
+	Notando $\mu = \frac{k+1}{2}$, escribimos \ref{S-Friedman}:
+	
+	\begin{align}
+		S 	&= 	\sum\limits_{j=1}^k
+					\sum\limits_{i=1}^n (R_{ij}-\mu)^2
+				+ 2 \sum\limits_{j=1}^k
+					\sum\limits_{i=1}^{n-1}
+						\sum\limits_{p=i+1}^n
+							(R_{ij}-\mu)(R_{pj}-\mu) 
+				\nonumber \\
+			&=	k \sum\limits_{j=1}^n (j-\mu)^2 + 2U 
+				\nonumber \\
+			&=  \frac{nk(k^2-1)}{12} + 2U	
+	\label{S-Friedman2}
+	\end{align}
+	
+	Los momentos de $S$ vienen determinados por los momentos de $U$, que se derivan de:
+	\[ 	E[ R_{ij} ]= \frac{k+1}{2};\ 
+		\var(R_{ij})=\frac{k^2-1}{12};\
+		\cov(R_{ij},R_{iq}) = -\frac{k^2-1}{12}
+	\]
+	
+	Además, dado que las observaciones en las diferentes filas son independientes, para $i \neq p$, la esperanza del producto de funciones de $R_{ij}$ y $R_{pq}$ estará multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
+	\[ E(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0 \] con lo que $var(U) = kE(U^2)$, con
+	
+	\begin{align*}
+		U^2 =& \sum\limits_{j=1}^k
+				\sum\limits_{1 \leq i < p \leq n}
+					(R_{ij} - \mu)^2 (R_{pj} - \mu)^2 \\
+			+& 2 
+			    \sum\limits_{j=1}^{k-1}
+			      \sum\limits_{q=j+1}^k
+					\sum\limits_{i=1}^{n-1}
+					  \sum\limits_{p=i+1}^n	
+					  	\sum\limits_{r=1}^{n-1}
+						  \sum\limits_{s=r+1}^n
+				(R_{ij} - \mu)(R_{pj} - \mu)
+				(R_{rq} - \mu)(R_{sq} - \mu)	
+	\end{align*}
+	
+	Como $R_{ij}$ y $R_{pq}$ son independientes para $i \neq p$, tenemos
+	\begin{align*}
+		E[U^2] =& \sum\limits_{j=1}^k
+					\sum\limits_{1 \leq i < p \leq n}
+						var(R_{ij})var(R_{pj}) \\
+			 &+ 2 
+			    \sum\limits_{j=1}^{k-1}
+			      \sum\limits_{q=j+1}^n
+			    {n \choose 2}
+				\cov(R_{ij}, R_{iq}) \cov(R_{pj}, R_{pq}) \\
+			=& k {n \choose 2} \frac{(k^2-1)^2}{144} +
+				2{k \choose 2}{n \choose 2} 
+					\frac{(k^2+1)^2}{144} \\
+			=& k^2 {n \choose 2} (k+1)^2 \frac{k-1}{144}
+	\end{align*}	
+	
+	Sustituyendo en \ref{S-Friedman2} llegamos a 
+	
+	\[ E[S] = \frac{nk(k^2-1)}{12}; \ 
+		\var(S)= \frac{k^2n(n-1)(k+1)^2}{72} \]
+	
+	Podemos definir la transformación
+	
+	\[ \chi^2_F = \frac{12S}{nk(k+1)} = 
+	\frac{12 \sum\limits_{j=1}^k R_j^2}{nk(k+1)} -3n(k+1)\]
+	
+	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)\frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros momentos de la distribución $\chi^2_{k-1}$. También los momentos de mayor orden de $\chi^2_F$ se aproximan a los momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A efectos prácticos, podemos tratar $\chi^2_F$ como una $\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica para la hipótesis nula mencionada con nivel de significación $\alpha$ es
+	\[ \chi^2_F \in R \ \text{ para } Q \geq \chi_{k-1,\alpha}^2 \]
+	
+	
+\subsection{Revisión del estado del arte en la aplicación de test no paramétricos}
+ 
+\paragraph{Validación de un modelo de degradación de documentos} \cite{KANUNGO00} En este artículo se presenta un modelo de la degradación en documentos producida por la digitalización de documentos impresos o la realización de fotocopias. El problema estadístico que se define es el siguiente. Dadas las muestras $x_1, \dots, x_N$ e $y_1, \dots, y_M$ de caracteres degradados de un mismo carácter de un documento y generados de manera artificial, respectivamente, realizar el test sobre la hipótesis nula de de ambos  provienen de la misma población para un valor de significación $\alpha$. El test aplicado es un test basado en permutaciones cuyo procedimiento se describe a continuación.
+
+\begin{algorithm}
+	\caption{Test basado en permutaciones}
+	\label{alg:TBP}
+	\begin{algorithmic}[1]
+	\REQUIRE
+		\begin{enumerate}[a]
+		\item Datos reales $X = \{ x_1, \dots, x_N \}$
+		\item Datos generados $Y = \{ y_1, \dots, y_M \}$
+		\item Función distancia entre conjuntos $\rho(X,Y)$
+		\item Función distancia entre caracteres $\delta(x,y)$
+		\item Tamaño máximo del test $\alpha$
+		\end{enumerate}
+		\STATE Calcular $d_0 = \rho(X,Y)$
+		\STATE Crear una muestra $Z= \{x_1, \dots, x_N, y_1, \dots, y_M \}$.
+		\FOR { $i \in \{1, \dots, K\}$ }
+			\STATE Realizar una permutación de $Z$.
+			\STATE Particionar $Z$ en $X'$ e $Y'$ tales que $X' = \{ z_1, \dots, z_N \}$, $Y' = \{ z_{N+1}, \dots, z_{N+M} \} $.
+			\STATE Calcular $d_i = \rho(X,Y)$
+		\ENDFOR
+		\STATE Calcular la distribución empírica de las $d_i$
+		\STATE Calcular el $p$-valor: $\alpha_0 = P(d \geq d_0)$
+		\STATE Rechazar la hipótesis nula si $\alpha_0 \leq \alpha$
+	\end{algorithmic}
+\end{algorithm}
+
+	Para la comparar un modelo $A$ con otro $B$ se comparan sus funciones de potencia. Suponemos $X \leadsto F(\theta_X)$, $Y \leadsto F(\theta_Y)$. Consideraremos la hipótesis nula $H_0 = \theta_X = \theta_Y$. Si fijamos $\theta_X= \theta_0$, Denotamos a la función potencia $\gamma_{\theta_0}= P(H_1 | \theta_X = \theta_0 \text{ y } \theta_Y = \theta)$. $A$ será mejor que $B$ dado $\theta$ si $\gamma_{\theta_0}^A  >\gamma_{\theta_0}^B$.
+	
+\paragraph{Comparación estadística de varios clasificadores} \cite{CHENGCHEN03} En este artículo se describe un método para realizar la comparación estadística de varios clasificadores sobre una misma base de datos a través del test de Cochran, una generalización del test de McNemar. La aplicación de un test no paramétrico en lugar de uno paramétrico como ANOVA se justifica en el artículo debido a que no se puede asegurar la independencia entre las instancias clasificadas por un mismo clasificador, con lo que queda en entredicho el desempeño del test ANOVA, por ejemplo. Si la hipótesis nula, $H_0: \theta_1 = \dots = \theta_n$ (todos los algoritmos tienen un rendimiento equivalente), es cierta, no es necesario ningún análisis posterior. Si es rechazada, se pretenden realizar múltiples comparaciones para encontrar los algoritmos con mejor rendimiento. Para ello se describen los métodos de Bonferroni y Scheffé. El primero parte de una familia de $g$ contrastes, mientras que el segundo considera la familia $L$ de todos los contrastes posibles. Por ello, para el primero se deben prefijar las comparaciones a realizar, mientras que para el segundo esto se puede realizar \textit{a posteriori} según los datos obtenidos. Para escoger entre un método u otro, se recomienda escoger el primero cuando $Z_{1-\alpha/2g}$ (percentil $(1-\alpha/2g)100$ de una distribución normal estándar) es menor que $\sqrt{\chi^2_{m-1,1-\alpha}}$ (donde $m$ es el número de algoritmos en la comparación) debido a que en este caso el método de Bonferroni tiene una mayor potencia. Escogeremos el método de Scheffé en caso contrario.
+
+\paragraph{Comparación estadística de clasificadores en varios conjuntos de datos} \cite{DEMSAR06} De la comparación utilizando un único conjunto de datos se pasa en este artículo a presentar un método para comparar el rendimento sobre varios conjuntos de datos utilizando test no paramétricos.\\
+	Se incluyen en una primera sección las opciones para realizar las comparaciones entre dos clasificadores para varias bases de datos, evaluando sus ventajas e inconvenientes:
+	\begin{enumerate}
+	\item Media entre los conjuntos de datos: Arroja poca información poco valiosa al combinar puntuaciones obtenidas en distintos dominios.
+	\item $t$-test emparejados: El estadístico de este test paramétrico es similar al usado al realizar la media entre los conjuntos de datos. Además, se necesita que la diferencia siga una distribución normal, además de que los datos disponibles suelen ser reducidos. 
+	\item Test de signo: Como se ha dicho en el desarrollo de los test, no tiene en cuenta la magnitud de la diferencia.
+	\item \textit{Signed-Rank test} de Wilcoxon: Más seguro que el $t$-test al no suponer la distribución normal. Si no se dan las circunstancias adecuadas, este test puede tener mayor potencia que el $t$-test.
+	\end{enumerate}
+	
+	En cuanto a la comparación entre varios clasificadores, se incluye una breve descripción del método ANOVA y una descripción más extensa del test de Friedman, que podríamos considerar su versión no paramétrica. Se incluye el estadístico $F_F = \frac{(n-1) \chi^2_F}{n(k-1) - \chi^2_F}$ que sigue la distribución $F$ con $k-1$ y $(k-1)(n-1)$ grados de libertad. Aunque el test ANOVA tiene mayor potencia cuando las condiciones se cumplen, se incluye un experimento que muestra que apenas hay diferencias si éstas no se dan.\\
+	Una vez se ha rechazado la hipótesis nula se describen los test \textit{post-hoc} de Nemenyi, Bonferroni-Dunn, Holm, Hochberg y Hommel.
+	
 
 	\subsection{Test basados en permutaciones}
 
