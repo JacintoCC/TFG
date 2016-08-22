@@ -28,6 +28,7 @@
 \usepackage[colorlinks=true,linkcolor=black]{hyperref} %referencia
 
 \usepackage{float}
+\newcommand*{\at}{@}
 
 % ********************************************************************
 % Re-usable information
@@ -39,7 +40,7 @@
 \newcommand{\myProf}{Francisco Herrera Triguero}
 \newcommand{\myOtherProf}{María del Mar Rueda García}
 %\newcommand{\mySupervisor}{Put name here\xspace}
-\newcommand{\myFaculty}{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación, Falcultad de Ciencias}
+\newcommand{\myFaculty}{Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación, Facultad de Ciencias}
 \newcommand{\myFacultyShort}{}
 \newcommand{\myDepartment}{}
 \newcommand{\myUni}{\protect{Universidad de Granada}}
@@ -49,7 +50,7 @@
 
 
 \hypersetup{
-pdfauthor = {\myName (jacintocc (en) (punto) ugr (punto) es)},
+pdfauthor = {\myName  (jacintocc\at correougr.es)},
 pdftitle = {\myTitle},
 pdfsubject = {},
 pdfkeywords = {palabra_clave1, palabra_clave2, palabra_clave3, ...},
@@ -118,7 +119,7 @@ pdfproducer = {pdflatex}
 \definecolor{gray97}{gray}{.97}
 \definecolor{gray75}{gray}{.75}
 \definecolor{gray45}{gray}{.45}
-\definecolor{gray30}{gray}{.94}
+\definecolor{gray30}{gray}{.30}
 
 \lstset{ frame=Ltb,
      framerule=0.5pt,
@@ -213,6 +214,7 @@ pdfproducer = {pdflatex}
 \newcommand{\var}{\text{var}}
 \newcommand{\cov}{\text{cov}}
 
+
 % Pseudocódigo
 \usepackage{algorithm}
 \usepackage{algorithmic}
@@ -223,8 +225,8 @@ pdfproducer = {pdflatex}
 
 \begin{document}
 \pagenumbering{roman}
-%\input{portada/portada}
-%\input{prefacios/prefacio}
+\input{portada/portada}
+\input{prefacios/prefacio}
 %\frontmatter
 \tableofcontents
 %\listoffigures

@@ -45,10 +45,11 @@
 	\item[Tasa falsos positivos(fpr)] $fpr=1-sp$
 	\item[Tasa falsos negativos(fnr)] $fnr=1-r$
 	\item[Valor negativo predicho(npv)] $npv=\frac{TN}{\hat{N}^-}$
-	\item[Estadístico kappa ($\kappa$)] $\kappa = \frac{Acc-p_e}{1-p_e}$, con 
-	\[ p_e = 
-		\left( \frac{TP+FN}{N} \cdot \frac{TP+FP}{N} \right) + 
-		\left( \frac{TN+FP}{N} \cdot \frac{TN+FN}{N} \right)  \] 
+	\item[Estadístico kappa ($\kappa$)] El propósito de esta medida es medir el grado de acuerdo entre dos observadores, o, en nuestro contexto, compensar los valores aleatorios además de minimizar el efecto de un dispar número de ejemplos en cada clase. 
+	\[ 
+	\kappa = \frac{N(TP + TN) - N^+\hat{N}^+ - N^-\hat{N}^- }
+				  {N^2 - N^+\hat{N}^+ - N^-\hat{N}^- }
+	\]
 \end{description}
 	
 	Las medidas de \textit{accuracy} y el error de clasificación son comúnmente usadas debido a que representa un concepto claro y es fácil de calcular.  Es necesario indicar que estas medidas son aconsejables cuando las dos clases se dan con una frecuencia similar y son igualmente relevantes para nuestro problema. Otras medidas como \textit{recall}, \textit{specificity} o \textit{precision} son más frecuentes en dominios como el de recuperación de información y aquellos donde o bien una clase es más relevante, o sólo existen unos pocos individuos de una clase.\\
@@ -69,7 +70,15 @@
 	donde $P\left(C=j|\mathbf{x}^{(i)}\right)$ es la probabilidad asignada por el clasificador a la instancia $i$-ésima para la clase $j$, $\delta$ es la delta de Kronecker y $c^{(i)}$ es la clase de la instancia $i$-ésima.\\
 	Hasta ahora las medidas le han dado el mismo peso a los errores cometidos en ambos sentidos (asignar a la clase positiva una instancia negativa o viceversa), sin embargo se pueden incluir \textit{funciones de pérdida} ($\mathcal{L}$) según el coste relativo de cada tipo de fallo. Hasta ahora se puede considerar que hemos usado la función de pérdida $\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase asignada e $y$ la clase real.
 	
-\subsection*{Medidas gráficas}
+\subsubsection*{Medidas de interpretabilidad} 
+	En algunos modelos y clasificadores se obtienen reglas para la clasificación de nuevos ejemplos. Por ello se valora positivamente que estas reglas sean entendibles para el usuario. 
+	\begin{description}
+	\item[Tamaño] Número de reglas que componen el modelo. A menor tamaño, mayor interpretabilidad. $\textit{Tamaño} = n_R$
+	\item[Número de antecedentes (ANT)] Para $R_i$ una regla de la forma $\textit{Condi-}$ ${ciones } \rightarrow \textit{ Clase}$ donde las condiciones tienen la forma $(Antecedente_1 \wedge \dots \wedge Antecedente_k)$, definimos $Ant(R_i) = k$ y entonces $ANT = \frac{1}{n_R} \sum\limits_{i=1}^{n_R} Ant(R_i)$.
+	\end{description}
+
+
+\subsubsection*{Medidas gráficas}
 
 	Como vemos en \cite{PRATI11}, en ocasiones es recomendable utilizar una representación gráfica del rendimiento ya que evitamos así pérdida de información al condensar toda la información en un escalar. En este artículo se presenta un conjunto de representaciones gráficas según el tipo de variable predicha: clases, ranking o probabilidad de pertenencia a una clase.
 	

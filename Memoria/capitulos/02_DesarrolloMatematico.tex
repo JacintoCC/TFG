@@ -1,11 +1,3 @@
-%\documentclass[11pt,leqno]{book}
-%\usepackage[spanish,activeacute]{babel}
-%\usepackage[utf8]{inputenc}
-%\usepackage{enumerate}
-%
-%\begin{document}
-
-
 \chapter{Desarrollo matemático}
 
 \section{Introducción a la inferencia}
@@ -85,8 +77,8 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 		\item $\hat{\theta}_n$ es un estimador consistente de $\theta$ si la distribución límite es la distribución degenerada con probabilidad $1$ en $\theta$.
 	\end{enumerate}
 			
-	\item \textit{Mínimo error cuadrático} 	$E[(\hat{\theta}_n - \theta)^2] \leq E[(\hat{\theta}_n^\star - \theta)^2]$ para cualquier estimador $\hat{\theta}_n^\star$.
-	\item \textit{Mínima varianza} 	$var(\hat{\theta}_n) \leq var(\hat{\theta}^\star_n)$ para cualquier estimador $\hat{\theta}_n^\star$, siendo ambos insesgados.
+	\item \textit{Mínimo error cuadrático} 	$E[(\hat{\theta}_n - \theta)^2] \leq E[(\hat{\theta}_n^* - \theta)^2]$ para cualquier estimador $\hat{\theta}_n^*$.
+	\item \textit{Mínima varianza} 	$var(\hat{\theta}_n) \leq var(\hat{\theta}^*_n)$ para cualquier estimador $\hat{\theta}_n^*$, siendo ambos insesgados.
 	\end{enumerate}
 	
 \begin{definicion}[Función de verosimilitud]
@@ -153,15 +145,24 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 
 \section{Test no paramétricos}
 
-	En la inferencia clásica se efectúan suposiciones sobre la población de la que se extraen muestras para realizar la inferencia. Aunque estas suposiciones están normalmente justificadas, en ocasiones no se dan las circunstancias necesarias para aplicar estas técnicas o su uso no está bien documentado. Por ello surgen las técnicas no paramétricas.
+	Para poder comprender este concepto, definimos la familia no paramétrica de distribuciones según \cite{PESSAL10}, sobre la que se realizan los test no paramétricos.
+ 
+\begin{definicion}[Familia de distribuciones no paramétrica]
+	Una familia de distribuciones $\mathcal{P}$ se dice que se comporta de manera no paramétrica cuando no es posible encontrar un espacio de dimensión finita $\Theta$ tal que hay una relación uno a uno entre $\Theta$ y $\mathcal{P}$, en el sentido en que cada elemento $P \in \mathcal{P}$ no puede ser identificado por un único elemento $\theta \in \Theta$ y viceversa.
+\end{definicion}
+
+	Si existiese esta relación, $\mathcal{P}$ sería una familia paramétrica y $\theta$ sería el parámetro.\\
+	En base a esta definición, consideraremos la inferencia estadística no paramétrica aquella que se realiza sobre una muestra suponiendo la pertenencia de ésta a una familia no paramétrica de distribuciones.
 	
 	\subsection*{Comparación con test paramétricos}
+	
+	En la inferencia clásica se efectúan suposiciones sobre la población de la que se extraen muestras para realizar la inferencia. Aunque estas suposiciones están normalmente justificadas, en ocasiones no se dan las circunstancias necesarias para aplicar estas técnicas o su uso no está bien documentado. Por ello surgen las técnicas no paramétricas. Nótese que es distinta la suposición al aplicar estas técnicas no paramétricas, pues consideramos en este caso que no conocemos su distribución.\\
 	
  	La principal ventaja de los test no paramétricos es que las hipótesis son más generales con lo que se pueden aplicar en un mayor número de problemas. Una de las condiciones habituales es la continuidad, aunque hay otras condiciones más estrictas como que la población sea simétrica para según qué test. Esto repercute en que se le pueden aplicar funciones a las muestras obtenidas para la realización de los test, a diferencia de en los test paramétricos dado que las muestras deben generalmente provenir de una población de forma conocida.\\
  	
  	Hay test de hipótesis que no están relacionados con valores de parámetros (a diferencia de los paramétricos). Son más simples de aplicar, las matemáticas, menos sofisticadas y basadas en la combinatoria, están relacionadas con las propiedades usadas en el proceso inductivo. Los libros de recetas no son necesarios, pues con la mera definición del test queda suficientemente claro cómo aplicar el test no paramétrico. Además, las distribuciones asintóticas son distribuciones conocidas como la normal o la chi cuadrado. Al relajar las condiciones sobre los datos de entrada, es menos sensible al \textit{dirty-data}, datos con errores usados en el entrenamiento del clasificador. Esto implica una mayor robustez en los test no paramétricos.\\
  	
- 	Correctamente aplicados, los test paramétricos, al disponer de mayor información tienen una mayor potencia, sin embargo, cuando se disponen de menos datos, y por tanto es más difícil que se den las condiciones de los test paramétricos, la potencia es similar.
+ 	Correctamente aplicados, los test paramétricos, al disponer de mayor información tienen una mayor potencia, sin embargo, cuando se disponen de menos datos, y por tanto es más difícil que se den las condiciones de los test paramétricos, la potencia es similar. Además, en esta situación, la falta de eficiencia de los test no paramétricos se suple con la falta de precisión de los test paramétricos al aproximar la distribución de los datos por la distribución asintótica conocida.
 
 
  	Se incluye en esta sección el desarrollo de los test no paramétricos más utilizados en aprendizaje automático.
@@ -590,6 +591,92 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)\frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros momentos de la distribución $\chi^2_{k-1}$. También los momentos de mayor orden de $\chi^2_F$ se aproximan a los momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A efectos prácticos, podemos tratar $\chi^2_F$ como una $\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica para la hipótesis nula mencionada con nivel de significación $\alpha$ es
 	\[ \chi^2_F \in R \ \text{ para } Q \geq \chi_{k-1,\alpha}^2 \]
 	
+\subsection{Test basados en permutaciones}
+	
+	En este apartado se incluye una descripción general sobre los test basados en permutaciones. La hipótesis general a la hora de realizar inferencia es considerar que una muestra aleatoria $\mathbf{x}$ proviene de una misma población $ P \in \mathcal{P};\ H_0: \{ X \leadsto P \in \mathcal{P} \}$. Por tanto, supuesta esta hipótesis nula, obtenemos que si la muestra $\mathbf{x}$ viniese de poblaciones distintas, los valores pertenecientes a cada población podrían intercambiarse por los de otra sin ningún problema.\\
+	Notemos además que $\mathbf{x}$ es un conjunto de estadísticos suficientes para cualquier distribución en $H_0$. Esto se debe a que, si $H_0$ es cierto, sea $f_P$ la densidad de $P$, $f_P^{(n)}(x)$ la densidad de la variable $X^(n)$. Como $f_P^{(n)}(\mathbf{x}) = f_P^{(n)}(\mathbf{x}) \cdot 1$ para todo $\mathbf{x} \in \Omega^n$, excepto para $f_P^{(n)}(\mathbf{x}) = 0$ debido al teorema de factorización cualquier conjunto $\mathbf{x}$ es un conjunto de estadísticos suficientes para cualquier $P \in \mathcal{P}$.\\
+	En estos test se realizan inferencias condicionadas con respecto a la muestra $x$, que es a su vez un conjunto de estadísticos suficientes en $H_0$. Este hecho unido a la intercambiabilidad de los datos observados con respecto a los grupos hace que los test sean independientes de las distribución $P$, por lo que no necesitamos conocerla. Esto queda más claramente explicado en el siguiente principio:
+
+\begin{definicion}[Principio de los test basados en permutaciones]
+	Si dos experimentos toman valores en el mismo espacio muestral $\Omega$ respectivamente con las distribuciones $P_1, P_2 \in \mathcal{P}$, dan el mismo conjunto de datos $\mathcal{x}$, entonces las inferencias condicionales a $\mathcal{x}$ obtenidas usando el mismo test estadístico debe ser la misma, debido a la intercambiabilidad de los datos con respecto a los grupos se cumple en la hipótesis nula. Por consiguiente, si dos experimentos con distribuciones $P_1, P_2$ dan respectivamente como muestras $\mathbf{x_1}, \mathbf{x_2}$, con $\mathbf{x_1} \neq \mathbf{x_2}$, entonces las inferencias con respecto a $\mathbf{x_1}$ y $\mathbf{x_2}$ pueden ser distintas.
+\end{definicion}
+
+
+\subsubsection{Ejemplo con muestras emparejadas}
+
+	Para explicar el funcionamiento de los test basados en permutaciones, expondremos situaciones ya conocidas en las que sabemos cómo utilizar test paramétricos o test no paramétricos expuestos anteriormente. El primer caso es el de muestras pareadas. Supondremos una muestra de 20 individuos que se somete a un tratamiento para reducir la ansiedad. Los datos se obtienen antes y después de realizar el experimento. Por tanto consideramos la v.a. $Y = (Y_1, Y_2)$ de $n=20$ elementos $\{(Y_{1i},Y_{2i}): i = 1, \dots, n\}$. La hipótesis nula es que las diferencias en que las distribuciones marginales de $Y_1$ e $Y_2$ son iguales: $H_0 : \{ Y_1 = Y_2 \}$ frente a $H_1: \{ Y_1 > Y_2 \}$\\
+	
+	En primer lugar, nótese que la hipótesis nula $H_0$ implica que las dos variables $Y_1, Y_2$ son intercambiables. Esto es, supuesto $H_0$, para cada individuo los dos valores observados podrían corresponder con cualquiera de las observaciones, antes o después del tratamiento. Es decir, si consideramos la variable aleatoria $X = Y_2 - Y_1$, cada valor observado $X_i, i=1, \dots, n$ podría tener cualquier signo con probabilidad $1/2$. Una forma de realizar el test sería considerando el estadístico $T = \sum\limits_{i=1}^n X_i$, cuya distribución condicionada a $\mathbf{X} = \{X_i: i = 1, \dots, n\}$, $F_T(t|\mathbf{X})$ vendrá dada bajo $H_0$ considerando la atribución de todas las formas posibles del signo de cada diferencia con probabilidad $1/2$. Nos referimos por $T^* = \sum\limits_{i=1}^n X_i^*$, donde $X_i^*$ se obtiene asignando aleatoriamente el signo. Notaremos por $\Omega_{/\mathbf{X}}$ al espacio muestral de permutaciones. Este espacio consiste en las posibles permutaciones de la muestra obtenidas, aunque posteriormente daremos una definición más formal. En este caso, el espacio tiene $M^{(n)} = 2^v$ elementos, donde $n-v$ es el número de diferencias nulas. Notamos por $F(t|\mathbf{X}) = P[T^* \leq t | \mathbf{X}], t \in \mathbb{R}$ a la cdf condicional de la permutación inducida por $T$ dado $\mathbf{X}$.\\
+	Si el tamaño de la muestra $n$ es grande, podrá aplicarse el Teorema Central del Límite Permutacional (PCTL) para aproximar la distribución de la permutación $F[t|\mathbf{X}]$. Para resolver un problema de este tipo podemos guiarnos por lo siguiente:
+	
+\begin{enumerate}[a]
+	\item Si $n \leq 25$ es posible calcular exactamente $T*$ para todas las posibles permutaciones y calcular $F[t|\mathbf{X}]$.
+	\item Si $n \geq 200$, $\sigma_X$ se supone finito y el cociente $(\sum_i X_i^4)/(\sum_i X_i^2)^2$ es pequeño, $F[t|\mathbf{X}]$ puede aproximarse por el PCTL. 
+	\item En otro caso, $F[t|\mathbf{X}]$ puede aproximarse utilizando el algoritmo condicional de Monte Carlo (CMC).
+\end{enumerate}
+	
+\subsubsection{Teoría de los test basados en permutaciones}
+
+\begin{definicion}[Espacio de referencia condicional]
+	Conjunto de puntos del espacio muestral $\Omega^n$ que son equivalentes a $\mathbf{X}$ en términos de la información asociada a la verosimilitud subyacente. Lo notamos por $\Omega^n_{/\mathbf{X}}$.
+\end{definicion}
+
+	Esto es, $\Omega^n_{/\mathbf{X}}$ contiene todos los puntos $\mathbf{X}^*$ tales que $P(X)/P(X^*)$ es independiente de $P$. Dado que en $H_0$ la probabilidad de obtener $\mathbf{X}$ es la misma que de obtener una permutación $\mathbf{X}^*$,
+	\[ 
+		\Omega^n_{/\mathbf{X}} = 
+			\left\lbrace
+				\underset{\mathbf{u}^*}{\bigcup}
+					[ X(u_i^*), i = 1, \dots, n ]
+			\right\rbrace
+	\]
+	con $\mathbf{u}^*$ cualquier permutación de las etiquetas $(1, \dots, n)$.
+
+\paragraph{Definicion de los test basados en permutaciones}
+\begin{definicion}[Soporte de la permutación]
+	Para realizar un test estadístico es necesaria una función no degenerada $T: \Omega^n \rightarrow \mathbf{R}$. Definimos el soporte de la permutación de $(T, \mathbf{X})$ como $\mathcal{T}_\mathbf{X} = \{ T^* = T(\mathbf{X}*): \mathbf{X}* \in \Omega_{/\mathbf{X}}\}$ 
+\end{definicion}	
+
+	Supongamos $H_0$ cierta. Entonces, $\mathbf{X}^*$ se distribuye uniformemente sobre $\Omega_{/\mathbf{X}}$. Pongamos los $M^{(n)}$ elementos de $\mathcal{T}_\mathbf{X}$ en orden creciente. De esta manera para $\alpha \in (0,1)$, se define $T_\alpha(\mathbf{X}) = T_\alpha = T^*_{(M^{(n)}_\alpha)}$ como el valor crítico asociado a $(T, \mathbf{X})$, donde $M^{(n)}_\alpha$ es el número de valores $T^*$ estrictamente menor que $T_\alpha$. Nótese que $T_\alpha$ depende de $\Omega_{/\mathbf{X}}$ y no únicamente de $\mathbf{X}$, pues $T_\alpha(\mathbf{X}) = T_\alpha(\mathbf{X}')$ para $\mathbf{X}' \in \Omega_{/\mathbf{X}}$. Esto implica que para $\alpha$ fijo, $T_\alpha$ es fijo para $\mathcal{T}_\mathbf{X}$.
+	
+\paragraph{Test basados en permutaciones aleatorizados}
+
+	Se define la versión aleatorizada del test basado en permutaciones para $(T, \mathbf{X})$ como 
+	\[ 
+		\phi_R = \left\lbrace \begin{array}{cc}
+			1 		& \text{ si } T^0 > T_\alpha \\
+			\gamma 	& \text{ si } T^0 = T_\alpha \\
+			0		& \text{ si } T^0 < T_\alpha \\
+		\end{array} \right.
+	\]
+	
+	donde $T^0 = T(\mathbf{X})$, el valor de $T$ en los datos observados y $\gamma$ es:
+	\[
+		\gamma = \frac{\alpha - P[T^0 > T_\alpha | 
+								\Omega_{/\mathbf{X}}]}
+					  {P[T^0 = T_\alpha | 
+								\Omega_{/\mathbf{X}}]}
+	\]
+	
+	Para aplicar $\phi_R$ es habitual usar un experimento aleatorio independiente de $\mathbf{X}$. Por ejemplo, rechazando $H_0$ si $U \geq \gamma$ para $T^0 = T_\alpha$, con $U$ un valor aleatorio de la variable uniforme $\mathcal{U}(0,1)$.\\
+	Para $\mathbf{X} \in \Omega^n$ la esperanza en $H_0$ de $\phi_R$ para $\alpha$ es:
+	\[ E[ \phi_R(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
+			P[ T^0(\mathbf{X}) > T_\alpha(\mathbf{X}) | 
+								\Omega_{/\mathbf{X}}] + 
+			P[ T^0(\mathbf{X}) = T_\alpha(\mathbf{X}) | 
+								\Omega_{/\mathbf{X}}] =
+			\alpha
+	\]
+	
+	Por consiguiente, el tamaño del test basado en permutaciones aleatorizado es exactamente $\alpha$.
+	
+\begin{proposicion}
+	Supuesta la condición de intercambiabilidad para $\mathcal{X}$. Entonces para todas las distribuciones $P$ y uniformemente para todos los conjuntos de datos $\mathbf{X} \in \Omega^n$ la probabilidad condicionada de rechazo de $\phi_R$ es invariante con respecto a $\mathbf{X}$ y $P$.
+\end{proposicion}
+
+\paragraph{Test basados en permutaciones no aleatorizados}
+
+	
+	
 	
 \subsection{Revisión del estado del arte en la aplicación de test no paramétricos}
  
@@ -636,8 +723,24 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	En cuanto a la comparación entre varios clasificadores, se incluye una breve descripción del método ANOVA y una descripción más extensa del test de Friedman, que podríamos considerar su versión no paramétrica. Se incluye el estadístico $F_F = \frac{(n-1) \chi^2_F}{n(k-1) - \chi^2_F}$ que sigue la distribución $F$ con $k-1$ y $(k-1)(n-1)$ grados de libertad. Aunque el test ANOVA tiene mayor potencia cuando las condiciones se cumplen, se incluye un experimento que muestra que apenas hay diferencias si éstas no se dan.\\
 	Una vez se ha rechazado la hipótesis nula se describen los test \textit{post-hoc} de Nemenyi, Bonferroni-Dunn, Holm, Hochberg y Hommel.
 	
+	
+\paragraph{Extensión sobre los procedimientos \textit{post-hoc}} \cite{GARCIAHERRERA08} Este artículo extiende al anterior prestando una mayor atención a la descripción de los procedimientos para la comparación entre algoritmos una vez rechazada la hipótesis nula. 
+	\begin{itemize}
+	\item Procedimiento de Nemenyi: Se ajusta el valor de $\alpha$ dividiendo por el número de comparaciones $\frac{k(k-1)}{2}$. 
+	\item Procedimiento de Holm: Ajusta el valor de $\alpha$ de manera descendente. Siendo $p_1, \dots, p_m$ los $p$-valores ordenados de menor a mayor y $H_1, \dots, H_m$ sus correspondientes hipótesis, se rechazan $H_1, \dots, H_{i-1}$ para $i$ el menor número tal que $p_i > \alpha/(m-i+1)$
+	\end{itemize}
+	
+	Debido a que las posibles hipótesis sobre la comparación por parejas están relacionadas y no se pueden dar todas las posibles combinaciones, se presentan los procedimientos de Schaffer estático y dinámico. Bergmann y Hommel propusieron un procedimiento basado en la idea de encontrar todas las hipótesis que no pudieran ser rechazadas. En un estudio comparativo sobre el rendimiento de cinco clasificadores sobre treinta bases de datos se observa como el procedimiento de Bergmann y Hommel tiene una mayor potencia.\\
+	Se aborda también el problema de calcular $p$-valores ajustados (APV) que tengan en cuenta los demás test realizados para poder utilizar directamente este valor ajustado. Se indican el cálculo para cada procedimiento \textit{post-hoc}. Tras realizar un nuevo estudio introduciendo el uso de APV, se descarta el test de Nemenyi debido a que es demasiado conservador. Se recomienda el procedimiento estático de Schaffer frente al del Holm al tener mayor potencia al usar las relaciones entre las hipótesis y una dificultad no muy superior. Debido a su coste computacional y su complejidad, se recomienda el método de Bergmann-Hommel sólo para cuando las diferencias entre clasificadores sean muy pequeñas y otros métodos no detecten diferencias significantes.
 
-	\subsection{Test basados en permutaciones}
+	\paragraph{Estudio del uso de test no paramétricos} \cite{GARCIA09} En este artículo se realiza un estudio sobre el uso de test no paramétricos para comparar el rendimiento de algoritmos evolutivos en la Sesión Especial de Optimización de parámetro real en el Congreso de Computación Evolutiva (CEC 2005). Los datos disponibles son los errores cometidos por los (11) algoritmos a la hora de minimizar 25 funciones de 10, 30 y 50 variables reales. En primer lugar se estudian las condiciones para realizar un test paramétrico ($t$-test) llevando a cabo test de normalidad (test de Kolmogoro-Smirnov, test de Shapiro-Wilk y el de D'Agostino-Pearson) y el test de Levene de Heterocedasticidad. Se pretende realizar en primer lugar la comparación entre dos de los algoritmos para comprobar si hay diferencias entre ellos. Sin embargo los test de normalidad rechazan para los resultados en casi todas las funciones a minimizar la hipótesis de normalidad y el test de Levene rechaza la hipótesis de la equivalencia de las varianzas, con lo que no se cumplen las condiciones para realizar el $t$-test. Si se realizan el $t$-test y el test no paramétrico de Wilcoxon se observa que los resultados son muy similares.\\
+	A la hora de afrontar la comparación en múltiples problemas en lugar de problema por problema en este artículo se toma la media de las distintas ejecuciones. Al realizar los test de normalidad sobre las dos muestras de 25 elementos para cada algoritmo se descarta la normalidad. El $t$-test y el test de Wilcoxon no rechazan la hipótesis nula de que ambos algoritmos sean igual de buenos, sin embargo el $p$-valor del test de Wilcoxon es bastante menor, lo que nos lleva a pensar que, debido a la ausencia de normalidad y de pocos datos y difíciles de incrementar (pues en este caso deberíamos añadir funciones nuevas funciones y sus correspondientes evaluaciones para cada algoritmo), en estos casos es mejor utilizar test no paramétricos.\\
+	Para realizar el análisis sobre todos los algoritmos se separan las funciones fáciles, aquellas en las que algún algoritmo alcanza el óptimo frente a las que ningún algoritmo llegó al óptimo. El test no paramétrico de Friedman y el de Iman-Davenport arrojan valores que nos llevan a rechazar la hipótesis nula tanto usando el grupo de funciones difíciles como usando el conjunto total de funciones.\\
+	El estudio posterior se centra en comparar los algoritmos con aquel que consiguió un menor error medio, el \textit{G-CMA-ES}. Para ello se utilizan el test de Bonferroni-Dunn, el de Holm y el de Hochberg para los dos grupos de funciones. El test de Hochberg llega a encontrar diferencias entre el mejor algoritmo y todos los demás para $\alpha=0.1$. 
+	
+	\paragraph{Estudio estadístico sobre algoritmos genéticos: precisión e interpretabilidad} \cite{GARCIA08} En este artículo se realiza la comparación sobre algoritmos evolutivos utilizados en clasificación, comparando tanto la tasa de clasificación como el valor kappa de Cohen y la interpretabilidad de estos resultados. Al igual que en el artículo anterior, se realizan test de normalidad y heterocedasticidad para comprobar si se dan las condiciones para aplicar un test paramétrico. Si las comparaciones por parejas de problemas se repiten crece el error asociado FWER (\textit{family-wise error rate}), esto es la probabilidad de al menos un error en la familia de hipótesis. Para realizar comparaciones entre varios algoritmos y fijar el FWER de antemano se utilizan el test de Friedman y el de Iman-Davenport y los test de Bonferroni-Dunn y el de Holm para buscar diferencias entre los algoritmos una vez descartada la hipótesis de que todos tienen la misma media. Se realiza calculan también los $p$-valores ajustados.\\
+	Para realizar el análisis de la interpretabilidad de los resultados se considera $\textit{Complejidad} = \textit{Tamaño} \cdot ANT$. Se realiza para este estudio únicamente un procedimiento para múltiples comparaciones, obteniendo diferencias significativas con el test de Bonferroni-Dunn y nivel de significación $\alpha=0.1$.
+	
+
 
 \section{Test bayesianos}	
-%\end{document}
