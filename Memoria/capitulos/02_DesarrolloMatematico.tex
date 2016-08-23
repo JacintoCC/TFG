@@ -581,15 +581,16 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	Sustituyendo en \ref{S-Friedman2} llegamos a 
 	
 	\[ E[S] = \frac{nk(k^2-1)}{12}; \ 
-		\var(S)= \frac{k^2n(n-1)(k+1)^2}{72} \]
+		\var(S)= \frac{k^2n(n-1)(k+1)^2}{72} .\]
 	
 	Podemos definir la transformación
 	
 	\[ \chi^2_F = \frac{12S}{nk(k+1)} = 
-	\frac{12 \sum\limits_{j=1}^k R_j^2}{nk(k+1)} -3n(k+1)\]
+	\frac{12 \sum\limits_{j=1}^k R_j^2}{nk(k+1)} -3n(k+1) .
+	\]
 	
 	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)\frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros momentos de la distribución $\chi^2_{k-1}$. También los momentos de mayor orden de $\chi^2_F$ se aproximan a los momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A efectos prácticos, podemos tratar $\chi^2_F$ como una $\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica para la hipótesis nula mencionada con nivel de significación $\alpha$ es
-	\[ \chi^2_F \in R \ \text{ para } Q \geq \chi_{k-1,\alpha}^2 \]
+	\[ \chi^2_F \in R \ \text{ para } Q \geq \chi_{k-1,\alpha}^2 .\]
 	
 \subsection{Test basados en permutaciones}
 	
@@ -621,13 +622,13 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	Conjunto de puntos del espacio muestral $\Omega^n$ que son equivalentes a $\mathbf{X}$ en términos de la información asociada a la verosimilitud subyacente. Lo notamos por $\Omega^n_{/\mathbf{X}}$.
 \end{definicion}
 
-	Esto es, $\Omega^n_{/\mathbf{X}}$ contiene todos los puntos $\mathbf{X}^*$ tales que $P(X)/P(X^*)$ es independiente de $P$. Dado que en $H_0$ la probabilidad de obtener $\mathbf{X}$ es la misma que de obtener una permutación $\mathbf{X}^*$,
+	Esto es, $\Omega^n_{/\mathbf{X}}$ contiene todos los puntos $\mathbf{X}^*$ tales que $dP(X)/dP(X^*)$ es independiente de $P$. Dado que en $H_0$ la probabilidad de obtener $\mathbf{X}$ es la misma que de obtener una permutación $\mathbf{X}^*$,
 	\[ 
 		\Omega^n_{/\mathbf{X}} = 
 			\left\lbrace
 				\underset{\mathbf{u}^*}{\bigcup}
 					[ X(u_i^*), i = 1, \dots, n ]
-			\right\rbrace
+			\right\rbrace ,
 	\]
 	con $\mathbf{u}^*$ cualquier permutación de las etiquetas $(1, \dots, n)$.
 
@@ -646,7 +647,7 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 			1 		& \text{ si } T^0 > T_\alpha \\
 			\gamma 	& \text{ si } T^0 = T_\alpha \\
 			0		& \text{ si } T^0 < T_\alpha \\
-		\end{array} \right.
+		\end{array} \right. ,
 	\]
 	
 	donde $T^0 = T(\mathbf{X})$, el valor de $T$ en los datos observados y $\gamma$ es:
@@ -654,17 +655,18 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 		\gamma = \frac{\alpha - P[T^0 > T_\alpha | 
 								\Omega_{/\mathbf{X}}]}
 					  {P[T^0 = T_\alpha | 
-								\Omega_{/\mathbf{X}}]}
+								\Omega_{/\mathbf{X}}]} .
 	\]
 	
 	Para aplicar $\phi_R$ es habitual usar un experimento aleatorio independiente de $\mathbf{X}$. Por ejemplo, rechazando $H_0$ si $U \geq \gamma$ para $T^0 = T_\alpha$, con $U$ un valor aleatorio de la variable uniforme $\mathcal{U}(0,1)$.\\
 	Para $\mathbf{X} \in \Omega^n$ la esperanza en $H_0$ de $\phi_R$ para $\alpha$ es:
-	\[ E[ \phi_R(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
+	\[ 
+		E[ \phi_R(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
 			P[ T^0(\mathbf{X}) > T_\alpha(\mathbf{X}) | 
 								\Omega_{/\mathbf{X}}] + 
 			P[ T^0(\mathbf{X}) = T_\alpha(\mathbf{X}) | 
 								\Omega_{/\mathbf{X}}] =
-			\alpha
+			\alpha .
 	\]
 	
 	Por consiguiente, el tamaño del test basado en permutaciones aleatorizado es exactamente $\alpha$.
@@ -675,16 +677,58 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 
 \paragraph{Test basados en permutaciones no aleatorizados}
 
+	En los contextos de aplicación se suele utilizar la versión no aleatorizada. Se define
 	
+	\[ 
+		\phi = \left\lbrace \begin{array}{cc}
+			1 		& \text{ si } T^0 \geq T_\alpha \\
+			0		& \text{ si } T^0 < T_\alpha \\
+		\end{array} \right. .
+	\]
 	
+	Ahora, el error asociado de tipo I es 
+	
+	\[ 
+		E[ \phi(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
+		P[ T^0 \geq T_\alpha | \Omega_{/\mathbf{X}}] =
+		\sum\limits_{\Omega_{/\mathbf{X}}}
+			\mathbb{I}[ T(\mathbf{X}^*) \geq T_\alpha ]/
+				M^{(n)} =
+		\alpha_a \geq
+		\alpha,
+	\] 
+	
+	donde $\alpha_a$ es el llamado $\alpha$-valor alcanzable asociado a $(T, \mathbf{X})$. Para $(T,\mathbf{X})$, el $\alpha$-valor alcanzable pertenece a $\Lambda_\mathbf{X}^{(n)} = \{ L_\mathbf{X}(t): dL_\mathbf{X}(t) > 0 \}$, para la función $ L_\mathbf{X}(t) = P[ T^* \geq t | \Omega_{/\mathbf{X}}] $. 
+	
+\paragraph{$p$-Valor} Determinar el valor crítico $T_\alpha$ para un test estadístico $T$ puede ser complicado en la práctica. Por tanto, normalmente se hace referencia a un $p$-valor asociado a $(T, \mathbf{X})$, que se define como $p = \lambda_T(\mathbf{X}) = L_\mathbf{X}(T^0) = P[ T^* \geq T^0 | \Omega_{/\mathbf{X}}]$. Este valor se puede calcular enumerando completamente $\mathcal{T}_\mathbf{X}$ o estimándolo mediante el algoritmo condicional de Monte Carlo. El $p$-valor $p$ es una función creciente de $T^0$ y tiene una  correspondencia uno a uno con los $\alpha$-valores alcanzables de $\phi$, puesto que $\lambda_T(\mathbf{X}) > \alpha$ implica $T^0 < T_\alpha$ y viceversa.
+
+\paragraph{Algoritmo CMC para estimar el $p$-valor}  Describimos a continuación los pasos generales de un algoritmo condicional de Monte Carlo para la evaluación de un $p$-valor de un test estadístico $T$ en un conjunto de datos $\mathbf{X} = \{ X_i, \ i=1, \dots, n; n_1, n_2 \}$
+
+\begin{algorithm}
+	\caption{Algoritmo CMC para estimar el $p$-valor}
+	\label{alg:CMC-pvalue}
+	\begin{algorithmic}[1]
+	\REQUIRE
+		\begin{enumerate}[a]
+		\item Muestra $\mathbf{X}$
+		\item Test estadístico $T$
+		\item Número de iteraciones $B$
+		\end{enumerate}
+		\STATE Calcular $T^0 = T(\mathbf{X})$
+		\FOR { $b \in \{1, \dots, B\}$ }
+			\STATE Realizar una permutación $\mathbf{X}^*$ de  $\mathbf{X}$.
+			\STATE Calcular $T^* = T(\mathbf{X}^*)$
+		\ENDFOR
+		\STATE El conjunto $\{ \mathcal{X}^*_b, b = 1, \dots, B \}$ es una muestra aleatoria de $\Omega_{/\mathbf{X}}$ y los valores correspondientes $\{ T^*_b, b = 1, \dots, B \}$ simulan la distribución nula de las permutaciones de $T$ (aquella que tendría $T$ de ser cierta $H_0$). Entonces el $p$-valor se estima como $\hat{\lambda}(\mathbf{X}) = \sum\limits_{b=1}^B \mathbb{I}[T_b^* \geq T^0]/B$, esto es, la proporción de los valores de la permutación mayores que el observado.
+	\end{algorithmic}
+\end{algorithm}
 	
 \subsection{Revisión del estado del arte en la aplicación de test no paramétricos}
  
-\paragraph{Validación de un modelo de degradación de documentos} \cite{KANUNGO00} En este artículo se presenta un modelo de la degradación en documentos producida por la digitalización de documentos impresos o la realización de fotocopias. El problema estadístico que se define es el siguiente. Dadas las muestras $x_1, \dots, x_N$ e $y_1, \dots, y_M$ de caracteres degradados de un mismo carácter de un documento y generados de manera artificial, respectivamente, realizar el test sobre la hipótesis nula de de ambos  provienen de la misma población para un valor de significación $\alpha$. El test aplicado es un test basado en permutaciones cuyo procedimiento se describe a continuación.
+\paragraph{Validación de un modelo de degradación de documentos} \cite{KANUNGO00} En este artículo se presenta un modelo de la degradación en documentos producida por la digitalización de documentos impresos o la realización de fotocopias. El problema estadístico que se define es el siguiente. Dadas las muestras $x_1, \dots, x_N$ e $y_1, \dots, y_M$ de caracteres degradados de un mismo carácter de un documento y generados de manera artificial, respectivamente, realizar el test sobre la hipótesis nula de de ambos  provienen de la misma población para un valor de significación $\alpha$. Se aplica un test basado en permutaciones calculando el $p$-valor utilizando el algoritmo~\ref{alg:CMC-pvalue}.
 
 \begin{algorithm}
 	\caption{Test basado en permutaciones}
-	\label{alg:TBP}
 	\begin{algorithmic}[1]
 	\REQUIRE
 		\begin{enumerate}[a]
@@ -741,6 +785,34 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	\paragraph{Estudio estadístico sobre algoritmos genéticos: precisión e interpretabilidad} \cite{GARCIA08} En este artículo se realiza la comparación sobre algoritmos evolutivos utilizados en clasificación, comparando tanto la tasa de clasificación como el valor kappa de Cohen y la interpretabilidad de estos resultados. Al igual que en el artículo anterior, se realizan test de normalidad y heterocedasticidad para comprobar si se dan las condiciones para aplicar un test paramétrico. Si las comparaciones por parejas de problemas se repiten crece el error asociado FWER (\textit{family-wise error rate}), esto es la probabilidad de al menos un error en la familia de hipótesis. Para realizar comparaciones entre varios algoritmos y fijar el FWER de antemano se utilizan el test de Friedman y el de Iman-Davenport y los test de Bonferroni-Dunn y el de Holm para buscar diferencias entre los algoritmos una vez descartada la hipótesis de que todos tienen la misma media. Se realiza calculan también los $p$-valores ajustados.\\
 	Para realizar el análisis de la interpretabilidad de los resultados se considera $\textit{Complejidad} = \textit{Tamaño} \cdot ANT$. Se realiza para este estudio únicamente un procedimiento para múltiples comparaciones, obteniendo diferencias significativas con el test de Bonferroni-Dunn y nivel de significación $\alpha=0.1$.
 	
+	\paragraph{Análisis \textit{bootstrap} de múltiples repeticiones de experimentos} \cite{OTERO13} En este artículo se presenta la realización de test basados en permutaciones para la comparación del rendimiento de algoritmos de clasificación, realizando un estudio para el que el test presentado tiene mayor potencia que los test de ANOVA o Friedman. El contexto para el que se presenta este método es el de la comparación entre algoritmos estocásticos (de ahí que se realice la repetición de la ejecución de los algoritmos con diferentes semillas) utilizando validación cruzada. Se propone usar intervalos para recoger parte de la variabilidad de los datos atribuible a la repetición del experimento. Se plantea el problema del uso de la media entre los distintos experimentos para evaluar un algoritmo debido a que los valores extremos tienen una influencia excesiva y se aboga por otros estadísticos como la mediana, el rango intercuartílico o la media restringida a los valores centrales.\\
+	El primer test es un test basado en permutaciones. Parte de la muestra compuesta por $e_{adfr}$, que es el error del algoritmo $a$-ésimo, el conjunto de datos $d$, para el \textit{fold} $f$ y la repetición $r$. Se utiliza en este test como estadístico para evaluar cada algoritmo la media de las ejecuciones en todos los \textit{folds}, repeticiones y bases de datos como estimador, utilizando el algoritmo ~\ref{alg:CMC-pvalue}. Se rechazará la hipótesis nula (la equivalencia de las medias) si para algún $a$ la media inicial $\hat{e}_a$ se encuentra en las colas de la distribución formada por los valores de las permutaciones $\hat{e}_a^*$ consistente en la cdf muestral:
+	\[ 
+		\hat{F}_{a \cdot \cdot \cdot}(x) =
+			\frac{1}{n_d n_r n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\sum\limits_{k=1}^{n_r}
+						\mathbb{I}[ e_{aijk} \leq x ].
+	\]
+	El segundo test sí hace uso de los intervalos, notando por $[q_{-adf}, q_{+adf}]$ el intervalo de los errores para un algoritmo, base de datos y \textit{fold}. Se definen las cdf muestrales como
+	
+\begin{align*}
+	\hat{F}_{-a \cdot \cdot}(x) &=
+		\frac{1}{n_d n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\mathbb{I}[ q_{+aij} \leq x ], \\
+	\hat{F}_{+a \cdot \cdot}(x) &=
+		\frac{1}{n_d n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\mathbb{I}[ x \in [q_{-aij},q_{+aij}) ] +
+			\hat{F}_{-a \cdot \cdot}(x) .			
+\end{align*}
+
+	En este test se aplica también el algoritmo ~\ref{alg:CMC-pvalue}, rechazando la hipótesis nula si el intervalo $[\hat{q}_{-a}, \hat{q}_{+a}]$, con $\hat{q}_{-a}, \hat{q}_{+a}$ las medias de los extremos inferiores y superiores respectivamente para cada algoritmo con respecto a las bases de datos y \textit{fold}, se encuentra en las colas de la distribución de los $[\hat{q}_{-a}^*, \hat{q}_{+a}^*]$.\\
+	Los resultados incluidos ofrecen una comparación entre la potencia de estos test presentados, el test de Friedman y el de ANOVA. Se realiza un experimento con datos sintéticos consistentes en los resultados de los errores de 5 algoritmos en 32 bases de datos para una secuencia de diferencias en sus medias preestablecidas. Para calcular la potencia se estima para cada diferencia el porcentaje de experimentos para el que se encuentran diferencias significativas entre los algoritmos dos a dos. Los resultados indican una mayor potencia de los test presentados en este artículo.
 
 
 \section{Test bayesianos}	
