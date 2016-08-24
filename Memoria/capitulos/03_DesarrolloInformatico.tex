@@ -7,7 +7,14 @@
 
 \chapter{Desarrollo informático}
 
-\section*{Aplicación de test no paramétricos en el aprendizaje automático}
+\section{Aplicación de test estadísticos en el aprendizaje automático}
 
-\section*{Evaluación algoritmos }
+	A la hora de evaluar un algoritmo de aprendizaje automático nos interesa conocer el error para un problema y su relación con respecto a otros, sin embargo, debemos ser conscientes de que para ello debemos diseñar y realizar un experimento cuyos resultados sean fiables y minimizar el efecto producido por las circunstancias en las que se realizan o los datos disponibles. Por ejemplo, el error obtenido en los datos utilizados para entrenar el modelo (error de entrenamiento) será menor que el error en unos datos que no han participado en este entrenamiento y son usados para evaluar el modelo (error de test). Cabe mencionar también que el error de entrenamiento no es comparable debido a que modelos más complejos se ajustarán más a los datos de entrenamiento, sin que eso signifique que el modelo se comporte mejor de manera global. Hay algoritmos que se comportan de manera no determinista, y por tanto deseemos realizar varias ejecuciones para estimar circunstancias aleatorias. En definitiva, debemos basar nuestra evaluación del algoritmo en la distribución (desconocida) del error. Para una correcta estimación del error es importante tener en cuenta lo siguiente:
+	\begin{itemize}
+	\item El error depende del problema. Por el teorema de \textit{No Free Lunch}, 
+	\end{itemize}
+	
+	
+\subsection{Diseño y análisis de experimentos}
+	
 %\end{document}

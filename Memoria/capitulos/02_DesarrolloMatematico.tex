@@ -416,6 +416,63 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 	Si $F_0$ es una función de distribución continua, entonces para cada $d \geq 0$, la distribución límite de $V = 4n {D_n^+}^2$ para $n \rightarrow \infty$ es la distribución chi cuadrado con dos grados de libertad.
 \end{corolario}	
 	
+\subsection{Análisis del conteo de datos}
+	
+	A la hora de comparar el rendimiento de algoritmos, una primera aproximación puede ser contar el número de casos en los que un algoritmo acierta y otro no. Para representar los datos necesarios para este tipo de test, se utiliza una matriz de contingencia $r \times k$, donde cada posición se corresponde con el número de muestras observadas que cumple las características de la fila y la columna.
+	
+\subsubsection{Test de McNemar}
+	
+	En este test suponemos una tabla $2 \times 2$ que recoge la respuesta de $n$ elementos ante una cierta prueba antes y después de un tratamiento o, en el caso en el que estamos, si los $n$ individuos de la muestra están bien o mal clasificados por dos algoritmos de clasificación.
+	
+\begin{table}[]
+\centering
+\caption{Tabla de contingencia de McNemar}
+\label{Tb:McNemar}
+\begin{tabular}{|lc|cc|}
+\hline
+                                                          &         & \multicolumn{2}{c|}{Clasificador $f_2$} \\ \cline{3-4} 
+                                                          &         & Fallo              & Acierto            \\ \hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{Clasificador $f_1$}} & Fallo   & $c_{00}$           & $c_{01}$           \\
+\multicolumn{1}{|c|}{}                                    & Acierto & $c_{10}$           & $c_{11}$           \\ \hline
+\end{tabular}
+\end{table}
+
+	En este test la hipótesis nula es que la probabilidad de que un individuo sea bien clasificado es la misma para ambos algoritmos. Notamos por $\theta_{ij},\ i=0,1,\ j=0,1$ la probabilidad de pertenecer a cada grupo. Notamos $\theta_{1 \cdot} = \theta_{10} + \theta_{11}$, $\theta_{\cdot 1} = \theta_{01} + \theta_{11}$, la probabilidad de estar bien clasificado por el primer y el segundo clasificador respectivamente. La hipótesis nula se escribe entonces como $H_0: \theta_{1 \cdot} = \theta_{\cdot 1}$, para la cual se considera el estadístico basado en $T = \frac{c_{1 \cdot} - c_{\cdot 1}}{N}$ como estimador insesgado. Podemos escribir $T = \frac{c_{01} - c_{10}}{N}$. El test de McNemar está basado en
+	\[ \frac{(c_{01} - c_{10})^2}{(c_{01} + c_{10})} \]
+	que sigue aproximadamente una distribución $\chi^2$ con un grado de libertad. Obtengamos ahora la esperanza y varianza de $T$. Puesto que $c_{01}$ y $c_{10}$ siguen una distribución binomial con parámetros $n$, $\theta_{01}$ y $\theta_{10}$ respectivamente, obtenemos
+
+\begin{align*}
+	E[c_{01}] 	&= n \theta_{01} \\
+	var(c_{01}) &= n \theta_{01} (1 - \theta_{01}) \\
+	E[c_{10}] 	&= n \theta_{10} \\
+	var(c_{10}) &= n \theta_{10} (1 - \theta_{10}).
+\end{align*}
+
+	La varianza de $T$ se puede ver obtener de 
+	
+\begin{equation}
+	N^2 var(T) = var(c_{01}) + var(c_{10}) - 2 cov(X_{01}, c_{10}).
+	\label{eq:McNemarVar}
+\end{equation}
+
+	Para el término de la covarianza podemos usar que la distribución de $(c_{00}, c_{01}, c_{10}, c_{11})$ es una distribución multinomial con probabilidades $(\theta_{00}, \theta_{01}, \theta_{10}, \theta_{11})$. Entonces, haciendo uso de la función generadora de momentos de $c_{01}$ y $c_{10}$,
+	\[ 
+		mgf(t_1, t_2) = 
+		\left(
+			\theta_{01} e^{t_1} + 
+			\theta_{10} e^{t_2} + 
+			[ 1 - (\theta_{01} + \theta_{10})] \right)^n,
+	\]
+	
+	obtenemos $E[c_{01}c_{10}] = \frac{\partial^2 }{\partial t_1 \partial t_2} mgf(0,0) = n(n-1)\theta_{01} \theta_{10}$ y por tanto escribimos la covarianza como:
+	\[
+		cov( c_{01}, c_{10} ) =
+			n (n-1) \theta_{01} \theta_{10} -
+			(n \theta_{01}) (n \theta_{10}) = - n \theta_{01} \theta_{10}.
+	\]
+	
+	Sustituyendo en \ref{eq:McNemarVar}, tenemos que $T$ tiene media $\theta_{01}-\theta_{10}$ y $var(T) = \frac{(\theta_{01} + \theta_{10}) - (\theta_{01} - \theta_{10})^2 }{n}$. Bajo la hipótesis nula $\theta_{01} = \theta_{10}$, $E[T] = 0$ y $var(T) = \frac{\theta_{01}+\theta_{10}}{n}$, que se puede estimar de manera consistente del estadístico $(c_{01} + c_{10})/n^2$.\\
+	Otra aproximación es observar el número de parejas discordantes $S = c_{01} + c_{10}$. Entonces $c_{01}$ sigue una binomial con parámetros $S$ y $\frac{\theta_{01}}{\theta_{01}+\theta_{10}}$. Es posible que estemos interesados en una alternativa unilateral, esto es $H_1: \theta_{\cdot 1} > \theta_{1 \cdot}$, en la que la hipótesis alternativa supone que un algoritmo de clasificación es mejor que otro. Para esta alternativa el $p$-valor exacto viene dado por $\sum\limits_{j=0}^S {S \choose j}(0.5)^S$. Para muestras de un gran tamaño, podemos obtener un $p$-valor aproximado basándonos en $Z = \frac{c_{01} - c_{10}}{\sqrt{c_{01} + c_{01}}}$, que sigue aproximadamente una distribución normal estándar.
 	
 \subsection{Test basados en una muestra y en muestras emparejadas}
 	
@@ -490,7 +547,7 @@ Cualquier función de distribución, $F_X(x)$, de una v.a. $X$ cumple las siguie
 \paragraph{Rango de probabilidad} Se devuelve el valor menos favorable a rechazar la hipótesis nula y el más favorable. No conduce a una única decisión a no ser que ambos valores caigan en la región crítica o fuera de ella.
 
 \paragraph{Omisión de los valores empatados} Otra posibilidad es descartar los valores empatados. Conlleva una pérdida de información y generalmente introduce un sesgo hacia rechazar la hipótesis nula.
-	
+
 	
 \subsection{Medidas de asociación en clasificaciones múltiples}	
 
