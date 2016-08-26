@@ -241,7 +241,7 @@ muestra.
 \end{definicion}
 
 	Notaremos como $\mathbb{I}[\textit{condición}$ a la 
-función indicadora, que toma valor $1$ si $condición$ es
+función indicadora, que toma valor $1$ si \textit{condición} es
 cierta y 0 si no.
 	
 	
@@ -1095,12 +1095,27 @@ $\theta_{10}$ respectivamente, obtenemos
 	
 \subsection{Medidas de asociación en clasificaciones múltiples}	
 
-	En este apartado presentamos la versión no paramétrica para el problema del análisis de la varianza. Enfocado al problema abordado en este trabajo, nos será muy útil para comparar el rendimiento de varios algoritmos en distintas bases de datos. Los datos se presentan en una tabla $n \times k$ con entradas $X_{ij}$. En esta distribución influyen dos factores que llamaremos el efecto por filas y por columnas.\\
-	 Para nuestro problema, consideraremos que las filas se corresponden con bases de datos y que las columnas constituyen los algoritmos utilizados. Un enfoque similar sería considerar cada fila una porción de tierra y cada columna un tratamiento distinto aplicado a un cultivo.
+	En este apartado presentamos la versión no paramétrica 
+para el problema del análisis de la varianza. Enfocado al 
+problema abordado en este trabajo, nos será muy útil para 
+comparar el rendimiento de varios algoritmos en distintas 
+bases de datos. Los datos se presentan en una tabla $n \times 
+k$ con entradas $X_{ij}$. En esta distribución influyen dos 
+factores que llamaremos el efecto por filas y por columnas.\\
+	Para nuestro problema, consideraremos que las filas se 
+corresponden con bases de datos y que las columnas 
+constituyen los algoritmos utilizados. Un enfoque similar 
+sería considerar cada fila una porción de tierra y cada 
+columna un tratamiento distinto aplicado a un cultivo.
 	
 \subsubsection{Análisis bidimensional de la varianza mediante clasificaciones en una tabla $k \times n$ y comparaciones múltiples de Friedman}
 
-	Partimos de una matriz $n \times k$. Consideraremos que las filas son independientes, pero no las columnas (en nuestro problema esto significa que las bases de datos sí son independientes pero cada algoritmo los resultados guardan correlación). Friedman sugirió cambiar cada valor de la matriz por la clasificación de cada fila.
+	Partimos de una matriz $n \times k$. Consideraremos que 
+las filas son independientes, pero no las columnas (en 
+nuestro problema esto significa que las bases de datos sí son 
+independientes pero cada algoritmo los resultados guardan 
+correlación). Friedman sugirió cambiar cada valor de la 
+matriz por la clasificación de cada fila.
 	
 	\[ \left( \begin{matrix}
 		R_{11} & R_{12} & \dots & R_{1k} \\
@@ -1108,7 +1123,10 @@ $\theta_{10}$ respectivamente, obtenemos
 		R_{n1} & R_{k2} & \dots & R_{nk}
 		\end{matrix} \right)	\]
 
-	Entonces, $R_{i1}, \dots, R_{ik}$ es una permutación de los $k$ primeros números (salvo en caso de empate). Escribimos como $R_j$ el total para la columna $j$. Consideraremos la distribución de la muestra de la v.a. 
+	Entonces, $R_{i1}, \dots, R_{ik}$ es una permutación de 
+los $k$ primeros números (salvo en caso de empate). 
+Escribimos como $R_j$ el total para la columna $j$. 
+Consideraremos la distribución de la muestra de la v.a. 
 	\begin{equation}
 		 S = \sum\limits_{j=1}^k
 				\left[
@@ -1122,8 +1140,20 @@ $\theta_{10}$ respectivamente, obtenemos
 	\label{S-Friedman}
 	\end{equation}
 	
-	bajo la hipótesis nula $H_0: \theta_1 = \dots = \theta_k$. En el caso de que no hubiera empates por filas habría un total de $(k!)^n$ posibles entradas igualmente probables. Las posibilidades se pueden enumerar y calcular el valor de $S$ para cada una de ellas, con lo que la distribución de probabilidad de $S$ sería $f_S(s) = \frac{u_s}{(k!)^n}$, con $u_s$ el número de asignaciones que tienen como suma de los cuadrados de las desviaciones totales por columnas $s$. Existe un método para obtener $u_s$ de $k$ y $n$ a partir de $k$ y $n-1$, y tablas con valores. Para los valores que exceden estas tablas se usa una aproximación de la distribución.\\
-	Notando $\mu = \frac{k+1}{2}$, escribimos \ref{S-Friedman}:
+	bajo la hipótesis nula $H_0: \theta_1 = \dots = 
+\theta_k$. En el caso de que no hubiera empates por filas 
+habría un total de $(k!)^n$ posibles entradas igualmente 
+probables. Las posibilidades se pueden enumerar y calcular el 
+valor de $S$ para cada una de ellas, con lo que la 
+distribución de probabilidad de $S$ sería $f_S(s) = 
+\frac{u_s}{(k!)^n}$, con $u_s$ el número de asignaciones que 
+tienen como suma de los cuadrados de las desviaciones totales 
+por columnas $s$. Existe un método para obtener $u_s$ de $k$ 
+y $n$ a partir de $k$ y $n-1$, y tablas con valores. Para los 
+valores que exceden estas tablas se usa una aproximación de 
+la distribución.\\
+	Notando $\mu = \frac{k+1}{2}$, escribimos 
+	\ref{S-Friedman}:
 	
 	\begin{align}
 		S 	&= 	\sum\limits_{j=1}^k
@@ -1139,15 +1169,19 @@ $\theta_{10}$ respectivamente, obtenemos
 	\label{S-Friedman2}
 	\end{align}
 	
-	Los momentos de $S$ vienen determinados por los momentos de $U$, que se derivan de:
+	Los momentos de $S$ vienen determinados por los momentos 
+de $U$, que se derivan de:
 	\[ 	E[ R_{ij} ]= \frac{k+1}{2};\ 
 		\var(R_{ij})=\frac{k^2-1}{12};\
 		\cov(R_{ij},R_{iq}) = -\frac{k^2-1}{12}
 	\]
 	
-	Además, dado que las observaciones en las diferentes filas son independientes, para $i \neq p$, la esperanza del producto de funciones de $R_{ij}$ y $R_{pq}$ estará multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
-	\[ E(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0 \] con lo que $var(U) = kE(U^2)$, con
-	
+	Además, dado que las observaciones en las diferentes 
+filas son independientes, para $i \neq p$, la esperanza del 
+producto de funciones de $R_{ij}$ y $R_{pq}$ estará 
+multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
+	\[ E(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0, \] 
+	con lo que $var(U) = kE(U^2)$, con
 	\begin{align*}
 		U^2 =& \sum\limits_{j=1}^k
 				\sum\limits_{1 \leq i < p \leq n}
@@ -1190,7 +1224,15 @@ $\theta_{10}$ respectivamente, obtenemos
 	\frac{12 \sum\limits_{j=1}^k R_j^2}{nk(k+1)} -3n(k+1) .
 	\]
 	
-	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)\frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros momentos de la distribución $\chi^2_{k-1}$. También los momentos de mayor orden de $\chi^2_F$ se aproximan a los momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A efectos prácticos, podemos tratar $\chi^2_F$ como una $\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica para la hipótesis nula mencionada con nivel de significación $\alpha$ es
+	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)
+\frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros 
+momentos de la distribución $\chi^2_{k-1}$. También los 
+momentos de mayor orden de $\chi^2_F$ se aproximan a los 
+momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A 
+efectos prácticos, podemos tratar $\chi^2_F$ como una $
+\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica 
+para la hipótesis nula mencionada con nivel de significación 
+$\alpha$ es
 	\[ 
 		\chi^2_F \in R \ \text{ para } 
 			Q \geq \chi_{k-1,\alpha}^2 .
@@ -1282,7 +1324,7 @@ diferencias nulas. Notamos por $F(t|\mathbf{X}) = P[T^* \leq
 t | \mathbf{X}], t \in \mathbb{R}$ a la cdf condicional de la 
 permutación inducida por $T$ dado $\mathbf{X}$.\\
 	Si el tamaño de la muestra $n$ es grande, podrá aplicarse 
-el Teorema Central del Límite Permutacional (PCTL) para 
+el Teorema Central del Límite Permutacional (\ref{th:PCTL}) para 
 aproximar la distribución de la permutación 
 $F[t|\mathbf{X}]$. Para resolver un problema de este tipo 
 podemos guiarnos por lo siguiente:
@@ -1294,7 +1336,7 @@ podemos guiarnos por lo siguiente:
 	\item Si $n \geq 200$, $\sigma_X$ se supone finito y el 
 		cociente $(\sum_i X_i^4)/(\sum_i X_i^2)^2$ es 
 		pequeño, $F[t|\mathbf{X}]$ puede aproximarse por 
-		el PCTL. 
+		el PCTL (\ref{th:PCTL}). 
 	\item En otro caso, $F[t|\mathbf{X}]$ puede aproximarse 
 		utilizando el algoritmo condicional de Monte 
 		Carlo (CMC).
@@ -1474,6 +1516,74 @@ $\mathbf{X} = \{ X_i, \ i=1, \dots, n; n_1, n_2 \}$
 		observado.
 	\end{algorithmic}
 \end{algorithm}
+
+\paragraph{Teorema Central del Límite Permutacional}
+	Por último en esta sección, se presenta la versión 
+permutacional del TCL de Wald y Wolfowitz \cite{WALWOL44}.
+Notaremos por $\mathbf{X} = \{X_1, \dots, X_n\}$ de $n$ v.a. 
+independientes e idénticamente distribuidas. Supongamos que 
+la hipótesis nula sobre la que se realiza el test, $H_0$, 
+implica que las permutaciones en $\mathbf{X}$ son igualmente 
+probables.\\
+	Definimos el test estadístico permutacional
+	\[
+		T = T(\mathbf{X}) = 
+			\sum\limits_{i=1}^n
+				A_i X_i,
+	\]
+	para el vector $\mathbf{A} = \{A_1, \dots, A_n\}$. Para 
+un vector genérico $\mathbf{D}$, notamos $\bar{D} = 
+\frac{\sum\limits_{i=1}^n D_i}{n}$, $\mu_r(\mathbf{D}) = 
+\frac{\sum\limits_{i=1}^n (D_i - \bar{D})^r}{n}$, 
+$W_r(\mathbf{D}) = \frac{\sum\limits_{i=1}^n 
+|D_i - \bar{D}|^r}{n}$, $R(\mathbb{D}) = 
+\underset{1 \leq i \leq n}{\max} D_i - 
+\underset{1 \leq i \leq n}{\min} D_i$.\\
+
+	De la distribución de la permutación de $T$ se obtiene
+
+\begin{align*}
+	\mathbb{E}_{\Omega_{/\mathbf{X}}} \left[
+		T(\mathbf{X}^*) | \Omega_{/\mathbf{X}}
+		\right] &=
+		n \bar{X} \bar{A}, \\
+	\mathbb{E}_{\Omega_{/\mathbf{X}}} \left[
+		(T(\mathbf{X}^*) - n\bar{X}\bar{A})^2 | 
+			\Omega_{/\mathbf{X}}
+		\right] &=
+		\frac{[n^2 \mu_2{\mathbf{X}} \mu_2{\mathbf{A}}]^2}
+			{n-1}.
+\end{align*}
+
+	Entonces, escribimos la v.a.
+	\[
+		Z = \frac{(T - n \bar{X} \bar{A})\sqrt{n-1}}
+				{n^2 \mu_2(\mathbf{X}) \mu_2(\mathbf{A})},
+	\]
+	
+	sabemos que la cdf de $Z$, $F_Z(t|\Omega^n)$ puede 
+determinarse enumerando todas las permutaciones de 
+$\mathbf{X}$. Antes de enunciar el teorema, enunciaremos la 
+condición sobre $\mathbf{X}$ y $\mathbf{A}$. 
+$\{ \mathbf{D}_n; n \geq 2 \}$:
+
+\begin{equation}
+	 \label{eq:PCLTcond}
+	 \tag{C.1}
+	 \frac{\mu_r(\mathbf{D}_n)}
+	 		{\mu_2(\mathbf{D})^{r/2}} = O(1),\quad
+	 		\forall r \in \mathbb{N},\ r \geq 2
+\end{equation}
+
+\begin{teorema}[Teorema Central del Límite Permutacional]
+	Sean $\{\mathbf{A}_n; n \geq 2\}$, $\{\mathbf{X}_n; 
+n \geq 2\}$ cumpliendo la condición~\ref{eq:PCLTcond}. 
+Entonces para $n \rightarrow \infty$,
+	\[ F_Z(t | \Omega^n_{\mathbf{X}}) 
+		\overset{P}{\rightarrow} \mathit{N}(t | 0,1)
+	\]
+	\label{th:PCTL}
+\end{teorema}
 	
 \subsection{Revisión del estado del arte en la aplicación de test no paramétricos}
  
