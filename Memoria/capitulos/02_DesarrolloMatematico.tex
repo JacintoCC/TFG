@@ -1908,3 +1908,221 @@ potencia de los test presentados en este artículo.
 
 
 \section{Test bayesianos}	
+
+	En esta sección se hace una introducción a conceptos de 
+la estadística bayesiana y test basados en esta estadística
+para su aplicación en la comparación de algoritmos de
+aprendizaje automático.\\
+	Según A. Gelman (\cite{GELMAN14}), la inferencia 
+bayesiana es el proceso de ajustar un modelo de probabilidad 
+a un conjunto de datos y resumir el resultado  mediante una 
+distribución de probabilidad sobre los  parámetros del modelo 
+y sobre cantidades no observadas como predicciones para 
+nuevas observaciones. Estamos por tanto frente a una 
+forma de entender la estadística distinta, cuya principal
+característica es el uso de la probabilidad para 
+cuantificar la incertidumbre en las inferencias basadas en
+el análisis de los datos. Este análisis puede dividirse en
+tres pasos:
+
+	\begin{enumerate}
+	\item establecimiento de un modelo de probabilidad;
+	\item condicionamiento sobre los datos observados,
+		calculando e interpretando la distribución 
+		\textit{a posteriori};
+	\item evaluación del modelo y las implicaciones de la
+		distribución \textit{a posteriori} resultante.
+	\end{enumerate}
+
+\subsection{Problemas de los test de hipótesis nula}	
+
+	Los test de hipótesis nula (THN) son en ocasiones como un
+método infalible para la realización de un experimento y la
+forma de obtener conclusiones. Sin embargo, existen críticas
+hacia el uso de este tipo de test, principalmente por parte 
+de estadísticos bayesianos, causadas en su mayoría por el mal
+uso que se hace de ellos. Las críticas realizadas son las
+siguientes:
+
+\begin{itemize}
+\item Las decisiones dicotómicas. Al fijar el valor 
+	$\alpha$ (normalmente $0.05$) se pueden realizar 
+	decisiones opuestas con una mínima variación del $p$-
+	valor. Se suele también confundir el significado del 
+	test al considerar equivalentes dos métodos para los que
+	no se encuentren diferencias estadísticamente 
+	significativas.
+\item Los THN no estiman la probabilidad
+	de la hipótesis. La pregunta que habitualmente nos
+	hacemos al comparar por ejemplo dos clasificadores es
+	``\textit{¿cuál es la probabilidad de que el rendimiento
+	de dos clasificadores sea el mismo?}'', en términos
+	formales, $P(H_0 | \mathbb{X})$. La pregunta que
+	responden es $P(T(\mathbb{X}) > \tau_\alpha | H_0)$.
+\item Los test de hipótesis nula sobre puntos son
+	prácticamente siempre falsos. La diferencia entre
+	dos clasificadores puede ser muy pequeña, sin embargo
+	no hay dos clasificadores cuyo rendimiento sea 
+	equivalente. Esto tiene como consecuencia que añadiendo
+	suficientes puntos es posible encontrar diferencias
+	significantes. Además, no sólo en este contexto, los
+	experimentos realizados y publicados suelen considerar
+	hipótesis nulas difícilmente sostenibles donde el
+	investigador busca rechazarla, con lo que el test está
+	resulta sesgado.
+\item El $p$-valor no distingue entre el efecto del tamaño
+	y el tamaño de la muestra. Si el efecto del tamaño de
+	$H_0$ es pequeño, se necesita más datos para demostrar 
+	la diferencia. Sin embargo, como el tamaño de la muestra
+	depende del investigador, y por el punto anterior $H_0$ 
+	``es siempre falsa'', con suficientes datos se puede
+	rechazar la hipótesis nula. En cambio, si se dispone 
+	de pocos datos, se puede fallar al no rechazar una
+	hipótesis nula ampliamente falsa.
+\item Los THN no tienen en cuenta la magnitud y la 
+	incertidumbre. No se proporciona información sobre la 
+	magnitud del efecto o la incertidumbre de la estimación
+	realizada, con lo que se dificulta un posterior análisis
+	de las propias conclusiones realizadas.
+\item No se obtiene información cuando no se rechaza la
+	hipótesis nula. Es un error habitual al considerar 
+	que al no encontrar diferencias significativas se
+	considere cierta la hipótesis nula. 
+\item No hay manera de decidir previamente el nivel 
+	de significación $\alpha$. Aunque habitualmente se 
+	fija un nivel de significación de $\alpha = 0.05$, y es
+	este valor el que determina los límites para rechazar 
+	$H_0$, este valor no tiene un significado concreto para
+	el experimento. 
+\item La inferencia depende del propósito del muestreo. 
+	La distribución de la muestra cambia por ejemplo si
+	se comparan dos algoritmos en todos los conjuntos de
+	datos disponibles que si se trata de realizar un 
+	número de observaciones en un único conjunto.
+\end{itemize}
+	
+\subsection{Análisis de los resultados experimentales}
+
+	Hay dos enfoques para el análisis de resultados 
+experimentales. El primero, conocido como \textbf{factor de 
+Bayes} o \textbf{comparación de modelo bayesiano}, está como 
+los THN basado en lo que llamaríamos un valor nulo. Se 
+comparan dos modelos y se escoge el más probable según los 
+datos obtenidos. Éste modelo también recibe algunas críticas
+similares a los THN pues en cierta forma se está cambiando el
+valor $\alpha$ por el usado para elegir entre un modelo u 
+otro, volviendo a una decisión dicotómica. El otro modelo, el 
+cual se desarrollará con más detalle, se conoce como 
+\textbf{estimación bayesiana de parámetros}. Al realizar
+el análisis sólo hay que establecer un rango de valores 
+candidatos para el parámetro (modelo \textit{a priori}) 
+y usar la inferencia bayesiana para calcular la probabilidad
+de todos los valores candidatos (distribución \textit{a 
+posteriori}).\\
+
+\subsubsection{t-test bayesiano correlado}
+	Este test se usa para el análisis de la validación
+cruzada en un único conjunto de datos. Su aporte consiste en 
+tener en cuenta la correlación debida al solapamiento de los 
+conjuntos de entrenamiento. El modelo de los datos 
+considerados es
+	\[ \mathbf{X} = \mu \mathbf{1} + \mathbf{v}, \]
+	con $\mathbf{X} = (x_1, \dots, x_n)$, $\mathbf{1}$ un 
+vector de unos de $n$ elementos, $\mu$ el parámetro de
+interés, esto es la media de las distancias entre el 
+rendimiento de los clasificadores y $\mathbf{v} \backsim 
+MVN(0, \Sigma_{n \times n})$, una normal multivariante con
+media cero y matriz de covarianzas $\Sigma$. Se caracteriza
+$\Sigma$ de la siguiente manera: $\Sigma_{ii} = \sigma^2$
+y $\Sigma_{ij} = \sigma^2 \rho$ para $i \neq j$, con $\rho$
+la correlación y $\sigma^2$ la varianza. Entonces,
+la probabilidad del modelo es 
+	\[ 
+		P(\mathbf{X} | \mu, \Sigma) = 
+		\frac{\exp\left(
+				-\frac{1}{2}
+				(\mathbf{X}-\mu\mathbf{X})^T
+				\Sigma^{-1}
+				(\mathbf{X}-\mu\mathbf{X})
+			\right)}
+		{(2\pi)^{n/2} \sqrt{|\Sigma|}}.
+	\]
+
+	Esta probabilidad no permite estimar $\rho$ de los datos, 
+así que adoptamos la heurística $\rho = \frac{n_{test}}{n}$. 
+Pretendemos estimar los parámetros $\mu$ y $\nu = 
+\frac{1}{\sigma^2}$, para lo cual consideramos la 
+distribución \textit{a priori} Normal-Gamma
+	\[
+		P(\mu, \nu | \mu_0, k_0, a, b) =
+			N\left(\mu; \mu_0, \frac{k_0}{\nu} \right)
+			G(\nu; a, b) = 
+			NG(\mu, \nu ; \mu_0, k_0, a, b).
+	\]
+	Escogiendo los parámetros $\mu_0 = 0, k_0 \rightarrow 
+\infty, a = -\frac{1}{2}, b=0$ la distribución \textit{a 
+posteriori} de $\mu$ resulta ser la distribución de Student:
+	
+	\[
+		P(\mu | \mathbf{X}, \mu_0, k_0, a, b) =
+			St \left(
+					\mu; n-1 , \bar{X},
+					\left( \frac{1}{n} + 
+							\frac{\rho}{1 - \rho} 
+					\right) \hat{\sigma}^2
+			   \right),
+	\]
+
+	con $\bar{X}$ y $\hat{\sigma}^2$ los estimadores 
+habituales. Por tanto podemos hacer el análisis sobre $\mu$ 
+basándonos en esta distribución.
+
+
+\paragraph{Ejemplo} Supongamos que realizamos un experimento
+con este test, realizando la comparación entre dos algoritmos
+para una base de datos. La información obtenida es una 
+distribución de Student, que describe como se ha mencionado
+la ditribución de la media de las diferencias del rendimiento
+entre dos clasificadores. Ahora, evaluamos la probabilidad 
+de la hipótesis que queramos realizar, por ejemplo, que un 
+algoritmo es mejor que otro directamente en la distribución
+de $\mu$, calculando la probabilidad de que $\mu > 0$ ó $\mu 
+< 0$ según corresponda. Para decir que los dos algoritmos son
+prácticamente equivalentes, podemos suponer que esto 
+significa que la diferencia de la precisión es menor que un
+$1\%$. El intervalo $[-0.01, 0.01]$ se conoce entonces como
+\textbf{región de práctica equivalencia} (rope). Una manera 
+de mostrar la incertidumbre de la estimación es indicando el 
+intervalo de los valores que son más confiables y cubren el 
+$q\%$ de la distribución (HDI). 
+
+\paragraph{Toma de decisiones} A la hora de realizar 
+análisis queremos obtener conclusiones, para lo que nos 
+apoyaremos en la rope. Si tenemos dos algoritmos $f_1, f_2$, 
+notaremos por $P(f_1 \ll f_2)$ a la probabilidad de que el 
+primero tenga un rendimiento inferior, por $P(f_1 \gg f_2)$ a 
+que la de que tenga un rendimiento superior y por $P(f_1 =
+f_2)$ a la probabilidad de que sean prácticamente 
+equivalentes. Podemos tomar las decisiones con un nivel
+de confianza (ahora con una interpretación directa) si
+tenemos una de estas tres situaciones con un valor mayor
+al nivel de confianza deseado.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
