@@ -1429,7 +1429,7 @@ propusieron el estadístico
 $(k-1)(n-1)$ grados de libertad.
 	
 	
-\paragraph{Test de Friedman \textit{Aligned Ranks}}
+\subsubsection{Test de Friedman AR}
 	Este test basado en el test de Friedman se propone como
 solución a la hora de comparar un número pequeño de 
 algoritmos para tener en cuenta el rendimiento no sólo 
@@ -1465,14 +1465,14 @@ para cada conjunto de datos sino entre ellos.\\
 						\hat{R}_{\cdot j}^2 -
 					kn^2(kn+1)^2/4
 				\right]}
-				{[kn(kn+1)(2kn+1)/6] -
+				{[kn(kn+1)(2kn+1)/6] 
 				 - (1/k) \sum\limits_{i=1}^n 
 				 			\hat{R}_{i \cdot}^2},
 	\]
 	
 	que sigue una distribución $\chi^2_{k-1}$.
 	
-\paragraph{Test de Quade}
+\subsubsection{Test de Quade}
 
 	El test de Friedman considera todos los conjuntos de 
 datos iguales en cuanto a importancia. Se propone la 
@@ -1507,7 +1507,97 @@ calculamos los términos
 $(k-1)(n-1)$.
 	
 
-	
+\subsubsection{Procedimientos \textit{post-hoc}}
+
+	Una vez se ha descartado la hipótesis nula de 
+la equivalencia entre los clasificadores, se pretende
+identificar dónde se producen las diferencias. Para ello,
+no se considera una única hipótesis sino una familia 
+de ellas consistentes en la igualdad del rendimiento entre 
+algoritmos y pretendemos rechazarlas o no sin tener que ir 
+una por una.\\
+	Si consideramos la comparación de $k$ algoritmos con 
+nivel de significación $\alpha$, la probabilidad de no 
+cometer un error de tipo I es $1-\alpha$, y entonces la 
+probabilidad de no cometerlo en las $k-1$ comparaciones es
+$(1-\alpha)^{k-1}$. Así pues, la probabilidad de cometer un
+error de tipo I es $1-(1-\alpha)^{k-1}$, lo que aumenta 
+la probabilidad de cometer un error cuando crece el número 
+de algoritmos a comparar. Para ello, la solución es 
+ajustar los $p$-valores (\textit{Adjusted $p$-values}, APV), 
+y realizar las comparaciones con $\alpha$. Se describen a continuación algunos procedimientos para ajustar los 
+$p$-valores y los valores de $\alpha$:
+
+\begin{itemize}
+\item Procedimientos de un paso.
+	\begin{description} 
+	\item[Bonferroni-Dunn] Ajusta el valor de $\alpha$ 
+		dividiéndolo por el número de comparaciones
+		realizadas, $k-1$. $APV_i = \min \{\nu,1\}$,
+		con $\nu = (k-1)p_i$.
+	\end{description}
+\item Procedimiento descendente.
+	\begin{description} 
+	\item[Holm] Consideramos los $p$-valores ordenados
+		de manera ascendente $p_1 \leq \dots \leq p_{k-1}$
+		y $H_1, \dots, H_{k-1}$ sus hipótesis asociadas.
+		Se rechazan las hipótesis $H_1, \dots, H_{i-1}$
+		para $i$ el menor entero tal que $p_i > 
+		\alpha/(k-i)$. $APV_i = \min \{\nu,1\}$,
+		con $\nu = \max \{(k-j)p_j: 1 \leq j \leq i\}$.
+	\item[Holland] Partiendo de la misma situación que en
+		el de Holm, se rechazan las hipótesis $H_1, \dots, 
+		H_{i-1}$ para $i$ el menor entero tal que $p_i > 
+		1- (1-\alpha)^(k-i)$. $APV_i = \min \{\nu,1\}$,
+		con $\nu = \max \{1- (1-\alpha)^(k-j): 1 \leq j 
+		\leq i\}$.
+	\item[Finner] Partiendo de la misma situación que en
+		los anteriores, se rechazan las hipótesis 
+		$H_1, \dots, H_{i-1}$ para $i$ el menor entero tal 
+		que $p_i >  1- (1-\alpha)^{(k-1)/i}$. 
+		$APV_i = \min \{\nu,1\}$, con $\nu = \max \{1- 
+		(1-\alpha)^{(k-1)/j}: 1 \leq j \leq i\}$.
+	\end{description}
+\item Procedimiento ascendente.
+	\begin{description} 
+	\item[Hochberg] Se ajusta el valor de $\alpha$ de manera
+		ascendente. Se compara el mayor $p$-valor con 
+		$\alpha$, el siguiente con $\alpha/2$, el siguiente
+		con $\alpha/3, \dots$ hasta encontrar una hipótesis
+		que se pueda rechazar, rechazando también aquellas
+		con un $p$-valor menor. $APV_i = \max \{(k-j)p_j:
+		(k-1) \geq j \geq i \}$.
+	\item[Hommel] Este método es más complejo de calcular
+		y comprender. Se busca el mayor $j$ tal que 
+		$p_{n-j+k} < k\alpha/j$ para todo $k=1,\dots,j$.
+		Si no existe $j$, se rechazan todas las hipótesis,
+		si no, se rechazan todas para las que $p_i \leq 
+		\alpha/j$.
+	\item[Rom] Consiste en una modificación del de Hochberg,
+		calculando $\alpha$ de la siguiente manera:
+		\[ 
+			\alpha_{k-i} = \frac{
+								\sum\limits_{j=1}^{i-1}
+									\alpha^j
+								- \sum\limits_{j=1}^{i-2}
+									{i \choose k}
+									\alpha_{k-1-j}^{i-j}
+						}{i},
+		\]
+		con $\alpha_{k-1} = \alpha, \alpha_{k-2}= \alpha/2$. 
+		$APV_i = \max \{(r_{k-j})p_j: (k-1) \geq j \geq 
+		i \}$, con $r_{k-j}=\alpha/\alpha_{k-j}$
+	\end{description}	
+\item Procedimiento en dos pasos.
+	\begin{description}
+	\item[Li] En primer lugar se rechazan todas las 
+		hipótesis si $p_{k-1} \leq \alpha$. Si no, 
+		no se rechazará $H_{k-1}$. En segundo lugar, se 
+		rechazan las hipótesis $H_{i}$ tal que 
+		$p_i \leq \frac{1-p_{k-1}}{(1-\alpha)\alpha}$.
+		$APV_i = p_i/(p_i + 1 - p_{k-1})$.	
+	\end{description}	 
+\end{itemize}
 
 \subsection{Test basados en permutaciones}
 	
