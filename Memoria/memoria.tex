@@ -247,7 +247,7 @@ pdfproducer = {pdflatex}
 %\input{capitulos/04_Conclusiones}
 %
 %%\nocite{*}
-\input{capitulos/Bibliografia}
+%\input{capitulos/Bibliografia}
 %
 %\appendix
 %\input{apendices/manual_usuario/manual_usuario}
@@ -257,5 +257,9 @@ pdfproducer = {pdflatex}
 % \printglossary
 \chapter*{}
 \thispagestyle{empty}
+
+\bibliography{capitulos/bibliografia}
+\label{bibliografia}
+\bibliographystyle{plain}
 
 \end{document}

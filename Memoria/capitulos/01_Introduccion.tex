@@ -4,9 +4,240 @@
 
 \section{Contextualización}
 
+	A la hora de evaluar un algoritmo de aprendizaje 
+automático nos interesa conocer el error para un problema y 
+su relación con respecto a otros, sin embargo, debemos ser 
+conscientes de que para ello debemos diseñar y realizar un 
+experimento cuyos resultados sean fiables y minimizar el 
+efecto producido por las circunstancias en las que se 
+realizan o los datos disponibles. Por ejemplo, el error 
+obtenido en los datos utilizados para entrenar el modelo 
+(error de entrenamiento) será menor que el error en unos 
+datos que no han participado en este entrenamiento y son 
+usados para evaluar el modelo (error de test). Cabe mencionar 
+también que el error de entrenamiento no es comparable debido 
+a que modelos más complejos se ajustarán más a los datos de 
+entrenamiento, sin que eso signifique que el modelo se 
+comporte mejor de manera global. Hay algoritmos que se 
+comportan de manera no determinista, y por tanto deseemos 
+realizar varias ejecuciones para estimar circunstancias 
+aleatorias. En definitiva, debemos basar nuestra evaluación 
+del algoritmo en la distribución (desconocida) del error. 
+Para una correcta estimación del error es importante tener en 
+cuenta lo siguiente:
+	
+	\begin{itemize}
+	\item El error depende del problema. El teorema de 
+		\textit{No Free Lunch} afirma que dados dos 
+		algoritmos su rendimiento medio para todos los 
+		posibles problemas es el mismo, lo que se traduce en 
+		que según el problema se puede dar que un algoritmo 
+		sea mejor que otro o al contrario.
+	\item La partición de la base de datos referente al 
+		problema en datos de entrenamiento y de test se 
+		realiza para obtener una idea más acertada del error 
+		cometido por el algoritmo para el problema. Sin 
+		embargo, una vez que se considere válido el algoritmo 
+		se entrenará con todos los datos disponibles.
+	\item Para validar el algoritmo, se deben utilizar datos 
+		que no hayan sido utilizados anteriormente de ninguna 
+		manera.
+	\item Normalmente, para la comparación del rendimiento de 
+		algoritmos se usa el error cometido en la 
+		clasificación, aunque se podrían considerar otros 
+		factores como el tiempo necesario para entrenar el 
+		algoritmo, su simplicidad...
+	\end{itemize}
+	
+\subsubsection{Diseño de experimentos}
+
+	Al hablar de experimentos nos referimos al test o a la 
+serie de test donde se manejan factores que afectan a la 
+salida. Pretendemos minimizar aquellos factores que no se 
+controlan y obtener resultados estadísticamente 
+significativos. Para ajustar parámetros propios del modelo de 
+aprendizaje automático que estemos utilizando existen 
+diferentes aproximaciones: la \textit{mejor suposición} 
+(donde quien realiza el experimento ajusta los parámetros 
+basándose en su conocimiento sobre el problema), \textit{un 
+factor cada vez} (se supone que los factores son 
+independientes y se prueban diferentes valores para cada 
+parámetro de uno en uno, mientras los demás se mantienen en 
+una posición base) y \textit{diseño factorial} (se crea una 
+rejilla con diferentes posibles valores para cada parámetro y 
+se prueba en ellos, es más costoso).\\
+
+	Para minimizar el número de ejecuciones necesarias, se 
+suele utilizar conocimiento previo para reducir las 
+combinaciones a probar. Otra estrategia consiste en el diseño 
+de la superficie de respuesta. Se considera la siguiente 
+situación:
+		\[ r = g( f_1, \dots, f_F | \phi ), \]
+	donde $r$ es la respuesta, $g$ el modelo utilizado, 
+$f_1, \dots f_F$ los factores y $\phi$ la estimación empírica 
+del modelo para cada configuración particular probada. El 
+procedimiento consiste en ir añadiendo a $\phi$ las 
+evaluaciones realizadas, ajustar $g$ según $\phi$ y buscar su 
+máximo (o mínimo), evaluar el algoritmo en ese punto y 
+ajustar $\phi$.\\
+	En la realización de experimentos es necesaria la 
+aleatorización a la hora de probar las diferentes 
+configuraciones de parámetros (no tanto en nuestro contexto, 
+pero el orden de las configuraciones al realizar experimentos 
+donde interviene maquinaria por ejemplo podría interferir en los 
+resultados debido a factores como la temperatura de la 
+máquina). Otro factor a tener en cuenta es que es necesaria 
+la repetición de las ejecuciones y promediar los resultados 
+para así reducir el impacto de factores aleatorios. Para 
+reducir la variabilidad de factores que no dependen del 
+propio algoritmo a evaluar, como las bases de datos o las 
+particiones realizadas, en la comparación de varios 
+algoritmos utilizamos las mismas particiones para cada uno.
+
+\paragraph{Directrices a la hora de realizar un experimento}
+	\begin{enumerate}
+	\item Fijar la intención del estudio
+	\item Seleccionar las variables de respuesta
+	\item Seleccionar los factores con los que se realizará 
+		el experimento y los niveles a comprobar
+	\item Diseño del experimento: La partición para 
+		entrenamiento y test depende del tamaño de la base de 
+		datos. Si la base de datos es pequeña puede haber una 
+		alta variabilidad y obtener resultados no 
+		concluyentes.
+	\item Efectuar el experimento: Antes de llevar a cabo un 
+		experimento de gran magnitud es aconsejable probar 
+		pequeños conjuntos de datos para probar que funciona. 
+		También es interesante guardar resultados intermedios 
+		o las semillas aleatorias para facilitar la 
+		reproducción de los datos.
+	\item El experimentador debe ser imparcial y juzgar de 
+		igual manera un algoritmo que otro, realizar 
+		documentación ...
+	\item Análisis estadístico: las afirmaciones y preguntas 
+		que se realicen debe sostenerse estadísticamente 
+		hablando. Es aconsejable un análisis visual para 
+		exponer los datos obtenidos.
+	\end{enumerate}
+	
+	
+\subsubsection{Validación cruzada y remuestreo}
+\label{sssec:CV}
+	
+	Para la repetición de los experimentos, necesitamos un 
+número de conjuntos de entrenamiento y validación del 
+conjunto de datos disponible. Si el conjunto es 
+suficientemente grande, podemos dividir aleatoriamente el 
+conjunto en $K$ partes, y de cada parte seleccionar la mitad 
+para entrenamiento y la otra mitad para test. $K$ suele ser 
+10 ó 30. Sin embargo, los conjuntos de datos no suelen ser 
+tan grandes. Por tanto, lo que habitualmente se realiza es 
+utilizar varias veces los mismos datos pero de formas 
+distintas, lo que se conoce como \textbf{validación cruzada} 
+(\textit{cross-validation}, CV). Otro concepto a tener en 
+cuenta es el de \textbf{estratificación}. Consiste en 
+mantener la proporción de las diferentes clases en cada una 
+de las particiones realizadas en la base de datos. 
+	
+\paragraph{Validación cruzada con $K$-fold} Se divide el 
+conjunto de datos $\mathcal{X}$ en $K$ partes aleatoriamente, 
+$\mathcal{X} = \mathcal{X}_1 \cup \dots \cup \mathcal{X}_K$. 
+Para formar cada par de datos de entrenamiento y validación, 
+$(\mathcal{T}, \mathcal{V})$, se mantiene una de las $K$ 
+partes y se unen las demás partes como conjunto de 
+entrenamiento
+\begin{align*}
+	\mathcal{V}_i &= \mathcal{X}_i \\
+	\mathcal{T}_i &= \underset{j=1,\dots,K; j\neq i}
+							\bigcup \mathcal{X}_j
+\end{align*} 
+	El problema de este método es que el conjunto de 
+validación es pequeño (lo que lleva a una mayor variabilidad 
+en el error). Además, los conjuntos de entrenamiento se 
+solapan considerablemente. $K$ es habitualmente 10 ó 30. 
+Conforme $K$ crece, se incrementa la robustez al afectar 
+menos cada dato concreto. El caso $K = n-1$, se conoce como 
+\textit{leave-one-out}. 
+
+\paragraph{$5 \times 2$ CV} Otra propuesta consiste en 
+dividir $\mathcal{X}$ en dos partes, utilizar una de estas 
+partes como datos de entrenamiento y la otra como test e 
+invertir los roles. Para obtener el segundo \textit{fold}, se 
+realiza otra partición aleatoria de $\mathcal{X}$ y se repite 
+el proceso. Lo habitual es que se realice cinco veces, 
+obteniendo así diez parejas $(\mathcal{T}, \mathcal{V})$. 
+Aunque podría realizarse más veces, al realizarse más veces 
+los conjuntos comparten muchas instancias y por lo tanto los 
+errores son muy dependientes entre sí, con lo que no se 
+aporta nueva información. Si se realiza menos de cinco veces, 
+se obtienen pocas muestras y es más complejo comprobar las 
+hipótesis.
+
+\paragraph{\textit{Bootstrapping}} Para generar varias 
+muestras a partir de una única se seleccionan instancias de 
+la original con reemplazamiento. Puede solaparse más que con 
+CV, con lo que las estimaciones resultan más dependientes. 
+Por ello, se recomienda especialmente para conjuntos de datos 
+muy pequeños en los que se necesiten mayores muestras. 
+
+	Al realizar \textit{bootstrap}, se seleccionan $N$ 
+instancias de un conjunto de tamaño $N$ con reemplazamiento. 
+El conjunto original se usa como conjunto de validación. La 
+probabilidad de no seleccionar una instancia es $1-1/N$, con 
+lo que la probabilidad de no seleccionarla tras $N$ 
+elecciones es $\left(1- \frac{1}{N}\right)^N \approx e^{-1} 
+\approx 0.368$. Esto significa que el conjunto de 
+entrenamiento contiene aproximadamente un $63.2\%$ de los 
+datos. Para obtener una mejor estimación del error, se 
+propone repetir el proceso y observar el comportamiento 
+medio.
+	
+\subsubsection{Test de hipótesis}
+
+	En la realización de los test de hipótesis, el 
+procedimiento es el siguiente: se define un estadístico que 
+sigue una distribución conocida en el caso de que se cumpla 
+la hipótesis realizada. Entonces si el estadístico calculado 
+de la muestra tiene poca probabilidad de obtenerse de la 
+distribución, se rechaza la hipótesis; en caso contrario, no. 
+\\
+	Surgen entonces las cuestiones: ¿Se puede justificar los 
+resultados estadísticamente o se obtienen por azar? ¿Son los 
+conjuntos de datos representativos para el problema? Estas 
+preguntas no se pueden responder de forma exhaustiva, es la 
+labor de los test estadísticos reunir los datos disponibles 
+para justificar la consistencia de las conclusiones. \\
+	A la hora de realizar los test estadísticos podemos 
+realizar las siguientes comparaciones:
+	\begin{enumerate}
+	\item Comparación de dos algoritmos en un dominio: $t$-
+		test (paramétrico), test de McNemar (no paramétrico).
+	\item Comparación de múltiples algoritmos en un dominio: 
+		\textit{Signed-Rank test} de Wilcoxon y test de signo 
+		(no paramétricos).
+	\item Comparación de múltiples algoritmos en varios 
+		dominios: ANOVA (paramétrico), test de Friedman o 
+		basados en permutaciones (no paramétricos). 
+	\end{enumerate}
+
+	Nótese que el test de \textit{Signed-Rank} de Wilcoxon 
+para muestras emparejadas puede aplicarse tanto para la 
+comparación de dos como entre varios algoritmos en un 
+dominio. Los test para varios algoritmos en varias bases de 
+datos necesitan un test posterior en caso de rechazar la 
+hipótesis de que todos los algoritmos se comporten de igual 
+manera. Ejemplos de estos test son el de Tukey, de 
+Bonferroni-Dunn o de Nemenyi. 
+
 \section{Evaluación de algoritmos}
 
-	Se incluye en esta sección una pequeña introducción sobre la evaluación de la aplicación de algoritmos sobre un problema para poder realizar así la comparación de su rendimiento con respecto al de otros algoritmos. Para realizar una correcta evaluación y comparativa entre algoritmos utilizados en aprendizaje automático debemos realizar los siguientes pasos:
+	Se incluye en esta sección una pequeña introducción sobre 
+la evaluación de la aplicación de algoritmos sobre un 
+problema para poder realizar así la comparación de su 
+rendimiento con respecto al de otros algoritmos. Para 
+realizar una correcta evaluación y comparativa entre 
+algoritmos utilizados en aprendizaje automático debemos 
+realizar los siguientes pasos:
 	
 	\begin{enumerate}
 		\item Selección de la medida del rendimiento
@@ -16,11 +247,36 @@
 
 \subsection{Medidas del rendimiento}
 	
-	El rendimiento de un algoritmo sobre un problema puede depender del criterio que los investigadores deseen optimizar con lo que el concepto de la \textit{calidad} de un algoritmo depende según el problema al que se aplique. Por tanto, consideraremos el problema como un problema multiobjetivo. Una posible forma de abordarlo es condensar varias medidas en una única con la que posteriormente realizar las comparaciones necesarias a través de test estadísticos. Se presenta a continuación un resumen de las medidas comúnmente utilizadas en el campo del aprendizaje automático tanto para problemas de clasificación como de regresión, indicando ventajas e inconvenientes que nos ayuden a decidir aquella medida que mejor se ajuste a nuestro problema.
+	El rendimiento de un algoritmo sobre un problema puede 
+depender del criterio que los investigadores deseen optimizar 
+con lo que el concepto de la \textit{calidad} de un algoritmo 
+depende según el problema al que se aplique. Por tanto, 
+consideraremos el problema como un problema multiobjetivo. 
+Una posible forma de abordarlo es condensar varias medidas en 
+una única con la que posteriormente realizar las 
+comparaciones necesarias a través de test estadísticos. Se 
+presenta a continuación un resumen de las medidas comúnmente 
+utilizadas en el campo del aprendizaje automático tanto para 
+problemas de clasificación como de regresión, indicando 
+ventajas e inconvenientes que nos ayuden a decidir aquella 
+medida que mejor se ajuste a nuestro problema.
 	
 \subsubsection*{Medidas para problemas de clasificación}
 
-	Las medidas utilizadas habitualmente para problemas de clasificación están basadas en la matriz de confusión (~\ref{tab:matrizconfusion}). Haremos un listado de aquellas más utilizadas sin entrar en las medidas diseñadas \textit{ad hoc} para problemas concretos. Suponemos que nos encontramos frente a un problema de clasificación binaria, aunque es posible extender la matriz de confusión y las medidas para problemas de clasificación con un mayor número de clases.
+	Las medidas utilizadas habitualmente para problemas de 
+clasificación están basadas en la matriz de confusión 
+(~\ref{tab:matrizconfusion}). Haremos un listado de aquellas 
+más utilizadas sin entrar en las medidas diseñadas \textit{ad 
+hoc} para problemas concretos. Suponemos que nos encontramos 
+frente a un problema de clasificación binaria, aunque es 
+posible extender la matriz de confusión y las medidas para 
+problemas de clasificación con un mayor número de clases.
+Notaremos por $x, \bar{x}$ la clase positiva y la negativa
+respectivamente de nuestro problema, mientras que $y,\bar{y}$
+se corresponden con las asignaciones a la clase positiva
+y negativa respectivamente. Por tanto, notaremos por $TP$ a
+los verdaderos positivos, por $TN$ a los verdaderos negativos,
+$FP$ a los falsos positivos y $FN$ a los falsos negativos.
 
 \begin{table}[H]
 \centering
@@ -35,70 +291,171 @@
 \caption{Matriz de confusión}
 \label{tab:matrizconfusion}
 \end{table} 
+
+En función de esta matriz se definen las siguientes
+medidas.
 	
 \begin{description}
-	\item[Error de clasificación ($\varepsilon$)] $\varepsilon = \frac{FP+FN}{N}$
-	\item[\textit{Accuracy}(Acc)] $Acc=\frac{TP+TN}{N}$
-	\item[\textit{Recall}(r)] $r=\frac{TP}{N^+}$
-	\item[\textit{Specificity}(sp)] $sp=\frac{TN}{N^-}$
-	\item[\textit{Precision}(pr)] $pr=\frac{TP}{\hat{N}^+}$
+	\item[Error de clasificación ($\varepsilon$),] 
+		$\varepsilon = \frac{FP+FN}{N}$
+	\item[Exactitud o \textit{Accuracy}(Acc),] 
+		$Acc=\frac{TP+TN}{N}$
+	\item[Exhaustividad o \textit{Recall}(r),] $r=\frac{TP}{N^+}$
+	\item[Especificidad o \textit{Specificity}(sp),] 
+		$sp=\frac{TN}{N^-}$
+	\item[Precisión (pr),] 
+		$pr=\frac{TP}{\hat{N}^+}$
 	\item[Tasa falsos positivos(fpr)] $fpr=1-sp$
 	\item[Tasa falsos negativos(fnr)] $fnr=1-r$
-	\item[Valor negativo predicho(npv)] $npv=\frac{TN}{\hat{N}^-}$
-	\item[Estadístico kappa ($\kappa$)] El propósito de esta medida es medir el grado de acuerdo entre dos observadores, o, en nuestro contexto, compensar los valores aleatorios además de minimizar el efecto de un dispar número de ejemplos en cada clase. 
+	\item[Valor negativo predicho(npv)] 
+		$npv=\frac{TN}{\hat{N}^-}$
+	\item[Estadístico kappa ($\kappa$)] El propósito de esta 
+		medida es medir el grado de acuerdo entre dos 
+		observadores, o, en nuestro contexto, compensar los 
+		valores aleatorios además de minimizar el efecto de 
+		un dispar número de ejemplos en cada clase. 
 	\[ 
 	\kappa = \frac{N(TP + TN) - N^+\hat{N}^+ - N^-\hat{N}^- }
 				  {N^2 - N^+\hat{N}^+ - N^-\hat{N}^- }
 	\]
 \end{description}
 	
-	Las medidas de \textit{accuracy} y el error de clasificación son comúnmente usadas debido a que representa un concepto claro y es fácil de calcular.  Es necesario indicar que estas medidas son aconsejables cuando las dos clases se dan con una frecuencia similar y son igualmente relevantes para nuestro problema. Otras medidas como \textit{recall}, \textit{specificity} o \textit{precision} son más frecuentes en dominios como el de recuperación de información y aquellos donde o bien una clase es más relevante, o sólo existen unos pocos individuos de una clase.\\
-	Para encontrar un equilibrio entre la detección de elementos de la muestra de ambas clases se han propuesto en la literatura algunas aproximaciones basadas en las anteriores medidas:
+	Las medidas de exactitud y el error de 
+clasificación son comúnmente usadas debido a que representa 
+un concepto claro y son fáciles de calcular.  Es necesario 
+indicar que estas medidas son aconsejables cuando las dos 
+clases se dan con una frecuencia similar y son igualmente 
+relevantes para nuestro problema. Otras medidas como 
+\textit{recall}, \textit{specificity} o \textit{precision} 
+son más frecuentes en dominios como el de recuperación de 
+información y aquellos donde o bien una clase es más 
+relevante, o sólo existen unos pocos individuos de 
+una clase.\\
+	Para encontrar un equilibrio entre la detección de 
+elementos de la muestra de ambas clases se han propuesto en 
+la literatura algunas aproximaciones basadas en las 
+anteriores medidas:
 	
 	\begin{description}
-		\item[Compensación entre \textit{recall} y \textit{specificity}] El método más popular para encontrar este equilibrio es el análisis ROC, que consta de una representación de $r$ con respecto a $fpr$. Una curva ROC puede resumirse en el valor AUC (\textit{area under the ROC curve})
-		\item[Compensación entre \textit{recall} y \textit{precision}] Depende del parámetro $\beta$ dado por el usuario :
+		\item[Compensación entre exhaustividad y 
+especificidad.] El método más popular para encontrar 
+este equilibrio es el análisis ROC, que consta de una 
+representación de $r$ con respecto a $fpr$. Una curva ROC 
+puede resumirse en el valor AUC (\textit{area under the ROC 
+curve})
+		\item[Compensación entre exhaustividad y 
+precisión.] Depende del parámetro $\beta$ dado por el 
+usuario :
 		\[ F_\beta = \frac{(\beta^2+1) pr \cdot r}
 						  {\beta^2 pr + r}	\]
 	\end{description}
 
-	Cuando en un problema de clasificación supervisada usamos un modelo probabilístico obtenemos la probabilidad de pertenencia a una de las clases, con lo que podemos realizar la asignación variando el umbral. Existen medidas que tratan de recoger el grado de proximidad entre esta asignación de probabilidad y la distribución real. La más conocida es la medida Brier ($BS$),
+	Cuando en un problema de clasificación supervisada usamos 
+un modelo probabilístico obtenemos la probabilidad de 
+pertenencia a una de las clases, con lo que podemos realizar 
+la asignación variando el umbral. Existen medidas que tratan 
+de recoger el grado de proximidad entre esta asignación de 
+probabilidad y la distribución real. La más conocida es la 
+medida Brier ($BS$),
 	\[ BS = \frac{1}{N} \sum\limits_{i=1}^N 
 		\sum\limits_{j \in \{c^+,c^-\}}
 			\left( P \left( C=j|\mathbf{x}^{(i)} \right) -
 			\delta_{j,c^{(i)}} \right) ^2,\]
-	donde $P\left(C=j|\mathbf{x}^{(i)}\right)$ es la probabilidad asignada por el clasificador a la instancia $i$-ésima para la clase $j$, $\delta$ es la delta de Kronecker y $c^{(i)}$ es la clase de la instancia $i$-ésima.\\
-	Hasta ahora las medidas le han dado el mismo peso a los errores cometidos en ambos sentidos (asignar a la clase positiva una instancia negativa o viceversa), sin embargo se pueden incluir \textit{funciones de pérdida} ($\mathcal{L}$) según el coste relativo de cada tipo de fallo. Hasta ahora se puede considerar que hemos usado la función de pérdida $\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase asignada e $y$ la clase real.
+	donde $P\left(C=j|\mathbf{x}^{(i)}\right)$ es la 
+probabilidad asignada por el clasificador a la instancia 
+$i$-ésima para la clase $j$, $\delta$ es la delta de 
+Kronecker y $c^{(i)}$ es la clase de la instancia 
+$i$-ésima.\\
+	Hasta ahora las medidas le han dado el mismo peso a los 
+errores cometidos en ambos sentidos (asignar a la clase 
+positiva una instancia negativa o viceversa), sin embargo se 
+pueden incluir \textit{funciones de pérdida} ($\mathcal{L}$) 
+según el coste relativo de cada tipo de fallo. Hasta ahora se 
+puede considerar que hemos usado la función de pérdida 
+$\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase 
+asignada e $y$ la clase real.
 	
 \subsubsection*{Medidas de interpretabilidad} 
-	En algunos modelos y clasificadores se obtienen reglas para la clasificación de nuevos ejemplos. Por ello se valora positivamente que estas reglas sean entendibles para el usuario. 
+	En algunos modelos y clasificadores se obtienen reglas 
+para la clasificación de nuevos ejemplos. Por ello se valora 
+positivamente que estas reglas sean entendibles para el 
+usuario. 
 	\begin{description}
-	\item[Tamaño] Número de reglas que componen el modelo. A menor tamaño, mayor interpretabilidad. $\textit{Tamaño} = n_R$
-	\item[Número de antecedentes (ANT)] Para $R_i$ una regla de la forma $\textit{Condi-}$ ${ciones } \rightarrow \textit{ Clase}$ donde las condiciones tienen la forma $(Antecedente_1 \wedge \dots \wedge Antecedente_k)$, definimos $Ant(R_i) = k$ y entonces $ANT = \frac{1}{n_R} \sum\limits_{i=1}^{n_R} Ant(R_i)$.
+	\item[Tamaño] Número de reglas que componen el modelo. 
+		A menor tamaño, mayor interpretabilidad. 
+		$\textit{Tamaño} = n_R$
+	\item[Número de antecedentes (ANT)] Para $R_i$ una regla 
+		de la forma $\textit{Condi-}$ ${ciones } \rightarrow 
+		\textit{ Clase}$ donde las condiciones tienen la 
+		forma $(Antecedente_1 \wedge \dots \wedge 
+		Antecedente_k)$, definimos $Ant(R_i) = k$ y entonces 
+		\[ANT = \frac{1}{n_R} 
+				\sum\limits_{i=1}^{n_R} Ant(R_i).\]
 	\end{description}
 
 
 \subsubsection*{Medidas gráficas}
 
-	Como vemos en \cite{PRATI11}, en ocasiones es recomendable utilizar una representación gráfica del rendimiento ya que evitamos así pérdida de información al condensar toda la información en un escalar. En este artículo se presenta un conjunto de representaciones gráficas según el tipo de variable predicha: clases, ranking o probabilidad de pertenencia a una clase.
+	Prati \textit{et al.} \cite{PRATI11} afirman que en ocasiones es 
+recomendable utilizar una representación gráfica del 
+rendimiento ya que evitamos así pérdida de información al 
+condensar toda la información en un escalar. En este artículo 
+se presenta un conjunto de representaciones gráficas según el 
+tipo de variable predicha: clases, ranking o probabilidad de 
+pertenencia a una clase.
 	
 \paragraph{Predicción de clases}
 	\begin{description}
-		\item[Gráficas ROC] Como se ha mencionado anteriormente, es una representación del la medida \textit{tpr} frente a \textit{fpr}. Un clasificador será mejor considerado cuanto más arriba y a la izquierda se sitúe en el gráfico. 
-		\item[Líneas de coste] Se trata de una modificación de las gráficas ROC para incluir el coste asociado a cada tipo de fallo. Se define el coste esperado para un clasificador como 
+		\item[Gráficas ROC] Como se ha mencionado 
+		anteriormente, es una representación del la medida 
+		\textit{tpr} frente a \textit{fpr}. Un clasificador 
+		será mejor considerado cuanto más arriba y a la 
+		izquierda se sitúe en el gráfico. 
+		\item[Líneas de coste] Se trata de una modificación 
+		de las gráficas ROC para incluir el coste asociado a 
+		cada tipo de fallo. Se define el coste esperado para 
+		un clasificador como 
 		\[ EC = \sum\limits_{X \in \{x, \bar{x}\}} 
 		 		\sum\limits_{X \in \{x, \bar{x}\}} 
-		 			p(X,Y) \mathcal{L}(X,Y)			.\]
-	Entonces, se definen $NormEC = \frac{EC}{maxEC}$, $PC = \frac{p(x) \mathcal{L}(\bar{x},y)}{maxEC}$, donde $maxEC = p(x)\mathcal{L}(\bar{x},y)+p(\bar{x})\mathcal{L}(x,\bar{y})$.  La gráfica representa la $PC$ frente a $NormEC$. Ahora cada clasificador, representado por un punto en la gráfica ROC, es una línea. El clasificador representado por el punto $(0,0)$ en la gráfica ROC (asigna a todos los puntos la clase negativa) ahora se representa mediante la recta $NormEC=PC$ y el punto $(1,1)$ mediante la recta $NormEC= 1-PC$. Dependiendo del coste relativo de la clase positiva ($PC$), será el mejor clasificador aquel con menor $NormEC$.
+		 			P(X,Y) \mathcal{L}(X,Y),
+		 \]
+con $P(X,Y)$ la probabilidad de clasificar como $Y$ un
+elemento de la clase $X$ y $\mathcal{L}(X,Y)$ la
+función de coste asociado a considerar $Y$ un elemento
+de la clase $X$.
+Entonces, se definen $NormEC = \frac{EC}{maxEC}$, $PC = 
+\frac{p(x) \mathcal{L}(\bar{x},y)}{maxEC}$, donde $maxEC 
+= p(x)\mathcal{L}(\bar{x},y)+p(\bar{x})\mathcal{L}(x,
+\bar{y})$.  La gráfica representa la $PC$ frente a 
+$NormEC$. Ahora cada clasificador, representado por un 
+punto en la gráfica ROC, es una línea. El clasificador 
+representado por el punto $(0,0)$ en la gráfica ROC (asigna a 
+todos los puntos la clase negativa) ahora se representa 
+mediante la recta $NormEC=PC$ y el punto $(1,1)$ mediante la 
+recta $NormEC= 1-PC$. Dependiendo del coste relativo de la 
+clase positiva ($PC$), será el mejor clasificador aquel con 
+menor $NormEC$.
 	\end{description}
 
 \paragraph{Predicción de \textit{ranking}} 	
 	\begin{description}
-		\item[Curvas ROC] Se traslada el problema a uno de clasificación mediante la asignación a la clase positiva del \textit{top} $n\%$. Se varía el porcentaje del $0\%$ al $100\%$ para obtener la curva ROC.
-		\item[Curvas de coste] Se trata de la transformación análoga a las curvas ROC para las líneas de coste.
-		\item[Curvas \textit{precision-recall}] Usadas habitualmente en el ámbito de la recuperación de información. Representan $precision$ frente a $recall$.
-		\item[Gráfica \textit{lift}] Similar a la gráfica ROC, representa $tpr$ frente a la probabilidad de asignar a un individuo la clase positiva. 
-		\item[Gráfica ROI] Similar a las gráficas \textit{lift}, pero representando en el eje $Y$ el beneficio esperado 
+		\item[Curvas ROC] Se traslada el problema a uno de 
+		clasificación mediante la asignación a la clase 
+		positiva del \textit{top} $n\%$. Se varía el 
+		porcentaje del $0\%$ al $100\%$ para obtener la curva 
+		ROC.
+		\item[Curvas de coste] Se trata de la transformación 
+		análoga a las curvas ROC para las líneas de coste.
+		\item[Curvas \textit{precision-recall}] Usadas 
+		habitualmente en el ámbito de la recuperación de 
+		información. Representan $precision$ frente a 
+		$recall$.
+		\item[Gráfica \textit{lift}] Similar a la gráfica 
+		ROC, representa $tpr$ frente a la probabilidad de 
+		asignar a un individuo la clase positiva. 
+		\item[Gráfica ROI] Similar a las gráficas 
+		\textit{lift}, pero representando en el eje $Y$ el 
+		beneficio esperado 
 		\[	TEP = N \sum\limits_{X \in \{x,\bar{x}\}}
 					\sum\limits_{Y \in \{y,\bar{y}\}}
 						p(X,Y) \mathcal{L}(X,Y) p(X) \]
@@ -106,33 +463,63 @@
 
 \paragraph{Predicción de probabilidad de pertenencia a una clase} 	
 	\begin{description}
-		\item[\textit{Reliability diagram}] Contiene dos gráficas. Una es $p(x|j)$ según $j$, que mide el grado en que concuerdan las predicciones con la frecuencia de los casos positivos. La segunda gráfica se corresponde con $p(y_j)$ según $j$, identificada con la confianza en la predicción.
-		\item[Diagrama de atributos] Para evaluar las mejoras relativas de un sistema de predicción con respecto a uno de referencia se define la $BSS$ (\textit{Brier skill score})
+		\item[\textit{Reliability diagram}] Contiene dos
+		gráficas. Una es $p(x|j)$ según $j$, que mide el 
+		grado en que concuerdan las predicciones con la
+		frecuencia de los casos positivos. La segunda gráfica 
+		se corresponde con $p(y_j)$ según $j$, identificada 
+		con la confianza en la predicción.
+		\item[Diagrama de atributos] Para evaluar las mejoras 
+		relativas de un sistema de predicción con respecto a 
+		uno de referencia se define la $BSS$ (\textit{Brier 
+		skill score})
 			\[BSS = 1 - \frac{BS}{BS_{ref}} \]
-			El diagrama de atributos es un refinamiento del \textit{reliability diagram}, al que se le añaden tres líneas: 
+		El diagrama de atributos es un refinamiento del
+		\textit{reliability diagram}, al que se le añaden 
+		tres líneas: 
 			\begin{description}
-			\item[Línea de no resolución:] línea horizontal donde $p(x|j)=p(x)$.
-			\item[Línea de máxima resolución:] línea vertical que intersecta a la diagonal en el mismo punto que la línea de no resolución.
-			\item[Clasificador de referencia:] Bisectriz entre la diagonal principal y la línea de no resolución. Representa los puntos cuya precisión (\textit{accuracy}) es menor que en el modelo de referencia.
+			\item[Línea de no resolución:] línea horizontal 
+			donde $p(x|j)=p(x)$.
+			\item[Línea de máxima resolución:] línea vertical 
+			que intersecta a la diagonal en el mismo punto 
+			que la línea de no resolución.
+			\item[Clasificador de referencia:] Bisectriz 
+			entre la diagonal principal y la línea de no 
+			resolución. Representa los puntos cuya precisión 
+			(\textit{accuracy}) es menor que en el modelo de 
+			referencia.
 			\end{description}
-		\item[\textit{Discrimination diagram}] Gráfica de $P(Y|X)$ según $y_j$. Contiene las curvas de $p(y_j|x)$ y de $p(y_j|\bar{x})$. En el mejor de los casos, estas dos curvas no se solaparían y podríamos saber la clase según $y_j$.
+		\item[\textit{Discrimination diagram}] Gráfica de 
+		$P(Y|X)$ según $y_j$. Contiene las curvas de 
+		$p(y_j|x)$ y de $p(y_j|\bar{x})$. En el mejor de los 
+		casos, estas dos curvas no se solaparían y podríamos 
+		saber la clase según $y_j$.
 	\end{description}
 	
 	
 \subsection*{Medidas para problemas de regresión}
 
-	Las medidas para un problema de regresión están basadas en la distancia entre el valor real de la instancia y el valor predicho. Consideraremos que calculamos el error de la predicción del algoritmo $f$ aplicado a los datos $x_1, \dots, x_N$ con valor $y_1, \dots, y_N$ respectivamente.
+	Las medidas para un problema de regresión están basadas 
+en la distancia entre el valor real de la instancia y el 
+valor predicho. Consideraremos que calculamos el error de la 
+predicción del algoritmo $f$ aplicado a los datos $x_1, 
+\dots, x_N$ con valor $y_1, \dots, y_N$ respectivamente.
 	
 \begin{description}
-	\item[\textit{Mean squared error} (MSE)]: Error cuadrático medio
+	\item[\textit{Mean squared error} (MSE)]: Error 
+	cuadrático medio
 		\[ MSE(f) = \frac{1}{N} \sum\limits_{i=1}^N
 								(y_i - f(x_i))^2	\]
-	\item[\textit{Root mean squared error} (RMSE)]: Raíz del error cuadrático medio
-		\[ RMSE(f) = \sqrt{\frac{1}{N} \sum\limits_{i=1}^N (y_i - f(x_i))^2}	\]
+	\item[\textit{Root mean squared error} (RMSE)]: Raíz del 
+	error cuadrático medio
+		\[ RMSE(f) = \sqrt{\frac{1}{N} 
+		\sum\limits_{i=1}^N (y_i - f(x_i))^2}	\]
 		
-	\item[\textit{Mean absolute error} (MAD) ]: Error absoluto medio
+	\item[\textit{Mean absolute error} (MAD) ]: Error 
+	absoluto medio
 		\[ MAD(f) = \frac{1}{N} \sum\limits_{i=1}^N
 								|y_i - f(x_i)|	\]
 \end{description}
 
-	Las medidas $MSE$ y $RMSE$ son más utilizadas debido a la penalización de los errores mayores. 
+	Las medidas $MSE$ y $RMSE$ son más utilizadas debido a la 
+penalización de los errores mayores. 

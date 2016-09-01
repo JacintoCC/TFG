@@ -1,7 +1,9 @@
-
+*.zip
 *.toc
 *.aux
 *.log
 *.pdf
 *.synctex.gz
 *.out
+*.blg
+*.bbl

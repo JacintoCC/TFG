@@ -284,7 +284,7 @@ alternativa no direccional).\\
 	Cuando el tamaño de la muestra es grande el test 
 estadístico para la binomial puede ser aproximado con la 
 distribución $\chi^2$ con un grado de libertad. Hay varias 
-opiniones a la hora de indicar el tamaño mínimo para realizar
+opiniones con respecto al tamaño mínimo para realizar
 esta aproximación. Se pueden tomar referencia que 
 $N \theta_0$ y $N (1 - \theta_0)$ sean mayores que 5. El test 
 estadístico para realizar estadístico para usar esta 
@@ -321,10 +321,10 @@ usar el $z$-test.\\
 	La hipótesis nula será por tanto $H_0: \mu_1 = \mu_2$.
 El test se realiza utilizando el estadístico $t$:
 \begin{align*}
-	t 	&= \frac{\bar{d}}
-			{\frac{\bar{\sigma}_d}{\sqrt{N}}} \\
-		&= \frac{\bar{X}_1 - \bar{X}_2}
-			{\frac{\bar{\sigma}_d}{\sqrt{N}}} 
+	t 	= \frac{\bar{d}}
+			{\frac{\bar{\sigma}_d}{\sqrt{N}}}
+		= \frac{\bar{X}_1 - \bar{X}_2}
+			{\frac{\bar{\sigma}_d}{\sqrt{N}}},
 \end{align*}
 	
 	donde $N$ es el número de datos de la muestra, 
@@ -409,8 +409,8 @@ su suma $M = \frac{\sum\limits_{i=1}^5 s_i^2}{\sigma^2}
 \end{equation}
 
 \paragraph{Modificación} Nótese que en la 
-ecuación~\ref{eq:5x2CVt} el valor $d_1^(1)$ podría ser
-ocupado por cualquier estadístico $d_i^(j)$. Alpaydin
+ecuación~\ref{eq:5x2CVt} el valor $d_1^{(1)}$ podría ser
+ocupado por cualquier estadístico $d_i^{(j)}$. Alpaydin
 propuso combinar estos valores de la forma:
 	\[
 		N = \frac{\sum\limits_{i=1}^5
@@ -737,7 +737,7 @@ numérico ordenados temporalmente y queremos comprobar la
 hipótesis de la aleatoriedad de la muestra.\\
 	Para una muestra de $n$ elementos, supongamos que podemos 
 ordenarlos de la forma $a_1 < \dots < a_n$ (estamos 
-suponiendo que no hay dos iguales. Si la hipótesis nula fuese 
+suponiendo que no hay dos iguales). Si la hipótesis nula fuese 
 cierta, nuestra muestra se corresponderá con una de las $n!$ 
 permutaciones con igual probabilidad. Usaremos para este test 
 las rachas crecientes y decrecientes. Construimos la 
@@ -1496,7 +1496,7 @@ $\frac{k+1}{2}$:
 calculamos los términos
 \begin{align*}
 		A_2 &= \frac{kn(n+1)(2n+1)(k+1)(k-1)}{72},\\
-		B = \frac{1}{n} \sum\limits_{j=1}^k S_j^2.
+		B &= \frac{1}{n} \sum\limits_{j=1}^k S_j^2.
 \end{align*}
 
 	Finalmente, obtenemos el estadístico
