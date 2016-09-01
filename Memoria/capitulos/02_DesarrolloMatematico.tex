@@ -1,16 +1,11 @@
 \chapter{Desarrollo matemático}
 
-\section{Introducción a la inferencia}
+\section{Notación}
 
-	En esta primera sección se hace un breve repaso de los 
+	En esta sección se hace un breve repaso de los 
 conceptos estadísticos necesarios para comprender el 
 contenido de la memoria así como presentar la notación.
 	
-\begin{definicion}[Inferencia estadística]
-	Rama de la estadística en la que se usan las propiedades
-de una muestra para extraer conclusiones de la población. 
-\end{definicion}
-
 \begin{definicion}[Variable aleatoria]
 	Función de conjuntos cuyo dominio es los elementos de un 
 espacio muestral sobre el cual se ha definido una función de
@@ -37,11 +32,6 @@ $X$ cumple las siguientes propiedades:
 		$\underset{\varepsilon \rightarrow 0^+}{\lim} 
 		F_X(x+\varepsilon) = F_X(x)$
 \end{enumerate}
-
-	Diremos que una v.a. es \textbf{continua} si su cdf es 
-continua. Supondremos que una cdf continua es derivable cpd 
-(\textit{casi por doquier}, es decir, en todo $\mathbb{R}$ 
-salvo en un conjunto finito de puntos).
 	
 \begin{definicion}[Función de densidad]
 	Se define la función de densidad como la derivada de 
@@ -68,11 +58,11 @@ de valores como
 
 \begin{definicion}[Muestra aleatoria]
 	Llamamos muestra aleatoria de una v.a. $X$ a un conjunto 
-de $n$ v.a., $(X_1, \dots, X_n)$, si son independientes e 
+de $n$ v.a., $\mathbf{X} = (X_1, \dots, X_n)$, si son independientes e 
 idénticamente distribuidas (i.i.d.), con lo que su 
 distribución de probabilidad conjunta es
 	\[ 
-		f_{X}(x_1, \dots, x_n) =
+		f_{\mathbf{X}}(x_1, \dots, x_n) =
 		f_{X_1, \dots, X_n}(x_1, \dots, x_n) =
 		\prod\limits_{i=1}^n f_X(x_i).
 	\]
@@ -80,24 +70,16 @@ distribución de probabilidad conjunta es
 	
 \begin{definicion}[Momento]
 	Es un parámetro de la población. El momento $k$-ésimo de 
-$X$ es $\mu_k' = E[X^k]$. La media es el momento de primer 
-orden, $\mu_1' = E[X] = \mu$. El momento $k$-ésimo central es 
-$\mu_k = E[(X - \mu)^k]$.
+$X$ es $\mu_k' = \mathbb{E}[X^k]$. La media es el momento de 
+primer orden, $\mu_1' = \mathbb{E}[X] = \mu$. El momento 
+$k$-ésimo centrado es  $\mu_k = \mathbb{E}(X - \mu)^k]$.
+Notamos por $\var$ a la varianza, es decir, el momento 
+centrado de segundo orden $\var(X) = \mathbb{E}[(X - \mu)^2]$. 
 \end{definicion}
 
-\begin{teorema}[Teorema central del límite]
-	Sea $X_1, \dots, X_n$ una muestra aleatoria de una 
-población con media $\mu$ y varianza $\sigma^2 > 0$ y sea 
-$\bar{X}_n$ la media de esa muestra. Entonces para $n 
-\rightarrow \infty$ la variable aleatoria $\sqrt{n}
-\frac{(\bar{X}_n - \mu)}{\sigma}$ tiene como distribución 
-límite la normal con media $0$ y varianza $1$.
-\end{teorema}
-
-\begin{definicion}[Estimador]
-	Definimos como estimador, o estimador puntual una función 
-de v.a. cuyo valor observado es usado para estimar el valor 
-verdadero de un parámetro de la población. 
+\begin{definicion}[Función generadora de momentos]
+	Notamos por $M_{g(X)}(t)$ a la función $\mathbb{E}[
+\exp(tg(X))]$. 
 \end{definicion}
 
 	Sea $\hat{\theta}_n = u(X_1, \dots, X_n)$ un estimador de 
@@ -106,7 +88,7 @@ de $\hat{\theta}_n$:
 	
 	\begin{enumerate}
 	\item \textit{Insesgadez}: 
-			$E[\hat{\theta}_n] = \theta$ para todo $\theta$.
+			$\mathbb{E}[\hat{\theta}_n] = \theta$ para todo $\theta$.
 	\item \textit{Suficiencia}: Podemos escribir
 			$f_{X_1, \dots, X_n}(x_1, \dots, x_n; \theta)$ 
 			como producto de dos funciones $f_{X_1, \dots, 
@@ -123,7 +105,7 @@ de $\hat{\theta}_n$:
 	\begin{enumerate}
 		\item Si $\hat{\theta}_n$ es un estimador insesgado 
 			de $\theta$ y $\underset{n \rightarrow \infty}
-			{\lim} var(\hat{\theta}_n) = 0$, entonces $
+			{\lim} \var(\hat{\theta}_n) = 0$, entonces $
 			\hat{\theta}_n$ es un estimador consistente por l
 			a desigualdad de Chebyshev.
 		\item $\hat{\theta}_n$ es un estimador consistente de 
@@ -132,13 +114,14 @@ de $\hat{\theta}_n$:
 			$\theta$.
 	\end{enumerate}
 			
-	\item \textit{Mínimo error cuadrático} 	
-			$E[(\hat{\theta}_n - \theta)^2] \leq
-			 E[(\hat{\theta}_n^* - \theta)^2]$ para cualquier 
+	\item \textit{Mínimo error cuadrático:} 	
+			$\mathbb{E}[(\hat{\theta}_n - \theta)^2] \leq
+			 \mathbb{E}[(\hat{\theta}_n^* - \theta)^2]$ para cualquier 
 			 estimador $\hat{\theta}_n^*$.
-	\item \textit{Mínima varianza} 	$var(\hat{\theta}_n) \leq
-			 var(\hat{\theta}^*_n)$ para cualquier estimador
-			  $\hat{\theta}_n^*$, siendo ambos insesgados.
+	\item \textit{Mínima varianza:} $\var(\hat{\theta}_n)
+			\leq \var(\hat{\theta}^*_n)$ para cualquier 
+			estimador $\hat{\theta}_n^*$, siendo ambos
+			insesgados.
 	\end{enumerate}
 	
 \begin{definicion}[Función de verosimilitud]
@@ -154,21 +137,13 @@ muestras tomadas como función de $\theta$. Esto es:
 es un valor $\bar{\theta}$ tal que 
 	\[ 
 		L(x_1, \dots, x_n; \bar{\theta}) \geq 
-			L(x_1, \dots, x_n; \theta) \ \forall \theta 	
+			L(x_1, \dots, x_n; \theta) \; \forall \theta 	
 	\]
 	
 	La relevancia de este estimador consiste en que, para 
 unas ciertas condiciones de regularidad, un estimador máximo 
 verosímil es suficiente, consistente y asintóticamente 
 insesgado, con varianza mínima y con distribución normal.
-	
-	
-\begin{definicion}[Intervalo de confianza]
-	Un intervalo de confianza al $100(1-\alpha)\%$ para el 
-parámetro $\theta$ es un intervalo aleatorio de extremos $U$ 
-y $V$ (funciones de v.a.) tal que $P(U < \theta < V) = 
-1 -\alpha$.
-\end{definicion}
 	
 \begin{definicion}[Hipótesis estadística]
 	Es una afirmación sobre la la función de probabilidad de 
@@ -184,7 +159,8 @@ hipótesis nula.
 	Llamamos región crítica o región de rechazo $R$ para un 
 test al conjunto de valores tomados por el test que conducen 
 a rechazar la hipótesis nula. Llamamos \textbf{valores 
-críticos} a los extremos de $R$.
+críticos} a los extremos de $R$ y los notaremos por $\tau_
+\alpha$
 \end{definicion}
 
 \begin{definicion}[Tipos de error]\textit{}
@@ -209,7 +185,7 @@ errores de tipo I y II tienen probabilidad
 
 \begin{definicion}[Tamaño del test]
 	Se define el tamaño del test como $\underset{\theta \in 
-	\omega}\sup \alpha(\theta)$.
+	\omega}{\sup}\ \alpha(\theta)$.
 \end{definicion}
 
 \begin{definicion}[Potencia del test]
@@ -229,8 +205,8 @@ especialmente relevante en los test no paramétricos.
 	
 \begin{definicion}[$p$-valor]
 	Probabilidad de obtener, siendo cierta la hipótesis nula 
-$H_0$, una muestra aleatoria tan alejada o más de la 
-hipotesis nula que la muestra aleatoria observada.
+$H_0$, una muestra aleatoria tan extraña como la muestra
+aleatoria observada.
 \end{definicion}
 
 \begin{definicion}[Consistencia]
@@ -272,13 +248,12 @@ de errores cometidos por el clasificador $f$,
 				\mathbb{I}[f(x_i) \neq y_i].
 	\]
 	
-	El test a realizar consiste en si la probabilidad de 
+	El test a realizar consiste en comprobar si la probabilidad de 
 cometer un error $\theta$ es igual a un valor $\theta_0$
 dado: $H_0: \theta = \theta_0;\ H_1: \theta \neq \theta_0$.
 La probabilidad de cometer $j$ errores de $N$ supuesta $H_0$
 será $P[X = j] = {N \choose j} \theta^j (1-p)^{N-j}$. Se 
-rechazará la hipótesis nula si la probabilidad de obtener un 
-valor tan alejado o más de la hipótesis nula que el observado 
+rechazará la hipótesis nula si el $p$-valor observado 
 es menor que el valor $\alpha/2$ (al considerar la hipótesis 
 alternativa no direccional).\\
 	Cuando el tamaño de la muestra es grande el test 
@@ -286,8 +261,8 @@ estadístico para la binomial puede ser aproximado con la
 distribución $\chi^2$ con un grado de libertad. Hay varias 
 opiniones con respecto al tamaño mínimo para realizar
 esta aproximación. Se pueden tomar referencia que 
-$N \theta_0$ y $N (1 - \theta_0)$ sean mayores que 5. El test 
-estadístico para realizar estadístico para usar esta 
+$N \theta_0$ y $N (1 - \theta_0)$ sean mayores que 5. El 
+estadístico para realizar el test usando esta 
 aproximación será:
 	\[
 		z = \frac{X/N - \theta_0}
@@ -295,17 +270,18 @@ aproximación será:
 							{N}}}
 	\]
 	
-\subsection{$t$-Test para muestras emparejadas}
+\subsection{$t$-Test para muestras apareadas}
 
 	Nos ocupamos aquí de esta versión del $t$-test para 
-muestras independientes emparejadas con varianzas 
+muestras independientes apareadas con varianzas 
 desconocidas por tener una mayor relevancia en la evaluación 
-de algoritmos de aprendizaje automático. Con este test se 
-pretende conocer si dos muestras independientes representan
-a dos poblaciones con diferentes medias. Para estimar el
-valor de las medias de las poblaciones, notaremos por 
-$\bar{X}_1, \bar{X}_2$ a las medias de las dos muestras. Las 
-condiciones para realizar este test son:
+de algoritmos de aprendizaje automático. Suponiendo que 
+disponemos de los datos del rendimiento de dos algoritmos, 
+realizamos el test para comprobar si éstos se corresponden 
+con los propios de dos poblaciones con diferentes medias. 
+Para estimar el valor de las medias de las poblaciones, 
+notaremos por $\bar{X}_1, \bar{X}_2$ a las medias de las dos 
+muestras. Las condiciones para realizar este test son:
 	
 	\begin{itemize}
 	\item Cada muestra ha sido seleccionada aleatoriamente 
@@ -331,7 +307,8 @@ El test se realiza utilizando el estadístico $t$:
 $\bar{X}_i,\ i=1,2$  es la media $\frac{1}{N}
 \sum\limits_{j=1}^{N} X_{ij}$ de los  valores obtenidos en 
 cada muestra, $\bar{d}$ es la diferencia de las medias y 
-$\bar{\sigma}_d$ es el estimador para la desviación típica:
+$\bar{\sigma}_d$ es el estimador para la desviación típica
+de las diferencias:
 	\[
 		\bar{\sigma}_d =
 			\sqrt{
@@ -344,7 +321,7 @@ $\bar{\sigma}_d$ es el estimador para la desviación típica:
 para la distribución $t$ de Student con $N - 1$ 
 grados de libertad.\\
 	Una versión más general de este test es el $t$-test de
-Welch para muestras no emparejadas de tamaños $N_1, N_2$
+Welch para muestras no apareadas de tamaños $N_1, N_2$
 cuyo estadístico es
 	\[
 		t = \frac{\bar{X}_1 - \bar{X}_2}
@@ -366,7 +343,7 @@ suele realizar con el estadístico $d$ de Cohen:
 					{\sigma_p},
 	\]
 	con $\sigma_p = \sqrt{\frac{\sigma_1^2 + \sigma_2^2}{2}}$
-la media de las varianzas de las respectivas muestras.
+la raíz de la media de las varianzas de las respectivas muestras.
 La interpretación del estadístico propuesta por Cohen es:
 	\begin{itemize}
 	\item $d_{Cohen}$ en torno a $0.2, 0.3$ denota un 
@@ -379,7 +356,7 @@ La interpretación del estadístico propuesta por Cohen es:
 	
 \subsubsection{5x2 CV $t$-test}
 	
-	En el capítulo siguiente (\ref{sssec:CV}), se describe el 
+	En la introducción (\ref{sssec:CV}), se describe el 
 proceso de validación cruzada, especialmente útil cuando se
 disponen de pocos datos y queremos mantener un equilibrio
 entre el tamaño del conjunto de entrenamiento y el de test.
@@ -420,7 +397,7 @@ propuso combinar estos valores de la forma:
 			\sim \chi_{10}^2.
 	\]
 	Sustituyendo esto en \ref{eq:5x2CVt}, tenemos
-un estadístico que es el radio de dos v.a. que siguen 
+un estadístico que es el cociente de dos v.a. que siguen 
 una $\chi^2$, con lo que definimos la v.a. $f$, que seguirá
 una distribución $F$ de Snedecor con 10 y 5 grados de
 libertad:
@@ -432,7 +409,7 @@ libertad:
 \subsection{Análisis de la varianza}
 
 	Estos test resultan insuficientes a la hora de comparar 
-múltiples clasificadores. Aunque se ha usado el $t$-test para 
+múltiples clasificadores. Aunque puede usarse el $t$-test para 
 realizar repetidas comparaciones entre distintos 
 clasificadores, esto plantea el problema de que son 
 necesarios numerosos test para realizar todas las 
@@ -477,10 +454,11 @@ base de datos es
 		X_{ij} = \bar{\bar{X}} + \alpha_i + e_{ij},
 	\]
 	donde $\alpha_i$ es la variabilidad del rendimiento entre 
-los distintos conjuntos de datos, que se supone con media 0 y
+los distintos conjuntos de datos, que representa una v.a. con media 0 y
 varianza $\sigma_A^2$ y $e_{ij}$ representa la variabilidad
-dentro del propio conjunto de datos, que se supone con media 
-0 y varianza $\sigma^2$. Además, se supone $e_{ij}$ 
+dentro del propio conjunto de datos, v.a. con media 
+0 y varianza $\sigma^2$. Tanto $\alpha_i$ como
+$e_{ij}$ se suponen normales. Además, se supone $e_{ij}$ 
 independiente de $\alpha_i$ y de los demás $e_{ij}$.\\
 	Definiremos en primer lugar algunas medidas de la 
 variación, como la existente debida a los clasificadores
@@ -534,11 +512,10 @@ test, el cociente $F$ se obtiene como
 	\[
 		F = \frac{MS_C}{MS_{Error}},
 	\]
-	
 	que sigue una distribución $F$ de Snedecor con $k-1$ y
 $(n-1)(k-1)$ grados de libertad.
 
-\paragraph{\textit{One-way} ANOVA} Se trata de un modelo más 
+\paragraph{ANOVA de una vía} Se trata de un modelo más 
 simple que no distingue entre la variabilidad dentro de los
 conjuntos de datos y entre conjuntos de datos, sino que ambas
 variabilidades se analizan de forma conjunta. En términos del
@@ -583,8 +560,7 @@ propiedad de ser libre de distribución:
 \begin{definicion}[Libre de distribución]
 	Decimos que un estadístico es libre de distribución si 
 para $H_0$ cierta, la distribución del estadístico no depende 
-de la distribución $F$ de la población. Este concepto se 
-puede extender a intevalos de confianza. 
+de la distribución $F$ de la población.
 \end{definicion}
 	
 	\subsection{Comparación con test paramétricos}
@@ -614,10 +590,8 @@ forma conocida.\\
 valores de parámetros (a diferencia de los paramétricos). Son 
 más simples de aplicar, las matemáticas, menos sofisticadas y 
 basadas en la combinatoria, están relacionadas con las 
-propiedades usadas en el proceso inductivo. Los libros de 
-recetas no son necesarios, pues con la mera definición del 
-test queda suficientemente claro cómo aplicar el test no 
-paramétrico. Además, las distribuciones asintóticas son 
+propiedades usadas en el proceso inductivo. 
+Además, las distribuciones asintóticas son 
 distribuciones conocidas como la normal o la chi cuadrado. Al 
 relajar las condiciones sobre los datos de entrada, es menos 
 sensible al \textit{dirty-data}, datos con errores usados en 
@@ -632,7 +606,7 @@ paramétricos, la potencia es similar. Además, en esta
 situación, la falta de eficiencia de los test no paramétricos 
 se suple con la falta de precisión de los test paramétricos 
 al aproximar la distribución de los datos por la distribución 
-asintótica conocida.
+asintótica conocida. 
 
 
  	Se incluye en esta sección el desarrollo de los test no
@@ -646,10 +620,14 @@ estadísticos, tanto de los paramétricos como de los no
 paramétricos, es la aleatoriedad de la muestra de partida. La 
 hipótesis nula para los test que serán presentados en esta 
 sección será la aleatoriedad de la muestra, mientras que la 
-hipótesis alternativa será la presencia de un patrón. Estos 
-test también son útiles en los estudios de series temporales 
-y control de calidad.
-	
+hipótesis alternativa será la presencia de un patrón. 
+En el problema que nos ocupa, podríamos usar estos test 
+en el estudio del efecto de un parámetro, partiendo de la
+hipótesis nula de que dicho parámetro no afecta (y por tanto
+los resultados son aleatorios) mientras que la hipótesis
+alternativa contempla la existencia de un patrón conforme
+este parámetro crece o decrece.
+
 \subsubsection{Test basado en el número de rachas}
 
 	Supongamos una secuencia de $n$ elementos de dos tipos, 
@@ -692,10 +670,10 @@ $H_0$.\\
 	Suponemos que el tamaño de la muestra $n \rightarrow 
 \infty$, de forma en que $\frac{n_1}{n} \rightarrow \lambda$, 
 $0<\lambda<1$. De aquí obtenemos
-	\[ \underset{n \rightarrow \infty}{\lim} E[R/n] = 
+	\[ \underset{n \rightarrow \infty}{\lim} \mathbb{E}[R/n] = 
 			2\lambda (1-\lambda) 
 				\underset{n \rightarrow \infty}{\lim} 
-					var(R\sqrt{n}) =
+					\var(R\sqrt{n}) =
 			4\lambda^2(1-\lambda)^2
 	\]
 	
@@ -805,8 +783,8 @@ sigue la siguiente relación:
 de rachas, independientemente de su longitud. El número de 
 rachas total sería $R = \sum\limits_{i=1}^{n-1} R_i$. Usando 
 el procedimiento anterior, se llega a que la distribución 
-asintótica nula estandarizada con media $\mu = 
-\frac{2n-1}{3}$ y varianza $\sigma^2=\frac{16n-29}{90}$ es la 
+del estadístico $\frac{R-\mu}{\sigma}$ con $\mu = 
+\frac{2n-1}{3}$ y $\sigma^2=\frac{16n-29}{90}$ es la 
 normal estándar.
 	
 \subsection{Test de bondad del ajuste}
@@ -822,9 +800,15 @@ disponer de test que nos indiquen cómo de confiable es la
 hipótesis de la normalidad para nuestra muestra. Los test de 
 bondad del ajuste se ocupan de la forma de la población y no 
 de la distribución concreta incluyendo parámetros de escala o 
-localización.
+localización. La utilización de estos test en nuestro problema
+nos permiten, según los resultados, justificar el
+uso de test paramétricos para realizar la comparación. Tras
+la aplicación de estos test podríamos, si los datos
+fuesen consistentes con la hipótesis de normalidad,
+decidirnos por la aplicación del test ANOVA en lugar
+de uno no paramétrico.
 	
-\subsubsection{Chi cuadrado}
+\subsubsection{Test chi cuadrado}
 
 	Sea una muestra aleatoria de tamaño $n$ obtenida de una 
 población con función de distribución desconocida $F_X$. El 
@@ -866,7 +850,7 @@ siguiente forma:
 	 
 	habiendo obtenido cada $\theta_i^0$ de $F_0$. El 
 estimador de máxima verosimilitud es $\hat{\theta}_i = 
-\frac{f_i}{n}$. Entonces el ratio de verosimilitud es
+\frac{f_i}{n}$. Entonces la razón de verosimilitud es
 	 
 	 \[ 
 	 T = \frac{L(\hat{\omega})}{L(\hat{\Omega})}
@@ -877,7 +861,6 @@ estimador de máxima verosimilitud es $\hat{\theta}_i =
 	 			\frac{\theta_i^0}{\hat{\theta_i}} 
 	 		\right)^{f_i}
 	 \]
-	 
 	 y la distribución de la v.a. $-2 \log T$ puede ser 
 aproximada por la distribución chi cuadrado. Debido a que 
 estimamos $k-1$ parámetros (el parámetro restante se deduce 
@@ -956,7 +939,7 @@ distribución que constituye la hipótesis nula y la
 definida de la siguiente forma:
 	\[ S_n(x) = \frac{\text{número de muestras} \leq x}{n} \]
 	Para una definición formal introducimos notación sobre 
-estadísticos ordinales. Sea $X_1, \dots, X_n$ una muestra 
+estadísticos ordenados. Sea $X_1, \dots, X_n$ una muestra 
 aleatoria de una población con función de distribución 
 continua $F_X$. Sea $X_{(1)}$ el menor valor de $X_1, \dots, 
 X_n; X_{(2)}$ el segundo menor;$ \dots; X_{(n)}$ el mayor. 
@@ -981,8 +964,10 @@ de la precisión de la estimación. El estadístico $D_n$ es
 especialmente útil en la inferencia no paramétrica debido a 
 que la distribución de $D_n$ no depende de $F_0(x)$ mientras 
 sea continua. Se definen las desviaciones direccionales
-	\[ D_n^+ = \underset{x}{\sup} [S_n(x) - F_0(x)]
-		D_n^- = \underset{x}{\sup} [F_0(x) - S_n(x)]\]
+\begin{align*}
+		D_n^+ &= \underset{x}{\sup} [S_n(x) - F_0(x)]  		\\
+		D_n^- &= \underset{x}{\sup} [F_0(x) - S_n(x)]\]
+\end{align*}	 
 	
 \begin{teorema}
 	Los estadísticos $D_n, D_n^+$ y $D_n^-$ son libres de 
@@ -1016,6 +1001,13 @@ $V = 4n {D_n^+}^2$ para $n \rightarrow \infty$ es la
 distribución chi cuadrado con dos grados de libertad.
 \end{corolario}	
 	
+	Para aplicar el test, partimos de $\tau_\alpha$ el valor
+crítico para el nivel de significación $\alpha$ de 
+$\chi^2_2$, entonces del corolario anterior obtenemos el 
+valor límite para $D^+_n$ despejando de $\tau_\alpha
+= 4n {D_n^+}^2$. Si el $D^+_n$ de la muestra fuese mayor,
+rechazaríamos la hipótesis nula.
+	
 \subsection{Análisis del conteo de datos}
 	
 	A la hora de comparar el rendimiento de algoritmos, una 
@@ -1028,13 +1020,13 @@ características de la fila y la columna.
 	
 \subsubsection{Test de McNemar}
 	
-	En este test suponemos una tabla $2 \times 2$ que recoge 
+	En este test suponemos una tabla $2 \times 2$ (\ref{Tb:McNemar}) que recoge 
 la respuesta de $n$ elementos ante una cierta prueba antes y 
 después de un tratamiento o, en el caso en el que estamos, si 
 los $n$ individuos de la muestra están bien o mal 
 clasificados por dos algoritmos de clasificación.
 	
-\begin{table}[]
+\begin{table}[H]
 \centering
 \caption{Tabla de contingencia de McNemar}
 \label{Tb:McNemar}
@@ -1068,16 +1060,16 @@ distribución binomial con parámetros $n$, $\theta_{01}$ y
 $\theta_{10}$ respectivamente, obtenemos
 
 \begin{align*}
-	E[c_{01}] 	&= n \theta_{01} \\
-	var(c_{01}) &= n \theta_{01} (1 - \theta_{01}) \\
-	E[c_{10}] 	&= n \theta_{10} \\
-	var(c_{10}) &= n \theta_{10} (1 - \theta_{10}).
+	\mathbb{E}[c_{01}] 	&= n \theta_{01} \\
+	\var(c_{01}) &= n \theta_{01} (1 - \theta_{01}) \\
+	\mathbb{E}[c_{10}] 	&= n \theta_{10} \\
+	\var(c_{10}) &= n \theta_{10} (1 - \theta_{10}).
 \end{align*}
 
 	La varianza de $T$ se puede ver obtener de 
 	
 \begin{equation}
-	N^2 var(T) = var(c_{01}) + var(c_{10}) - 2 cov(X_{01}, c_{10}).
+	N^2 \var(T) = \var(c_{01}) + \var(c_{10}) - 2 cov(X_{01}, c_{10}).
 	\label{eq:McNemarVar}
 \end{equation}
 
@@ -1085,33 +1077,32 @@ $\theta_{10}$ respectivamente, obtenemos
 distribución de $(c_{00}, c_{01}, c_{10}, c_{11})$ es una 
 distribución multinomial con probabilidades $(\theta_{00}, 
 \theta_{01}, \theta_{10}, \theta_{11})$. Entonces, haciendo 
-uso de la función generadora de momentos de $c_{01}$ y 
+uso de la función generatriz de momentos de $c_{01}$ y 
 $c_{10}$,
 	\[ 
-		mgf(t_1, t_2) = 
+		M_X(t_1, t_2) = 
 		\left(
 			\theta_{01} e^{t_1} + 
 			\theta_{10} e^{t_2} + 
 			[ 1 - (\theta_{01} + \theta_{10})] \right)^n,
 	\]
-	
-	obtenemos $E[c_{01}c_{10}] = \frac{\partial^2 }
-{\partial t_1 \partial t_2} mgf(0,0) = n(n-1)\theta_{01} 
+obtenemos $\mathbb{E}[c_{01}c_{10}] = \frac{\partial^2 }
+{\partial t_1 \partial t_2} M_X(0,0) = n(n-1)\theta_{01} 
 \theta_{10}$ y por tanto escribimos la covarianza como:
 	\[
-		cov( c_{01}, c_{10} ) =
+		\cov( c_{01}, c_{10} ) =
 			n (n-1) \theta_{01} \theta_{10} -
 			(n \theta_{01}) (n \theta_{10}) = 
 			- n \theta_{01} \theta_{10}.
 	\]
 	
 	Sustituyendo en \ref{eq:McNemarVar}, tenemos que $T$ 
-tiene media $\theta_{01}-\theta_{10}$ y $var(T) = 
+tiene media $\theta_{01}-\theta_{10}$ y $\var(T) = 
 \frac{(\theta_{01} + \theta_{10}) - (\theta_{01} - 
 \theta_{10})^2 }{n}$. Bajo la hipótesis nula $\theta_{01} = 
-\theta_{10}$, $E[T] = 0$ y $var(T) = \frac{\theta_{01}+
+\theta_{10}$, $\mathbb{E}[T] = 0$ y $\var(T) = \frac{\theta_{01}+
 \theta_{10}}{n}$, que se puede estimar de manera consistente 
-del estadístico $(c_{01} + c_{10})/n^2$.\\
+a partir del estadístico $(c_{01} + c_{10})/n^2$.\\
 	Otro enfoque es observar el número de parejas 
 discordantes $S = c_{01} + c_{10}$. Entonces $c_{01}$ sigue 
 una binomial con parámetros $S$ y $\frac{\theta_{01}}
@@ -1126,25 +1117,25 @@ aproximado basándonos en $Z = \frac{c_{01} - c_{10}}
 {\sqrt{c_{01} + c_{01}}}$, que sigue aproximadamente una 
 distribución normal estándar.
 	
-\subsection{Test basados en una muestra y en muestras emparejadas}
+\subsection{Test basados en una muestra y en muestras apareadas}
 	
 	En este apartado presentaremos los test no paramétricos 
 análogos a test paramétricos como el test $t$ de Student para 
 las hipótesis nulas $H_0: \mu = \mu_0$ para una única muestra 
-y $H_0: \mu_X - \mu_Y = \mu_0$ para muestras emparejadas. En 
+y $H_0: \mu_X - \mu_Y = \mu_0$ para muestras apareadas. En 
 los test no paramétricos sólo serán necesarias condiciones 
 sobre la continuidad de la población. 
 	
 \subsubsection{Test de signo}
 
 	Supongamos una muestra de $n$ elementos de una población 
-$F_X$ con mediana desconocida $M$, donde suponemos que $F_X$ 
+con mediana desconocida $M$, donde suponemos que $F_X$ 
 es continua y estrictamente creciente al menos en el entorno 
 de $M$. Esto significa que $F_X^{-1}(0.5) = M$. La hipótesis 
 nula a comprobar se corresponde con el valor de la mediana:
 
 	\[ H_0: M = M_0	\text{ o equivalentemente }
-			\theta = P(X > M_0) = 0.5 \]
+			P(X > M_0) = 0.5 \]
 	con $M_0$ un valor dado. Como hemos supuesto que $F_X$ 
 tiene una única mediana, la hipótesis significa que $M_0$ 
 divide el área de la función de densidad en dos partes 
@@ -1169,7 +1160,7 @@ y el mayor entero respectivamente tales que
 			{n \choose i}(0.5)^n \leq \frac{\alpha}{2}
 	\]
 
-\subsubsection{\textit{Signed-Rank test} de Wilcoxon}
+\subsubsection{Test de rangos con signos de Wilcoxon}
 
 	El test anterior usa únicamente el signo de la diferencia 
 de la muestra a la mediana, sin considerar la distancia. Para 
@@ -1198,22 +1189,22 @@ Definimos
 					 Z_i r(|D_i|) - \frac{N(N+1)}{2} \]
 	
 	Bajo la hipótesis nula, $Z_i$ sigue una distribución de 
-Bernouilli con $E(Z_i) = 1/2$ y $var(Z_i) = 1/4$. Usando que 
+Bernouilli con $E(Z_i) = 1/2$ y $\var(Z_i) = 1/4$. Usando que 
 $T^+$ es una combinación lineal de las variables $Z_i$, 
 tenemos
-	\[ E[ T^+ | H_0 ] = \sum\limits_{i=1}^n 
+	\[ \mathbb{E}[ T^+ | H_0 ] = \sum\limits_{i=1}^n 
 						\frac{r(|D_i|)}{2} 
 					= \frac{n(n+1)}{4}			\]
 	y
 	
-	\[ var( T^+ | H_0 ) = \sum\limits_{i=1}^n 
+	\[ \var( T^+ | H_0 ) = \sum\limits_{i=1}^n 
 						\frac{[r(|D_i|)]^2}{4} 
 					= \frac{n(n+1)(2n+1)}{24}	\]
 					
 	Para la aplicación de este test se obtiene el estadístico 
 $T = \min \{ T^+, T^- \}$. En la tabla de los valores 
-críticos de $T$ para el test \textit{signed-rank} de Wilcoxon 
-\cite[Tabla A5]{SHESKIN11} se encuentran aquellos valores 
+críticos de $T$ para el test de rangos con signos de Wilcoxon 
+(por ejemplo en \cite[Tabla A5]{SHESKIN11}) se encuentran aquellos valores 
 para nivel de significación 0.05 y 0.01 para los cuales 
 debemos rechazar la hipótesis nula si $T$ es menor que el 
 valor correspondiente en la tabla.\\
@@ -1285,19 +1276,20 @@ k$ con entradas $X_{ij}$. En esta distribución influyen dos
 factores que llamaremos el efecto por filas y por columnas.\\
 	Para nuestro problema, consideraremos que las filas se 
 corresponden con conjuntos de datos y que las columnas 
-constituyen los algoritmos utilizados. Un enfoque similar 
-sería considerar cada fila una porción de tierra y cada 
-columna un tratamiento distinto aplicado a un cultivo.
+constituyen los algoritmos utilizados. 
 	
 \subsubsection{Análisis bidimensional de la varianza mediante clasificaciones en una tabla $k \times n$ y comparaciones múltiples de Friedman}
 
 	Partimos de una matriz $n \times k$. Consideraremos que 
 las filas son independientes, pero no las columnas (en 
 nuestro problema esto significa que las conjuntos de datos sí 
-son independientes pero cada algoritmo los resultados guardan 
-correlación). Friedman sugirió cambiar cada valor de la 
-matriz por la clasificación de cada fila.
-	
+son independientes pero en cada algoritmo los resultados guardan 
+correlación). La hipótesis nula que consideraremos será la 
+equivalencia del rendimiento de todos los algoritmos.
+Friedman sugirió cambiar cada valor de la 
+matriz por la clasificación de cada fila. Notaremos por $R_{ij}$
+el orden del algoritmo $j$ para el problema $i$.
+
 	\[ \left( \begin{matrix}
 		R_{11} & R_{12} & \dots & R_{1k} \\
 		\vdots & \vdots & \ddots & \vdots \\
@@ -1317,11 +1309,10 @@ Consideraremos la distribución de la muestra de la v.a.
 				\sum\limits_{i=1}^n \left(
 					R_{ij} - \frac{k+1}{2}
 				\right)
-			\right]^2
+			\right]^2,
 	\label{S-Friedman}
 	\end{equation}
-	
-	bajo la hipótesis nula $H_0: \theta_1 = \dots = 
+bajo la hipótesis nula $H_0: \theta_1 = \dots = 
 \theta_k$. En el caso de que no hubiera empates por filas 
 habría un total de $(k!)^n$ posibles entradas igualmente 
 probables. Las posibilidades se pueden enumerar y calcular el 
@@ -1346,23 +1337,22 @@ la distribución.\\
 				\nonumber \\
 			&=	k \sum\limits_{j=1}^n (j-\mu)^2 + 2U 
 				\nonumber \\
-			&=  \frac{nk(k^2-1)}{12} + 2U	
+			&=  \frac{nk(k^2-1)}{12} + 2U	.
 	\label{S-Friedman2}
 	\end{align}
 	
 	Los momentos de $S$ vienen determinados por los momentos 
 de $U$, que se derivan de:
-	\[ 	E[ R_{ij} ]= \frac{k+1}{2};\ 
+	\[ 	\mathbb{E}[ R_{ij} ]= \frac{k+1}{2};\ 
 		\var(R_{ij})=\frac{k^2-1}{12};\
 		\cov(R_{ij},R_{iq}) = -\frac{k^2-1}{12}
 	\]
 	
 	Además, dado que las observaciones en las diferentes 
-filas son independientes, para $i \neq p$, la esperanza del 
-producto de funciones de $R_{ij}$ y $R_{pq}$ estará 
-multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
+filas son independientes, para $i \neq p$, se tiene
+$\cov(R_{ij},R_{pq})=0$. Entonces
 	\[ E(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0, \] 
-	con lo que $var(U) = kE(U^2)$, con
+	con lo que $\var(U) = kE(U^2)$, con
 	\begin{align*}
 		U^2 =& \sum\limits_{j=1}^k
 				\sum\limits_{1 \leq i < p \leq n}
@@ -1375,14 +1365,14 @@ multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
 					  	\sum\limits_{r=1}^{n-1}
 						  \sum\limits_{s=r+1}^n
 				(R_{ij} - \mu)(R_{pj} - \mu)
-				(R_{rq} - \mu)(R_{sq} - \mu)	
+				(R_{rq} - \mu)(R_{sq} - \mu).
 	\end{align*}
 	
 	Como $R_{ij}$ y $R_{pq}$ son independientes para $i \neq p$, tenemos
 	\begin{align*}
-		E[U^2] =& \sum\limits_{j=1}^k
+		\mathbb{E}[U^2] =& \sum\limits_{j=1}^k
 					\sum\limits_{1 \leq i < p \leq n}
-						var(R_{ij})var(R_{pj}) \\
+						\var(R_{ij})\var(R_{pj}) \\
 			 &+ 2 
 			    \sum\limits_{j=1}^{k-1}
 			      \sum\limits_{q=j+1}^n
@@ -1391,12 +1381,12 @@ multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
 			=& k {n \choose 2} \frac{(k^2-1)^2}{144} +
 				2{k \choose 2}{n \choose 2} 
 					\frac{(k^2+1)^2}{144} \\
-			=& k^2 {n \choose 2} (k+1)^2 \frac{k-1}{144}
+			=& k^2 {n \choose 2} (k+1)^2 \frac{k-1}{144}.
 	\end{align*}	
 	
 	Sustituyendo en \ref{S-Friedman2} llegamos a 
 	
-	\[ E[S] = \frac{nk(k^2-1)}{12}; \ 
+	\[ \mathbb{E}[S] = \frac{nk(k^2-1)}{12}; \ 
 		\var(S)= \frac{k^2n(n-1)(k+1)^2}{72} .\]
 	
 	Podemos definir la transformación
@@ -1404,8 +1394,7 @@ multiplicado por $\cov(R_{ij},R_{pq})=0$. Entonces
 	\[ \chi^2_F = \frac{12S}{nk(k+1)} = 
 	\frac{12 \sum\limits_{j=1}^k R_j^2}{nk(k+1)} -3n(k+1) .
 	\]
-	
-	que tiene $E[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)
+	que tiene $\mathbb{E}[\chi^2_F] = k-1$, $\var(\chi^2_F)= 2(k-1)
 \frac{n-1}{n} \approx 2(k-1)$, que son los dos primeros 
 momentos de la distribución $\chi^2_{k-1}$. También los 
 momentos de mayor orden de $\chi^2_F$ se aproximan a los 
@@ -1416,14 +1405,14 @@ para la hipótesis nula mencionada con nivel de significación
 $\alpha$ es
 	\[ 
 		\chi^2_F \in R \ \text{ para } 
-			Q \geq \chi_{k-1,\alpha}^2 .
+			\chi^2_F \geq \chi_{k-1,\alpha}^2 .
 	\]
 	
 \paragraph{Propuesta de Iman-Davenport} Sin embargo, este
 test es demasiado conservador, por lo que Iman y Davenport
 propusieron el estadístico
 	\[
-		F_F = \frac{(n-1)Q}{n(k-1) - Q},
+		F_F = \frac{(n-1)\chi^2_F}{n(k-1) - \chi^2_F},
 	\]
 	que sigue una distribución $F$ de Snedecor con $k-1$ y
 $(k-1)(n-1)$ grados de libertad.
@@ -1433,7 +1422,8 @@ $(k-1)(n-1)$ grados de libertad.
 	Este test basado en el test de Friedman se propone como
 solución a la hora de comparar un número pequeño de 
 algoritmos para tener en cuenta el rendimiento no sólo 
-para cada conjunto de datos sino entre ellos.\\
+para cada conjunto de datos sino entre ellos. El
+siguiente algoritmo indica el procedimiento de cálculo.\\
 	
 \begin{algorithm}
 	\caption{Cálculo del estadístico de Friedman-AR}
@@ -1469,7 +1459,6 @@ para cada conjunto de datos sino entre ellos.\\
 				 - (1/k) \sum\limits_{i=1}^n 
 				 			\hat{R}_{i \cdot}^2},
 	\]
-	
 	que sigue una distribución $\chi^2_{k-1}$.
 	
 \subsubsection{Test de Quade}
@@ -1482,7 +1471,6 @@ diferencias entre los rendimientos en cada base de datos.\\
 	\[ rango_i = \underset{j}{\max} \{x_{ij}\} - 
 				 \underset{j}{\min} \{x_{ij}\},
 	\]
-	
 	y se clasifican los rangos de menor a mayor, notando por 
 $Q_i$ al puesto ocupado por el conjunto de datos $i$.
 Entonces se multiplica $Q_i$ por la diferencia entre el 
@@ -1602,11 +1590,10 @@ $p$-valores y los valores de $\alpha$:
 \subsection{Test basados en permutaciones}
 	
 	En este apartado se incluye una descripción general sobre 
-los test basados en permutaciones. La hipótesis general a la 
+los test basados en permutaciones. La hipótesis nula a la 
 hora de realizar inferencia es considerar que una muestra 
 aleatoria $\mathbf{x}$ proviene de una misma población 
-$P \in \mathcal{P};\ H_0: \{ X \leadsto P \in 
-\mathcal{P} \}$. Por tanto, supuesta esta hipótesis nula, 
+$P \in \mathcal{P}$. Por tanto, supuesta esta hipótesis nula, 
 obtenemos que si la muestra $\mathbf{x}$ viniese de 
 poblaciones distintas, los valores pertenecientes a cada 
 población podrían intercambiarse por los de otra sin ningún 
@@ -1615,14 +1602,15 @@ problema.\\
 estadísticos suficientes para cualquier distribución en 
 $H_0$. Esto se debe a que, si $H_0$ es cierto, sea $f_P$ la 
 densidad de $P$, $f_P^{(n)}(x)$ la densidad de la variable 
-$X^(n)$. Como $f_P^{(n)}(\mathbf{x}) = f_P^{(n)}(\mathbf{x}) 
+$X^{(n)}$. Como $f_P^{(n)}(\mathbf{x}) = f_P^{(n)}(\mathbf{x}) 
 \cdot 1$ para todo $\mathbf{x} \in \Omega^n$, excepto para 
 $f_P^{(n)}(\mathbf{x}) = 0$ debido al teorema de 
-factorización cualquier conjunto $\mathbf{x}$ es un conjunto 
+factorización (\cite{VELEZGARCIA93}) cualquier conjunto $\mathbf{x}$ 
+es un conjunto 
 de estadísticos suficientes para cualquier $P \in 
 \mathcal{P}$.\\
 	En estos test se realizan inferencias condicionadas con
-respecto a la muestra $x$, que es a su vez un conjunto de 
+respecto a la muestra $\mathbf{x}$, que es a su vez un conjunto de 
 estadísticos suficientes en $H_0$. Este hecho unido a la 
 intercambiabilidad de los datos observados con respecto a los 
 grupos hace que los test sean independientes de las 
@@ -1633,10 +1621,10 @@ queda más claramente explicado en el siguiente principio:
 permutaciones]
 	Si dos experimentos toman valores en el mismo espacio
 muestral $\Omega$ respectivamente con las distribuciones 
-$P_1, P_2 \in \mathcal{P}$, dan el mismo conjunto de datos 
-$\mathcal{x}$, entonces las inferencias condicionales a 
-$\mathcal{x}$ obtenidas usando el mismo test estadístico debe 
-ser la misma, debido a la intercambiabilidad de los datos con 
+$P_1, P_2 \in \mathcal{P}$, dan el mismo conjunto de datos, 
+entonces las inferencias condicionales a los datos obtenidas 
+usando el mismo test estadístico debe 
+ser la misma, debido a que la intercambiabilidad de los datos con 
 respecto a los grupos se cumple en la hipótesis nula. Por 
 consiguiente, si dos experimentos con distribuciones 
 $P_1, P_2$ dan respectivamente como muestras $\mathbf{x_1}, 
@@ -1646,15 +1634,15 @@ $\mathbf{x_2}$ pueden ser distintas.
 \end{definicion}
 
 
-\subsubsection{Ejemplo con muestras emparejadas}
+\subsubsection{Ejemplo con muestras apareadas}
 
 	Para explicar el funcionamiento de los test basados en 
 permutaciones, expondremos situaciones ya conocidas en las 
 que sabemos cómo utilizar test paramétricos o test no 
 paramétricos expuestos anteriormente. El primer caso es el de 
-muestras pareadas. Supondremos una muestra de 20 individuos 
-que se somete a un tratamiento para reducir la ansiedad. Los 
-datos se obtienen antes y después de realizar el experimento. 
+muestras pareadas. Supondremos una situación en la que 
+tenemos 20 problemas y comparamos el rendimiento de dos
+algoritmos en cada uno de ellos.
 Por tanto consideramos la v.a. $Y = (Y_1, Y_2)$ de $n=20$ 
 elementos $\{(Y_{1i},Y_{2i}): i = 1, \dots, n\}$. La 
 hipótesis nula es que las diferencias en que las 
@@ -1665,7 +1653,7 @@ $H_0 : \{ Y_1 = Y_2 \}$ frente a $H_1: \{ Y_1 > Y_2 \}$\\
 implica que las dos variables $Y_1, Y_2$ son intercambiables. 
 Esto es, supuesto $H_0$, para cada individuo los dos valores 
 observados podrían corresponder con cualquiera de las 
-observaciones, antes o después del tratamiento. Es decir, si 
+observaciones, para un algoritmo u otro. Es decir, si 
 consideramos la variable aleatoria $X = Y_2 - Y_1$, cada 
 valor observado $X_i, i=1, \dots, n$ podría tener cualquier 
 signo con probabilidad $1/2$. Una forma de realizar el test 
@@ -1673,13 +1661,12 @@ sería considerando el estadístico $T = \sum\limits_{i=1}^n
 X_i$, cuya distribución condicionada a $\mathbf{X} = \{X_i: i 
 = 1, \dots, n\}$, $F_T(t|\mathbf{X})$ vendrá dada bajo $H_0$ 
 considerando la atribución de todas las formas posibles del 
-signo de cada diferencia con probabilidad $1/2$. Nos 
-referimos por $T^* = \sum\limits_{i=1}^n X_i^*$, donde 
+signo de cada diferencia con probabilidad $1/2$. Denotamos
+por $T^* = \sum\limits_{i=1}^n X_i^*$, donde 
 $X_i^*$ se obtiene asignando aleatoriamente el signo. 
 Notaremos por $\Omega_{/\mathbf{X}}$ al espacio muestral de 
 permutaciones. Este espacio consiste en las posibles 
-permutaciones de la muestra obtenidas, aunque posteriormente 
-daremos una definición más formal. En este caso, el espacio 
+permutaciones de la muestra obtenidas. En este caso, el espacio 
 tiene $M^{(n)} = 2^v$ elementos, donde $n-v$ es el número de 
 diferencias nulas. Notamos por $F(t|\mathbf{X}) = P[T^* \leq 
 t | \mathbf{X}], t \in \mathbb{R}$ a la cdf condicional de la 
@@ -1700,7 +1687,7 @@ podemos guiarnos por lo siguiente:
 		el PCTL (\ref{th:PCTL}). 
 	\item En otro caso, $F[t|\mathbf{X}]$ puede aproximarse 
 		utilizando el algoritmo condicional de Monte 
-		Carlo (CMC).
+		Carlo (CMC) (\ref{alg:CMC-pvalue}).
 \end{enumerate}
 	
 \subsubsection{Teoría de los test basados en permutaciones}
@@ -1750,7 +1737,7 @@ depende de $\Omega_{/\mathbf{X}}$ y no únicamente de $
 \mathbf{X}}$. Esto implica que si $\alpha$ es fijo,$T_\alpha$ 
 es fijo para $\mathcal{T}_\mathbf{X}$.
 	
-\paragraph{Test basados en permutaciones aleatorizados}
+\paragraph{Test aleatorizados basados en permutaciones }
 
 	Se define la versión aleatorizada del test basado en 
 permutaciones para $(T, \mathbf{X})$ como 
@@ -1761,7 +1748,6 @@ permutaciones para $(T, \mathbf{X})$ como
 			0		& \text{ si } T^0 < T_\alpha \\
 		\end{array} \right. ,
 	\]
-	
 	donde $T^0 = T(\mathbf{X})$, el valor de $T$ en los datos 
 observados y $\gamma$ es:
 	\[
@@ -1779,7 +1765,7 @@ $\mathcal{U}(0,1)$.\\
 	Para $\mathbf{X} \in \Omega^n$ la esperanza en $H_0$ de 
 $\phi_R$ para $\alpha$ es:
 	\[ 
-		E[ \phi_R(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
+		\mathbb{E}[ \phi_R(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
 			P[ T^0(\mathbf{X}) > T_\alpha(\mathbf{X}) | 
 								\Omega_{/\mathbf{X}}] + 
 			P[ T^0(\mathbf{X}) = T_\alpha(\mathbf{X}) | 
@@ -1787,8 +1773,8 @@ $\phi_R$ para $\alpha$ es:
 			\alpha .
 	\]
 	
-	Por consiguiente, el tamaño del test basado en 
-permutaciones aleatorizado es exactamente $\alpha$.
+	Por consiguiente, el tamaño del test aleatorizado basado en 
+permutaciones es exactamente $\alpha$.
 	
 \begin{proposicion}
 	Supuesta la condición de intercambiabilidad para 
@@ -1813,7 +1799,7 @@ versión no aleatorizada. Se define
 	Ahora, el error asociado de tipo I es 
 	
 	\[ 
-		E[ \phi(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
+		\mathbb{E}[ \phi(\mathbf{X}) | \Omega_{/\mathbf{X}}] =
 		P[ T^0 \geq T_\alpha | \Omega_{/\mathbf{X}}] =
 		\sum\limits_{\Omega_{/\mathbf{X}}}
 			\mathbb{I}[ T(\mathbf{X}^*) \geq T_\alpha ]/
@@ -1855,7 +1841,7 @@ $\mathbf{X} = \{ X_i, \ i=1, \dots, n; n_1, n_2 \}$
 	\REQUIRE
 		\begin{enumerate}[a]
 		\item Muestra $\mathbf{X}$
-		\item Test estadístico $T$
+		\item Estadístico $T$
 		\item Número de iteraciones $B$
 		\end{enumerate}
 		\STATE Calcular $T^0 = T(\mathbf{X})$
@@ -1921,7 +1907,6 @@ $W_r(\mathbf{D}) = \frac{\sum\limits_{i=1}^n
 		Z = \frac{(T - n \bar{X} \bar{A})\sqrt{n-1}}
 				{n^2 \mu_2(\mathbf{X}) \mu_2(\mathbf{A})},
 	\]
-	
 	y sabemos que la cdf de $Z$, $F_Z(t|\Omega^n)$ puede 
 determinarse enumerando todas las permutaciones de 
 $\mathbf{X}$. Antes de enunciar el teorema, enunciaremos la 
@@ -1957,8 +1942,8 @@ siguiente. Dadas las muestras $x_1, \dots, x_N$ e $y_1,
 \dots, y_M$ de caracteres degradados de un mismo carácter de 
 un documento y generados de manera artificial, 
 respectivamente, realizar el test sobre la hipótesis nula de 
-de ambos  provienen de la misma población para un valor de 
-significación $\alpha$. Se aplica un algoritmo 
+que ambos  provienen de la misma población para un valor de 
+significación $\alpha$. Se aplica el algoritmo 
 (\ref{alg:CMC-digitalizacion}) para realizar el test basado 
 en permutaciones calculando el $p$-valor utilizando el 
 algoritmo~\ref{alg:CMC-pvalue}.
@@ -1994,14 +1979,6 @@ algoritmo~\ref{alg:CMC-pvalue}.
 	\end{algorithmic}
 \end{algorithm}
 
-	Para la comparar un modelo $A$ con otro $B$ se comparan 
-sus funciones de potencia. Suponemos $X \sim F(\theta_X)
-$, $Y \sim F(\theta_Y)$. Consideraremos la hipótesis nula 
-$H_0 = \theta_X = \theta_Y$. Si fijamos $\theta_X= \theta_0$, 
-Denotamos a la función potencia $\gamma_{\theta_0}= 
-P(H_1 | \theta_X = \theta_0 \text{ y } \theta_Y = \theta)$. 
-$A$ será mejor que $B$ dado $\theta$ si $\gamma_{\theta_0}^A  
-> \gamma_{\theta_0}^B$.
 	
 \paragraph{Comparación estadística de varios clasificadores} 
 \cite{CHENGCHEN03} En este artículo se describe un método 
@@ -2054,7 +2031,7 @@ inconvenientes:
 	\item Test de signo: Como se ha dicho en el desarrollo de 
 		los test, no tiene en cuenta la magnitud de la 
 		diferencia.
-	\item \textit{Signed-Rank test} de Wilcoxon: Más seguro 
+	\item Test de rangos con signo de Wilcoxon: Más seguro 
 		que el $t$-test al no suponer la distribución normal. 
 		Si no se dan las circunstancias adecuadas, este test 
 		puede tener mayor potencia que el $t$-test.
@@ -2062,8 +2039,7 @@ inconvenientes:
 	
 	En cuanto a la comparación entre varios clasificadores, 
 se incluye una breve descripción del método ANOVA y una 
-descripción más extensa del test de Friedman, que podríamos 
-considerar su versión no paramétrica. Se incluye el 
+descripción más extensa del test de Friedman. Se incluye el 
 estadístico $F_F = \frac{(n-1) \chi^2_F}{n(k-1) - \chi^2_F}$ 
 que sigue la distribución $F$ con $k-1$ y $(k-1)(n-1)$ grados 
 de libertad. Aunque el test ANOVA tiene mayor potencia cuando 
@@ -2113,7 +2089,7 @@ sobre el uso de test no paramétricos para comparar el
 rendimiento de algoritmos evolutivos en la Sesión Especial de 
 Optimización de parámetro real en el Congreso de Computación 
 Evolutiva (CEC 2005). Los datos disponibles son los errores 
-cometidos por los (11) algoritmos a la hora de minimizar 25 
+cometidos por los algoritmos a la hora de minimizar 25 
 funciones de 10, 30 y 50 variables reales. En primer lugar se 
 estudian las condiciones para realizar un test paramétrico 
 ($t$-test) llevando a cabo test de normalidad (test de 
@@ -2138,7 +2114,7 @@ ambos algoritmos sean igual de buenos, sin embargo el $p$-
 valor del test de Wilcoxon es bastante menor, lo que nos 
 lleva a pensar que, debido a la ausencia de normalidad y de 
 pocos datos y difíciles de incrementar (pues en este caso 
-deberíamos añadir funciones nuevas funciones y sus 
+deberíamos añadir nuevas funciones y sus 
 correspondientes evaluaciones para cada algoritmo), en estos 
 casos es mejor utilizar test no paramétricos.\\
 	Para realizar el análisis sobre todos los algoritmos se 
@@ -2167,12 +2143,12 @@ homocedasticidad para comprobar si se dan las condiciones
 para aplicar un test paramétrico. Si las comparaciones por 
 parejas de problemas se repiten crece el error asociado FWER 
 (\textit{family-wise error rate}), esto es la probabilidad de 
-al menos un error en la familia de hipótesis. Para realizar 
+cometer al menos un error en la familia de hipótesis. Para realizar 
 comparaciones entre varios algoritmos y fijar el FWER de 
 antemano se utilizan el test de Friedman y el de Iman-
 Davenport y los test de Bonferroni-Dunn y el de Holm para 
 buscar diferencias entre los algoritmos una vez descartada la 
-hipótesis de que todos tienen la misma media. Se realiza 
+hipótesis de que todos tienen la misma media. Se 
 calculan también los $p$-valores ajustados.\\
 	Para realizar el análisis de la interpretabilidad de los 
 resultados se considera $\textit{Complejidad} = 
@@ -2188,7 +2164,7 @@ previos los test de múltiples signos y la estimación del
 contraste basado en medianas como test básicos para realizar
 entre múltiples clasificadores y conjuntos de datos como 
 test básicos, y los más avanzados del test de Friedman
-de puestos alineados (\textit{Friedman Aligned Ranks}, 
+de rangos alineados (\textit{Friedman Aligned Ranks}, 
 Friedman-AR) y el test de Quade. Además, para realizar las 
 comparaciones  posteriores  una vez descartada la hipótesis 
 de un igual  rendimiento entre todos los algoritmos, se 
@@ -2344,8 +2320,8 @@ siguientes:
 	hacemos al comparar por ejemplo dos clasificadores es
 	``\textit{¿cuál es la probabilidad de que el rendimiento
 	de dos clasificadores sea el mismo?}'', en términos
-	formales, $P(H_0 | \mathbb{X})$. La pregunta que
-	responden es $P(T(\mathbb{X}) > \tau_\alpha | H_0)$.
+	formales, $P(H_0 | \mathbf{X})$. La pregunta que
+	responden es $P(T(\mathbf{X}) > \tau_\alpha | H_0)$.
 \item Los test de hipótesis nula sobre puntos son
 	prácticamente siempre falsos. La diferencia entre
 	dos clasificadores puede ser muy pequeña, sin embargo
@@ -2381,7 +2357,7 @@ siguientes:
 	este valor el que determina los límites para rechazar 
 	$H_0$, este valor no tiene un significado concreto para
 	el experimento. 
-\item La inferencia depende del propósito del muestreo. 
+\item La inferencia depende del propósito del estudio. 
 	La distribución de la muestra cambia por ejemplo si
 	se comparan dos algoritmos en todos los conjuntos de
 	datos disponibles que si se trata de realizar un 
@@ -2392,8 +2368,8 @@ siguientes:
 
 	Hay dos enfoques para el análisis de resultados 
 experimentales. El primero, conocido como \textbf{factor de 
-Bayes} o \textbf{comparación de modelo bayesiano}, está como 
-los THN basado en lo que llamaríamos un valor nulo. Se 
+Bayes} o \textbf{comparación de modelo bayesiano}, está, como 
+los THN, basado en lo que llamaríamos un valor nulo. Se 
 comparan dos modelos y se escoge el más probable según los 
 datos obtenidos. Éste modelo también recibe algunas críticas
 similares a los THN pues en cierta forma se está cambiando el
@@ -2415,11 +2391,11 @@ tener en cuenta la correlación debida al solapamiento de los
 conjuntos de entrenamiento. El modelo de los datos 
 considerados es
 	\[ \mathbf{X} = \mu \mathbf{1} + \mathbf{v}, \]
-	con $\mathbf{X} = (x_1, \dots, x_n)$, $\mathbf{1}$ un 
+	con $\mathbf{X} = (X_1, \dots, X_n)$, $\mathbf{1}$ un 
 vector de unos de $n$ elementos, $\mu$ el parámetro de
 interés, esto es la media de las distancias entre el 
 rendimiento de los clasificadores y $\mathbf{v} \backsim 
-MVN(0, \Sigma_{n \times n})$, una normal multivariante con
+\Sigma_{n \times n}$, una normal multivariante con
 media cero y matriz de covarianzas $\Sigma$. Se caracteriza
 $\Sigma$ de la siguiente manera: $\Sigma_{ii} = \sigma^2$
 y $\Sigma_{ij} = \sigma^2 \rho$ para $i \neq j$, con $\rho$
@@ -2437,7 +2413,8 @@ la probabilidad del modelo es
 	\]
 
 	Esta probabilidad no permite estimar $\rho$ de los datos, 
-así que adoptamos la heurística $\rho = \frac{n_{test}}{n}$. 
+así que adoptamos la heurística $\rho = \frac{n_{test}}{n}$,
+con $n_{test}$ el número de datos en el conjunto de test.
 Pretendemos estimar los parámetros $\mu$ y $\nu = 
 \frac{1}{\sigma^2}$, para lo cual consideramos la 
 distribución \textit{a priori} Normal-Gamma
@@ -2460,7 +2437,6 @@ posteriori} de $\mu$ resulta ser la distribución de Student:
 					\right) \hat{\sigma}^2
 			   \right),
 	\]
-
 	con $\bar{X}$ y $\hat{\sigma}^2$ los estimadores 
 habituales. Por tanto podemos hacer el análisis sobre $\mu$ 
 basándonos en esta distribución.
@@ -2469,7 +2445,7 @@ basándonos en esta distribución.
 \paragraph{Ejemplo} Supongamos que realizamos un experimento
 con este test, realizando la comparación entre dos algoritmos
 para una base de datos. La información obtenida es una 
-distribución de Student, que describe como se ha mencionado
+distribución $T$ de Student, que describe como se ha mencionado
 la ditribución de la media de las diferencias del rendimiento
 entre dos clasificadores. Ahora, evaluamos la probabilidad 
 de la hipótesis que queramos realizar, por ejemplo, que un 
@@ -2479,14 +2455,14 @@ de $\mu$, calculando la probabilidad de que $\mu > 0$ ó $\mu
 prácticamente equivalentes, podemos suponer que esto 
 significa que la diferencia de la precisión es menor que un
 $1\%$. El intervalo $[-0.01, 0.01]$ se conoce entonces como
-\textbf{región de práctica equivalencia} (rope). Una manera 
+\textbf{región de práctica equivalencia} (\textit{rope}). Una manera 
 de mostrar la incertidumbre de la estimación es indicando el 
 intervalo de los valores que son más confiables y cubren el 
 $q\%$ de la distribución (HDI). 
 
 \paragraph{Toma de decisiones} A la hora de realizar 
 análisis queremos obtener conclusiones, para lo que nos 
-apoyaremos en la rope. Si tenemos dos algoritmos $f_1, f_2$, 
+apoyaremos en la \textit{rope}. Si tenemos dos algoritmos $f_1, f_2$, 
 notaremos por $P(f_1 \ll f_2)$ a la probabilidad de que el 
 primero tenga un rendimiento inferior, por $P(f_1 \gg f_2)$ a 
 que la de que tenga un rendimiento superior y por $P(f_1 =
@@ -2511,8 +2487,8 @@ definido por dos parámetros: la fuerza \textit{a priori},
 $s>0$ y la media \textit{a priori} , $G_0$. Tengamos en 
 cuenta que al ser $DP$ una distribución sobre distribuciones,
 $G_0$ es una medida de probabilidad. Escogiendo $G_0 = 
-delta_{z_0}$, una delta de Dirac centrada en el punto $z_0$,
-la densidad de probabilidad posterior de $Z$ tiene la
+\delta_{z_0}$, una delta de Dirac centrada en el punto $z_0$,
+la densidad de probabilidad \textit{a posteriori} de $Z$ tiene la
 expresión:
 	\[ P(z) = 
 		w_0 \delta_{z_0}(z) +
@@ -2540,18 +2516,17 @@ experimental procedemos de la siguiente manera. Calculamos:
 \end{align*}
 
 	Así, obtenemos una versión bayesiana del test de signo, 
-que tiene en cuenta la rope $[-r,r]$. De hecho, $\theta_l,
+que tiene en cuenta la \textit{rope} $[-r,r]$. De hecho, $\theta_l,
 \theta_e, \theta_r$ son las probabilidades de que la media
 de las diferencias esté en el respectivo intervalo. 
 Debido a que $(w_0, w_1, \dots, w_n) \sim Dir(s,1, \dots, 
-1)$, se prueba que
+1)$, se demuestra que
 	\[ 
 		\theta_l,\theta_e, \theta_r \sim
 		Dir(n_l + s \mathbb{I}[ z_0 \in (-\infty,-r) ],
 			n_e + s \mathbb{I}[ z_0 \in [-r,r] ],
 			n_r + s \mathbb{I}[ z_0 \in (r, \infty) ])
 	\]
-	
 	donde $n_l, n_e, n_r$ son el número de observaciones 
 que caen en cada intervalo. En definitiva, para 
 completar el modelo, debemos escoger el valor \textit{a 
@@ -2579,9 +2554,9 @@ priori} de la fuerza $s$ y la observación $z_0$.\\
 					\mathbb{I}[ z_i + z_j 
 								\in (2r, \infty)],
 \end{align*}
-
-	obtenemos una versión bayesiana del \textit{signed-rank}
-test, con la rope $[-r,r]$. Ahora la distribución de 
+	obtenemos una versión bayesiana del 
+test de rangos con signo, con la \textit{rope} $[-r,r]$. 
+Ahora la distribución de 
 $\theta_l, \theta_e, \theta_r$ no está claramente definida,
 pero se puede calcular muestreando mediante el método
 de Monte Carlo los pesos $(w_0, w_1, \dots, w_n) \sim 
@@ -2603,9 +2578,9 @@ estadísticos.
 
 \paragraph{Versión bayesiana del test de Wilcoxon} 
 \cite{BENAVOLI14} Para la comparación de algoritmos mediante
-muestras emparejadas, se presenta el test de Wilcoxon en 
+muestras apareadas, se presenta el test de Wilcoxon en 
 versión bayesiana. Se realiza, al igual que en el test
-de signo y el \textit{signed-rank}, utilizando el Proceso de
+de signo y el de rangos con signo, utilizando el Proceso de
 Dirichlet para la distribución \textit{a priori}. La versión 
 bayesiana, a diferencia de la no paramétrica, no necesita 
 suponer la simetría de las muestras. Una cuestión importante
@@ -2637,7 +2612,7 @@ para cada algoritmo o bien el frente de Pareto, donde se
 consideran las soluciones no dominadas (aquellas que no son
 peor con respecto a otra solución para todos los criterios).
 En este artículo se presenta en primer lugar la realización 
-de un test basado en el ratio de verosimilitud, que presenta
+de un test basado en la razón de verosimilitud, que presenta
 las mismas desventajas que los THN. Para la realización del
 test bayesiano, se opta por usar como distribución 
 \textit{a priori} la distribución de Dirichlet, obteniéndose
