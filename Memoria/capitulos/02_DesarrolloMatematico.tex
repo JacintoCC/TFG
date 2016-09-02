@@ -536,7 +536,8 @@ test tiene una menor potencia.
 \section{Test no paramétricos}
 
 	Para poder comprender este concepto, definimos la familia 
-no paramétrica de distribuciones según \cite{PESSAL10}, sobre 
+no paramétrica de distribuciones en términos de Pesarin 
+(\cite{pesarin2010permutation}), sobre 
 la que se realizan los test no paramétricos. 
  
 \begin{definicion}[Familia de distribuciones no paramétrica]
@@ -555,7 +556,7 @@ familia paramétrica y $\theta$ sería el parámetro.\\
 estadística no paramétrica aquella que se realiza sobre una 
 muestra suponiendo la pertenencia de ésta a una familia no 
 paramétrica de distribuciones. Un concepto relacionado es la 
-propiedad de ser libre de distribución:
+propiedad de ser libre de distribución, del que tomamos la definición de Hollander (\cite{Hollander99}):
 	
 \begin{definicion}[Libre de distribución]
 	Decimos que un estadístico es libre de distribución si 
@@ -610,7 +611,10 @@ asintótica conocida.
 
 
  	Se incluye en esta sección el desarrollo de los test no
-paramétricos más utilizados en aprendizaje automático.
+paramétricos más utilizados en aprendizaje automático 
+utilizando como referencia las indicaciones de Gibbons y 
+Chakraborti (\cite{DBLP:reference/stat/GibbonsC11}) y Sheskin 
+(\cite{sheskin2003handbook}).
  	
  	
 \subsection{Test de aleatoriedad}
@@ -966,7 +970,7 @@ que la distribución de $D_n$ no depende de $F_0(x)$ mientras
 sea continua. Se definen las desviaciones direccionales
 \begin{align*}
 		D_n^+ &= \underset{x}{\sup} [S_n(x) - F_0(x)]  		\\
-		D_n^- &= \underset{x}{\sup} [F_0(x) - S_n(x)]\]
+		D_n^- &= \underset{x}{\sup} [F_0(x) - S_n(x)]
 \end{align*}	 
 	
 \begin{teorema}
@@ -1204,7 +1208,7 @@ tenemos
 	Para la aplicación de este test se obtiene el estadístico 
 $T = \min \{ T^+, T^- \}$. En la tabla de los valores 
 críticos de $T$ para el test de rangos con signos de Wilcoxon 
-(por ejemplo en \cite[Tabla A5]{SHESKIN11}) se encuentran aquellos valores 
+(por ejemplo en \cite[Tabla A5]{sheskin2003handbook}) se encuentran aquellos valores 
 para nivel de significación 0.05 y 0.01 para los cuales 
 debemos rechazar la hipótesis nula si $T$ es menor que el 
 valor correspondiente en la tabla.\\
@@ -1400,7 +1404,7 @@ momentos de la distribución $\chi^2_{k-1}$. También los
 momentos de mayor orden de $\chi^2_F$ se aproximan a los 
 momentos de mayor orden de $\chi^2_{k-1}$ para $n$ grande. A 
 efectos prácticos, podemos tratar $\chi^2_F$ como una $
-\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica 
+\chi^2_{k-1}$ para $n>7$ ó $n>10, k>5$. La región crítica $R$
 para la hipótesis nula mencionada con nivel de significación 
 $\alpha$ es
 	\[ 
@@ -1605,7 +1609,7 @@ densidad de $P$, $f_P^{(n)}(x)$ la densidad de la variable
 $X^{(n)}$. Como $f_P^{(n)}(\mathbf{x}) = f_P^{(n)}(\mathbf{x}) 
 \cdot 1$ para todo $\mathbf{x} \in \Omega^n$, excepto para 
 $f_P^{(n)}(\mathbf{x}) = 0$ debido al teorema de 
-factorización (\cite{VELEZGARCIA93}) cualquier conjunto $\mathbf{x}$ 
+factorización (\cite[p. 167]{ibarrola1993principios}) cualquier conjunto $\mathbf{x}$ 
 es un conjunto 
 de estadísticos suficientes para cualquier $P \in 
 \mathcal{P}$.\\
@@ -1866,7 +1870,7 @@ $\mathbf{X} = \{ X_i, \ i=1, \dots, n; n_1, n_2 \}$
 
 \paragraph{Teorema Central del Límite Permutacional}
 	Por último en esta sección, se presenta la versión 
-permutacional del TCL de Wald y Wolfowitz \cite{WALWOL44}.
+permutacional del TCL de Wald y Wolfowitz (\cite{wald1944}).
 Notaremos por $\mathbf{X} = \{X_1, \dots, X_n\}$ de $n$ v.a. 
 independientes e idénticamente distribuidas. Supongamos que 
 la hipótesis nula sobre la que se realiza el test, $H_0$, 
@@ -1934,7 +1938,7 @@ Entonces para $n \rightarrow \infty$,
 \subsection{Revisión del estado del arte en la aplicación de test no paramétricos}
  
 \paragraph{Validación de un modelo de degradación de 
-documentos} \cite{KANUNGO00} En este artículo se presenta un 
+documentos} \cite{DBLP:journals/pami/KanungoHBSM00} En este artículo se presenta un 
 modelo de la degradación en documentos producida por la 
 digitalización de documentos impresos o la realización de 
 fotocopias. El problema estadístico que se define es el 
@@ -1981,7 +1985,7 @@ algoritmo~\ref{alg:CMC-pvalue}.
 
 	
 \paragraph{Comparación estadística de varios clasificadores} 
-\cite{CHENGCHEN03} En este artículo se describe un método 
+\cite{DBLP:conf/mlmta/ChenC03} En este artículo se describe un método 
 para realizar la comparación estadística de varios 
 clasificadores sobre una misma base de datos a través del 
 test de Cochran, una generalización del test de McNemar. La 
@@ -2010,7 +2014,7 @@ método de Bonferroni tiene una mayor potencia. Escogeremos el
 método de Scheffé en caso contrario.
 
 \paragraph{Comparación estadística de clasificadores en 
-varios conjuntos de datos} \cite{DEMSAR06} De la comparación 
+varios conjuntos de datos} \cite{DBLP:journals/jmlr/Demsar06} De la comparación 
 utilizando un único conjunto de datos se pasa en este 
 artículo a presentar un método para comparar el rendimento 
 sobre varios conjuntos de datos utilizando test no 
@@ -2052,7 +2056,7 @@ Hochberg y Hommel.
 	
 	
 \paragraph{Extensión sobre los procedimientos 
-\textit{post-hoc}} \cite{GARCIAHERRERA08} Este artículo 
+\textit{post-hoc}} \cite{garcia2008extension} Este artículo 
 extiende al anterior prestando una mayor atención a la 
 descripción de los procedimientos para la comparación entre 
 algoritmos una vez rechazada la hipótesis nula. Se introducen
@@ -2084,7 +2088,7 @@ clasificadores sean muy pequeñas y otros métodos no detecten
 diferencias significantivas.
 
 	\paragraph{Estudio del uso de test no paramétricos} 
-	\cite{GARCIA09} En este artículo se realiza un estudio
+	\cite{DBLP:journals/heuristics/GarciaMLH09} En este artículo se realiza un estudio
 sobre el uso de test no paramétricos para comparar el 
 rendimiento de algoritmos evolutivos en la Sesión Especial de 
 Optimización de parámetro real en el Congreso de Computación 
@@ -2133,7 +2137,7 @@ diferencias entre el mejor algoritmo y todos los demás para
 $\alpha=0.1$. 
 	
 	\paragraph{Estudio estadístico sobre algoritmos 
-genéticos: precisión e interpretabilidad} \cite{GARCIA08} En 
+genéticos: precisión e interpretabilidad} \cite{Garcia2008} En 
 este artículo se realiza la comparación sobre algoritmos 
 evolutivos utilizados en clasificación, comparando tanto la 
 tasa de clasificación como el valor kappa de Cohen y la 
@@ -2158,7 +2162,7 @@ obteniendo diferencias significativas con el test de
 Bonferroni-Dunn y nivel de significación $\alpha=0.1$.
 	
 	\paragraph{Test avanzados para la comparación y análisis 
-experimental de la potencia} \cite{GARCIA10} En este
+experimental de la potencia} \cite{DBLP:journals/isci/GarciaFLH10} En este
 artículo se introducen con respecto a otros artículos 
 previos los test de múltiples signos y la estimación del 
 contraste basado en medianas como test básicos para realizar
@@ -2194,7 +2198,7 @@ demás sean grandes.
 
 	
 	\paragraph{Análisis \textit{bootstrap} de múltiples 
-repeticiones de experimentos} \cite{OTERO13} En este artículo 
+repeticiones de experimentos} \cite{Otero201488} En este artículo 
 se presenta la realización de test basados en permutaciones 
 para la comparación del rendimiento de algoritmos de 
 clasificación, realizando un estudio para el que el test 
@@ -2276,7 +2280,7 @@ potencia de los test presentados en este artículo.
 la estadística bayesiana y test basados en esta estadística
 para su aplicación en la comparación de algoritmos de
 aprendizaje automático.\\
-	Según A. Gelman (\cite{GELMAN14}), la inferencia 
+	Según A. Gelman (\cite{Gelman03-105949}), la inferencia 
 bayesiana es el proceso de ajustar un modelo de probabilidad 
 a un conjunto de datos y resumir el resultado  mediante una 
 distribución de probabilidad sobre los  parámetros del modelo 
@@ -2563,7 +2567,7 @@ de Monte Carlo los pesos $(w_0, w_1, \dots, w_n) \sim
 Dir(s,1, \dots, 1)$.\\
 	Para ambos métodos falta por fijar $s$ y $z_0$. 
 En los experimentos realizados por Benavoli 
-(\cite{BENAVOLI16}) se utiliza $s=0.5$ y $z_0=0$. Se realizan 
+(\cite{DBLP:journals/corr/BenavoliCDZ16}) se utiliza $s=0.5$ y $z_0=0$. Se realizan 
 también experimentos con $z_0 = \infty$ y $z_0 = -\infty$, 
 obteniendo resultados muy parecidos en la probabilidad
 de escoger un algoritmo frente a otro.
@@ -2577,7 +2581,7 @@ de aprendizaje automático mediante la realización de test
 estadísticos. 
 
 \paragraph{Versión bayesiana del test de Wilcoxon} 
-\cite{BENAVOLI14} Para la comparación de algoritmos mediante
+\cite{DBLP:conf/icml/BenavoliCMZR14} Para la comparación de algoritmos mediante
 muestras apareadas, se presenta el test de Wilcoxon en 
 versión bayesiana. Se realiza, al igual que en el test
 de signo y el de rangos con signo, utilizando el Proceso de
@@ -2591,7 +2595,7 @@ consiste en modelar la falta de información \textit{a priori}
 como un conjunto de distribuciones de probabilidad. 
 
 \paragraph{Procedimiento no paramétrico bayesiano para la 
-comparación de algoritmos} \cite{BENAVOLI15a} En este 
+comparación de algoritmos} \cite{DBLP:conf/icml/BenavoliCMZ15} En este 
 artículo se presenta la versión bayesiana del test de 
 Friedman. Se presenta el test, que utiliza el $DP$ para 
 realizar la comparación de dos algoritmos en un primer
@@ -2605,7 +2609,7 @@ compara varios algoritmos según aquel que consiga el mejor
 resultado.
 
 \paragraph{Test estadístico para el análisis conjunto de 
-medidas de rendimiento} \cite{BENAVOLI15b}	Para la 
+medidas de rendimiento} \cite{DBLP:conf/jsai/BenavoliC15}	Para la 
 comparación de algoritmos con respecto a varias medidas
 se suelen utilizar o bien la media ponderada de las medidas
 para cada algoritmo o bien el frente de Pareto, donde se 
@@ -2623,7 +2627,7 @@ Finalmente, se presenta una mejora de este método usando
 redes bayesianas.
 
 \paragraph{Comparación de algoritmos en múltiples bases de 
-datos con CV} \cite{CORANI15} En este artículo se introduce
+datos con CV} \cite{DBLP:journals/ml/CoraniB15} En este artículo se introduce
 el $t$-test bayesiano (\ref{ssec:bayes-ttest}) y un test de 
 Poisson que compara dos clasificadores en varias bases de 
 datos teniendo en cuenta la correlación y la incertidumbre 
@@ -2631,7 +2635,7 @@ provocada por la validación cruzada en cada conjunto de
 datos.
 
 \paragraph{Tutorial para la comparación de clasificadores 
-mediante análisis bayesiano}. \cite{BENAVOLI16} Este artículo 
+mediante análisis bayesiano}. \cite{DBLP:journals/corr/BenavoliCDZ16} Este artículo 
 es un artículo divulgativo que presenta las ventajas de los 
 test bayesianos y expone su uso en diferentes casos, 
 aplicando el $t$-test bayesiano, el test de signos y el $t$-

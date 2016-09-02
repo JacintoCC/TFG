@@ -3,10 +3,18 @@
 \setcounter{page}{1}
 
 \section{Contextualización}
-
-	A la hora de evaluar un algoritmo de aprendizaje 
-automático nos interesa conocer el error para un problema y 
-su relación con respecto a otros, sin embargo, debemos ser 
+	
+	El interés creciente en el campo del aprendizaje
+automático ha significado un aumento en la propuesta
+de nuevos algoritmos que pretenden mejorar a los 
+ya existentes. Se describe a continuación el proceso
+general para poder comparar algoritmos, basándonos en
+las recomendaciones realizadas por Alpaydin 
+(\cite{Alpaydin:2010:IML:1734076}) y Japkowicz  
+(\cite{DBLP:books/cu/Japkowicz2011}).\\
+	A la hora de evaluar un algoritmo,
+nos interesa conocer el error asociado a un problema y 
+su relación con respecto a otros. Sin embargo, debemos ser 
 conscientes de que para ello debemos diseñar y realizar un 
 experimento cuyos resultados sean fiables y minimizar el 
 efecto producido por las circunstancias en las que se 
@@ -23,7 +31,7 @@ comportan de manera no determinista, y por tanto deseemos
 realizar varias ejecuciones para estimar circunstancias 
 aleatorias. En definitiva, debemos basar nuestra evaluación 
 del algoritmo en la distribución (desconocida) del error. 
-Para una correcta estimación del error es importante tener en 
+Para una correcta estimación del error,  es importante tener en 
 cuenta lo siguiente:
 	
 	\begin{itemize}
@@ -121,129 +129,6 @@ algoritmos utilizamos las mismas particiones para cada uno.
 	\end{enumerate}
 	
 	
-\subsubsection{Validación cruzada y remuestreo}
-\label{sssec:CV}
-	
-	Para la repetición de los experimentos, necesitamos un 
-número de conjuntos de entrenamiento y validación del 
-conjunto de datos disponible. Si el conjunto es 
-suficientemente grande, podemos dividir aleatoriamente el 
-conjunto en $K$ partes, y de cada parte seleccionar la mitad 
-para entrenamiento y la otra mitad para test. $K$ suele ser 
-10 ó 30. Sin embargo, los conjuntos de datos no suelen ser 
-tan grandes. Por tanto, lo que habitualmente se realiza es 
-utilizar varias veces los mismos datos pero de formas 
-distintas, lo que se conoce como \textbf{validación cruzada} 
-(\textit{cross-validation}, CV). Otro concepto a tener en 
-cuenta es el de \textbf{estratificación}. Consiste en 
-mantener la proporción de las diferentes clases en cada una 
-de las particiones realizadas en la base de datos. 
-	
-\paragraph{Validación cruzada con $K$-fold} Se divide el 
-conjunto de datos $\mathcal{X}$ en $K$ partes aleatoriamente, 
-$\mathcal{X} = \mathcal{X}_1 \cup \dots \cup \mathcal{X}_K$. 
-Para formar cada par de datos de entrenamiento y validación, 
-$(\mathcal{T}, \mathcal{V})$, se mantiene una de las $K$ 
-partes y se unen las demás partes como conjunto de 
-entrenamiento
-\begin{align*}
-	\mathcal{V}_i &= \mathcal{X}_i \\
-	\mathcal{T}_i &= \underset{j=1,\dots,K; j\neq i}
-							\bigcup \mathcal{X}_j
-\end{align*} 
-	El problema de este método es que el conjunto de 
-validación es pequeño (lo que lleva a una mayor variabilidad 
-en el error). Además, los conjuntos de entrenamiento se 
-solapan considerablemente. $K$ es habitualmente 10 ó 30. 
-Conforme $K$ crece, se incrementa la robustez al afectar 
-menos cada dato concreto. El caso $K = n-1$, se conoce como 
-\textit{leave-one-out}. 
-
-\paragraph{$5 \times 2$ CV} Otra propuesta consiste en 
-dividir $\mathcal{X}$ en dos partes, utilizar una de estas 
-partes como datos de entrenamiento y la otra como test e 
-invertir los roles. Para obtener el segundo \textit{fold}, se 
-realiza otra partición aleatoria de $\mathcal{X}$ y se repite 
-el proceso. Lo habitual es que se realice cinco veces, 
-obteniendo así diez parejas $(\mathcal{T}, \mathcal{V})$. 
-Aunque podría realizarse más veces, al realizarse más veces 
-los conjuntos comparten muchas instancias y por lo tanto los 
-errores son muy dependientes entre sí, con lo que no se 
-aporta nueva información. Si se realiza menos de cinco veces, 
-se obtienen pocas muestras y es más complejo comprobar las 
-hipótesis.
-
-\paragraph{\textit{Bootstrapping}} Para generar varias 
-muestras a partir de una única se seleccionan instancias de 
-la original con reemplazamiento. Puede solaparse más que con 
-CV, con lo que las estimaciones resultan más dependientes. 
-Por ello, se recomienda especialmente para conjuntos de datos 
-muy pequeños en los que se necesiten mayores muestras. 
-
-	Al realizar \textit{bootstrap}, se seleccionan $N$ 
-instancias de un conjunto de tamaño $N$ con reemplazamiento. 
-El conjunto original se usa como conjunto de validación. La 
-probabilidad de no seleccionar una instancia es $1-1/N$, con 
-lo que la probabilidad de no seleccionarla tras $N$ 
-elecciones es $\left(1- \frac{1}{N}\right)^N \approx e^{-1} 
-\approx 0.368$. Esto significa que el conjunto de 
-entrenamiento contiene aproximadamente un $63.2\%$ de los 
-datos. Para obtener una mejor estimación del error, se 
-propone repetir el proceso y observar el comportamiento 
-medio.
-	
-\subsubsection{Test de hipótesis}
-
-	En la realización de los test de hipótesis, el 
-procedimiento es el siguiente: se define un estadístico que 
-sigue una distribución conocida en el caso de que se cumpla 
-la hipótesis realizada. Entonces si el estadístico calculado 
-de la muestra tiene poca probabilidad de obtenerse de la 
-distribución, se rechaza la hipótesis; en caso contrario, no. 
-\\
-	Surgen entonces las cuestiones: ¿Se puede justificar los 
-resultados estadísticamente o se obtienen por azar? ¿Son los 
-conjuntos de datos representativos para el problema? Estas 
-preguntas no se pueden responder de forma exhaustiva, es la 
-labor de los test estadísticos reunir los datos disponibles 
-para justificar la consistencia de las conclusiones. \\
-	A la hora de realizar los test estadísticos podemos 
-realizar las siguientes comparaciones:
-	\begin{enumerate}
-	\item Comparación de dos algoritmos en un dominio: $t$-
-		test (paramétrico), test de McNemar (no paramétrico).
-	\item Comparación de múltiples algoritmos en un dominio: 
-		\textit{Signed-Rank test} de Wilcoxon y test de signo 
-		(no paramétricos).
-	\item Comparación de múltiples algoritmos en varios 
-		dominios: ANOVA (paramétrico), test de Friedman o 
-		basados en permutaciones (no paramétricos). 
-	\end{enumerate}
-
-	Nótese que el test de \textit{Signed-Rank} de Wilcoxon 
-para muestras emparejadas puede aplicarse tanto para la 
-comparación de dos como entre varios algoritmos en un 
-dominio. Los test para varios algoritmos en varias bases de 
-datos necesitan un test posterior en caso de rechazar la 
-hipótesis de que todos los algoritmos se comporten de igual 
-manera. Ejemplos de estos test son el de Tukey, de 
-Bonferroni-Dunn o de Nemenyi. 
-
-\section{Evaluación de algoritmos}
-
-	Se incluye en esta sección una pequeña introducción sobre 
-la evaluación de la aplicación de algoritmos sobre un 
-problema para poder realizar así la comparación de su 
-rendimiento con respecto al de otros algoritmos. Para 
-realizar una correcta evaluación y comparativa entre 
-algoritmos utilizados en aprendizaje automático debemos 
-realizar los siguientes pasos:
-	
-	\begin{enumerate}
-		\item Selección de la medida del rendimiento
-		\item Selección del método de estimación
-		\item Realización de test estadísticos
-	\end{enumerate}
 
 \subsection{Medidas del rendimiento}
 	
@@ -333,8 +218,9 @@ relevante, o sólo existen unos pocos individuos de
 una clase.\\
 	Para encontrar un equilibrio entre la detección de 
 elementos de la muestra de ambas clases se han propuesto en 
-la literatura algunas aproximaciones basadas en las 
-anteriores medidas:
+la literatura (por ejemplo por Santafé, 
+\cite{DBLP:journals/air/SantafeIL15}) algunas aproximaciones 
+basadas en las anteriores medidas:
 	
 	\begin{description}
 		\item[Compensación entre exhaustividad y 
@@ -370,8 +256,9 @@ $i$-ésima.\\
 errores cometidos en ambos sentidos (asignar a la clase 
 positiva una instancia negativa o viceversa), sin embargo se 
 pueden incluir \textit{funciones de pérdida} ($\mathcal{L}$) 
-según el coste relativo de cada tipo de fallo. Hasta ahora se 
-puede considerar que hemos usado la función de pérdida 
+según el coste relativo de cada tipo de fallo. Se 
+puede considerar que en las medidas anteriores se ha usado 
+la función de pérdida 
 $\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase 
 asignada e $y$ la clase real.
 	
@@ -396,7 +283,7 @@ usuario.
 
 \subsubsection*{Medidas gráficas}
 
-	Prati \textit{et al.} \cite{PRATI11} afirman que en ocasiones es 
+	Prati \textit{et al.} \cite{DBLP:journals/tkde/PratiBM11} afirman que en ocasiones es 
 recomendable utilizar una representación gráfica del 
 rendimiento ya que evitamos así pérdida de información al 
 condensar toda la información en un escalar. En este artículo 
@@ -523,3 +410,115 @@ predicción del algoritmo $f$ aplicado a los datos $x_1,
 
 	Las medidas $MSE$ y $RMSE$ son más utilizadas debido a la 
 penalización de los errores mayores. 
+
+\subsection{Validación cruzada y remuestreo}
+\label{sssec:CV}
+	
+	Para la repetición de los experimentos, necesitamos un 
+número de conjuntos de entrenamiento y validación del 
+conjunto de datos disponible. Si el conjunto es 
+suficientemente grande, podemos dividir aleatoriamente el 
+conjunto en $K$ partes, y de cada parte seleccionar la mitad 
+para entrenamiento y la otra mitad para test. $K$ suele ser 
+10 ó 30. Sin embargo, los conjuntos de datos no suelen ser 
+tan grandes. Por tanto, lo que habitualmente se realiza es 
+utilizar varias veces los mismos datos pero de formas 
+distintas, lo que se conoce como \textbf{validación cruzada} 
+(\textit{cross-validation}, CV). Otro concepto a tener en 
+cuenta es el de \textbf{estratificación}. Consiste en 
+mantener la proporción de las diferentes clases en cada una 
+de las particiones realizadas en la base de datos. 
+	
+\paragraph{Validación cruzada con $K$-fold} Se divide el 
+conjunto de datos $\mathcal{X}$ en $K$ partes aleatoriamente, 
+$\mathcal{X} = \mathcal{X}_1 \cup \dots \cup \mathcal{X}_K$. 
+Para formar cada par de datos de entrenamiento y validación, 
+$(\mathcal{T}, \mathcal{V})$, se mantiene una de las $K$ 
+partes y se unen las demás partes como conjunto de 
+entrenamiento
+\begin{align*}
+	\mathcal{V}_i &= \mathcal{X}_i \\
+	\mathcal{T}_i &= \underset{j=1,\dots,K; j\neq i}
+							\bigcup \mathcal{X}_j
+\end{align*} 
+	El problema de este método es que el conjunto de 
+validación es pequeño (lo que lleva a una mayor variabilidad 
+en el error). Además, los conjuntos de entrenamiento se 
+solapan considerablemente. $K$ es habitualmente 10 ó 30. 
+Conforme $K$ crece, se incrementa la robustez al afectar 
+menos cada dato concreto. El caso $K = n-1$, se conoce como 
+\textit{leave-one-out}. 
+
+\paragraph{$5 \times 2$ CV} Otra propuesta consiste en 
+dividir $\mathcal{X}$ en dos partes, utilizar una de estas 
+partes como datos de entrenamiento y la otra como test e 
+invertir los roles. Para obtener el segundo \textit{fold}, se 
+realiza otra partición aleatoria de $\mathcal{X}$ y se repite 
+el proceso. Lo habitual es que se realice cinco veces, 
+obteniendo así diez parejas $(\mathcal{T}, \mathcal{V})$. 
+Aunque podría realizarse más veces, al realizarse más veces 
+los conjuntos comparten muchas instancias y por lo tanto los 
+errores son muy dependientes entre sí, con lo que no se 
+aporta nueva información. Si se realiza menos de cinco veces, 
+se obtienen pocas muestras y es más complejo comprobar las 
+hipótesis.
+
+\paragraph{\textit{Bootstrapping}} Para generar varias 
+muestras a partir de una única se seleccionan instancias de 
+la original con reemplazamiento. Puede solaparse más que con 
+CV, con lo que las estimaciones resultan más dependientes. 
+Por ello, se recomienda especialmente para conjuntos de datos 
+muy pequeños en los que se necesiten mayores muestras. 
+
+	Al realizar \textit{bootstrap}, se seleccionan $N$ 
+instancias de un conjunto de tamaño $N$ con reemplazamiento. 
+El conjunto original se usa como conjunto de validación. La 
+probabilidad de no seleccionar una instancia es $1-1/N$, con 
+lo que la probabilidad de no seleccionarla tras $N$ 
+elecciones es $\left(1- \frac{1}{N}\right)^N \approx e^{-1} 
+\approx 0.368$. Esto significa que el conjunto de 
+entrenamiento contiene aproximadamente un $63.2\%$ de los 
+datos. Para obtener una mejor estimación del error, se 
+propone repetir el proceso y observar el comportamiento 
+medio.
+	
+\subsection{Test de hipótesis}
+
+	Una vez se han extraído los datos, pretendemos obtener
+las conclusiones de manera estadística. Para ello, la 
+forma habitual de proceder es mediante los test de hipótesis.
+En la realización de los test de hipótesis, el 
+procedimiento es el siguiente: se define un estadístico que 
+sigue una distribución conocida en el caso de que se cumpla 
+la hipótesis realizada. Entonces si el estadístico calculado 
+de la muestra tiene poca probabilidad de obtenerse de la 
+distribución, se rechaza la hipótesis; en caso contrario, no. 
+\\
+	Surgen entonces las cuestiones: ¿Se puede justificar los 
+resultados estadísticamente o se obtienen por azar? ¿Son los 
+conjuntos de datos representativos para el problema? Estas 
+preguntas no se pueden responder de forma exhaustiva, es la 
+labor de los test estadísticos reunir los datos disponibles 
+para justificar la consistencia de las conclusiones. \\
+	A la hora de realizar los test estadísticos podemos 
+realizar las siguientes comparaciones:
+	\begin{enumerate}
+	\item Comparación de dos algoritmos en un dominio: $t$-
+		test (paramétrico), test de McNemar (no paramétrico).
+	\item Comparación de múltiples algoritmos en un dominio: 
+		\textit{Signed-Rank test} de Wilcoxon y test de signo 
+		(no paramétricos).
+	\item Comparación de múltiples algoritmos en varios 
+		dominios: ANOVA (paramétrico), test de Friedman o 
+		basados en permutaciones (no paramétricos). 
+	\end{enumerate}
+
+	Nótese que el test de \textit{Signed-Rank} de Wilcoxon 
+para muestras emparejadas puede aplicarse tanto para la 
+comparación de dos como entre varios algoritmos en un 
+dominio. Los test para varios algoritmos en varias bases de 
+datos necesitan un test posterior en caso de rechazar la 
+hipótesis de que todos los algoritmos se comporten de igual 
+manera. Ejemplos de estos test son el de Tukey, de 
+Bonferroni-Dunn o de Nemenyi. 
+

@@ -25,7 +25,8 @@
 
 \usepackage{longtable}
 
-\usepackage[colorlinks=true,linkcolor=black]{hyperref} %referencia
+\usepackage[colorlinks=true,linkcolor=black,
+			citecolor=blue]{hyperref} %referencia
 
 \usepackage{float}
 \newcommand*{\at}{@}
@@ -257,8 +258,7 @@ pdfproducer = {pdflatex}
 % \printglossary
 \chapter*{}
 \thispagestyle{empty}
-
-\bibliography{capitulos/bibliografia}
+\bibliography{capitulos/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía}
 \label{bibliografia}
 \bibliographystyle{plain}
 
