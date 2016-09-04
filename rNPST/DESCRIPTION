@@ -1,0 +1,6 @@
+Package: rNPTS
+Title: Non-Parametric Tests in R
+Version: 1.0
+Date: 2008-05-13
+Description: This package is a wrapper of the Java package JavaNPTS.
+License: GPL-2
