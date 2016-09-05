@@ -6,7 +6,7 @@ dataTable <- function(matrix){
   ncol <- ncol(matrix)
 
   # Set number of rows and cols to the object
-  .jcall(table, "V", "setDimensions", nrow, ncol)
+  .jcall(table, "V", "setDimensions", as.integer(nrow), as.integer(ncol))
 
   # Set values
   for( i in 1:nrow ){

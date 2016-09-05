@@ -1,4 +1,4 @@
 .onLoad <- function(libname, pkgname){
     library(rJava)
-    .jinit("rNPTS/java")
+    .jinit("rNPST/java")
 }
