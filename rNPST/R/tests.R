@@ -71,7 +71,7 @@ doTest <- function(test.name, ...){
                       "javanpst.tests.goodness.A_DTest.A_DTest",
                       "javanpst.tests.goodness.chiSquareTest.ChiSquareTest",
                       "javanpst.tests.goodness.K_STest.K_STest",
-                      "javanpst.tests.goodness.lillieforsTest.LillieforsTest"
+                      "javanpst.tests.goodness.lillieforsTest.LillieforsTest",
                       "javanpst.tests.location.normalScoresTest.NormalScoresTest",
                       "javanpst.tests.location.wilcoxonRankSumTest.WilcoxonRankSumTest",
                       "javanpst.tests.multiple.concordanceCoefficient.ConcordanceCoefficient",
@@ -308,7 +308,7 @@ ad.test <- function(matrix){
 
 chiSquare.test <- function(sequece){
   java.test.object <- .jnew("javanpst.tests.goodness.chiSquareTest.ChiSquareTest",
-                            numericSequence(sequece)
+                            numericSequence(sequece))
   report <- runTest(java.test.object)
   q <- .jcall(java.test.object, "D", "getQ")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
@@ -319,7 +319,7 @@ chiSquare.test <- function(sequece){
 
 ks.test <- function(sequece){
   java.test.object <- .jnew("javanpst.tests.goodness.K_STest.K_STest",
-                            numericSequence(sequece)
+                            numericSequence(sequece))
   report <- runTest(java.test.object)
   Dn <- .jcall(java.test.object, "D", "getDn")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
@@ -329,7 +329,7 @@ ks.test <- function(sequece){
 }
 
 lilliefors.test <- function(sequece){
-  java.test.object <- .jnew("javanpst.tests.goodness.lillieforsTest.LillieforsTest"
+  java.test.object <- .jnew("javanpst.tests.goodness.lillieforsTest.LillieforsTest",
                             numericSequence(sequence))
   report <- runTest(java.test.object)
   Dn <- .jcall(java.test.object, "D", "getDn")

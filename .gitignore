@@ -7,3 +7,6 @@
 *.out
 *.blg
 *.bbl
+*.tar.gz
+*.RData
+*.Rhistory

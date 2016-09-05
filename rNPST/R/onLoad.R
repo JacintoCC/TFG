@@ -1,3 +1,4 @@
 .onLoad <- function(libname, pkgname){
-    .jpackage(rNTPS)
+    library(rJava)
+    .jinit("rNPTS/java")
 }

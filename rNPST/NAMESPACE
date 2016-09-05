@@ -1,2 +1,7 @@
 import("rJava")
-export("testFriedman")
+export("friedman.test")
+export("page.test")
+export("dataTable")
+export("fillSequence")
+export("numericSequence")
+export("stringSequence")

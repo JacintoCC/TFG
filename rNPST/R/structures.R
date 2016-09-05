@@ -1,7 +1,6 @@
 dataTable <- function(matrix){
   # Create the DataTable object
   table <- .jnew("javanpst.data.structures.dataTable.DataTable")
-
   #
   nrow <- nrow(matrix)
   ncol <- ncol(matrix)
