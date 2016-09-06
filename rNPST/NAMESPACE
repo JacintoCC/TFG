@@ -1,4 +1,5 @@
 import("rJava")
+import("MCMCpack")
 export("runTest")
 export("friedman.test")
 export("page.test")
