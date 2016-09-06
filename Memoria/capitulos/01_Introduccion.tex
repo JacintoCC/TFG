@@ -36,7 +36,9 @@ en cuenta lo siguiente:
 	
 	\begin{itemize}
 	\item El error depende del problema. El teorema de 
-		\textit{No Free Lunch} afirma que dados dos 
+		\textit{No Free Lunch} (Wolpert y Macready, 
+		\cite{Wolpert:1997:NFL:2221336.2221408}) 
+		afirma que dados dos 
 		algoritmos su rendimiento medio para todos los 
 		posibles problemas es el mismo, lo que se traduce en 
 		que según el problema se puede dar que un algoritmo 
@@ -212,18 +214,29 @@ problema de clasificación, las medidas para evaluar el
 rendimiento o los algoritmos de clasificación.
 
 \section*{Contenido de la memoria}\addcontentsline{toc}{section}{Contenido de la memoria}
-	En el capítulo~\ref{cap:matematicas} se realiza el estudio
-matemático sobre los test estadísticos. Se incluye en la 
-sección~\ref{chapter:notacion} la notación
-utilizada, la teoría de los test paramétricos en la
-sección~\ref{sec:param}, los test no paramétricos y 
-basados en permutaciones en la sección~\ref{sec:tnp} 
-y la teoría bayesiana y sus test estadísticos en la
-sección~\ref{sec:bay}.\\
-	En el capítulo~\ref{cap:inf} se incluye una introducción
-al caso práctico con los datos utilizados. Posteriormente,
-se realizan los test estadísticos descritos y una comparación 
-entre los resultados arrojados por estos test.
+	En la primera parte de la memoria
+(\ref{part:matematicas}) se presenta en el 
+capítulo~\ref{chapter:Intro} una introducción a la evaluación 
+de algoritmos de aprendizaje automático, a las medidas 
+utilizadas para ello y la notación usada. En los 
+sucesivos capítulos se presenta el contenido matemático
+relativo a los test paramétricos 
+(Cap.~\ref{chapter:test_parametricos}), los test no
+paramétricos y basados en permutaciones 
+(Cap.~\ref{chapter:test_no_parametricos}) y
+los test bayesianos (Cap.~\ref{chapter:test_bayesianos}).\\
+	En la segunda parte de la memoria 
+(\ref{part:informatica}) se hace en el capítulo~
+\ref{chapter:revision} una revisión del estado del arte
+en la aplicación de test estadísticos al problema que 
+nos ocupa. En el Capítulo~\ref{chapter:software} se
+realiza una descripción de varios paquetes software 
+existentes para la realización de test estadísticos, los
+cuales se integran en un paquete de \texttt{R} que funciona
+como \textit{wrapper}. Finalmente,
+en el capítulo~\ref{chapter:experimentos} se realiza un
+caso práctico donde se aplican los test estadísticos
+disponibles y se compara su potencia.
 
 
 
