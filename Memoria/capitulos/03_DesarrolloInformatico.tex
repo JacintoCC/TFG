@@ -1,3 +1,547 @@
-\chapter{Desarrollo informático}
+\part{Desarrollo informático}
+\label{part:informatica}
 
-	En
+\chapter{Revisión del Estado del Arte en la Aplicación de test en la evaluación de algoritmos de aprendizaje automático}
+
+\section{Test paramétricos}
+
+
+\subsection{5x2 CV $t$-test}
+	
+	En la introducción (\ref{sec:CV}), se describe el 
+proceso de validación cruzada, especialmente útil cuando se
+disponen de pocos datos y queremos mantener un equilibrio
+entre el tamaño del conjunto de entrenamiento y el de test.
+Para esta situación, se propone la siguiente variación 
+del $t$-test. Se considera $d_i^{(j)}$, para $j=1,2$, $i=
+1,\dots,5$, la diferencia entre el rendimiento de los dos
+clasificadores para la repetición $i$ y el \textit{fold} $j$.
+Se considera la media para cada repetición $\bar{d}_i = 
+(d_i^{(1)} + d_i^{(2)})/2$ y la varianza estimada
+$s_i^2 = (d_i^{(1)}-\bar{d_i})^2 + (d_i^{(2)}-\bar{d_i})^2$. 
+Bajo la hipótesis nula de que los dos clasificadores tienen 
+el mismo rendimiento, $d_i^{(j)}$ puede considerarse 
+aproximadamente normal . Si suponemos $d_i^{(1)}$ y 
+$d_i^{(2)}$ independientes y normales (lo cual no es
+cierto porque los conjuntos de test y de entrenamiento
+no se han obtenido de manera independiente), entonces
+$s_i^2/\sigma^2$ sigue una distribución $\chi^2$ con un
+grado de libertad. Si suponemos las $s_i^2$ independientes,
+su suma $M = \frac{\sum\limits_{i=1}^5 s_i^2}{\sigma^2}
+\sim \chi^2_5$ y 
+\begin{equation}
+	\label{eq:5x2CVt}
+	t = \frac{d_1^{(1)}/\sigma}{\sqrt{M/5}} = 
+		\frac{d_1^{(1)}}
+			{\sqrt{\sum\limits_{i=1}^5 s_i^2/5}}
+		\sim t_5.
+\end{equation}
+
+\paragraph{Modificación} Nótese que en la 
+ecuación~\ref{eq:5x2CVt} el valor $d_1^{(1)}$ podría ser
+ocupado por cualquier estadístico $d_i^{(j)}$. Alpaydin
+propuso combinar estos valores de la forma:
+	\[
+		N = \frac{\sum\limits_{i=1}^5
+				\sum\limits_{j=1}^2
+					\left( d_i^{(j)} \right)^2}
+				{\sigma^2}
+			\sim \chi_{10}^2.
+	\]
+	Sustituyendo esto en \ref{eq:5x2CVt}, tenemos
+un estadístico que es el cociente de dos v.a. que siguen 
+una $\chi^2$, con lo que definimos la v.a. $f$, que seguirá
+una distribución $F$ de Snedecor con 10 y 5 grados de
+libertad:
+	\[ 
+		f = \frac{N/10}{M/5} \sim F_{10,5}.
+	\]
+	
+	
+\section{Test no paramétricos}
+ 
+\paragraph{Validación de un modelo de degradación de 
+documentos} \cite{DBLP:journals/pami/KanungoHBSM00} En este artículo se presenta un 
+modelo de la degradación en documentos producida por la 
+digitalización de documentos impresos o la realización de 
+fotocopias. El problema estadístico que se define es el 
+siguiente. Dadas las muestras $x_1, \dots, x_N$ e $y_1, 
+\dots, y_M$ de caracteres degradados de un mismo carácter de 
+un documento y generados de manera artificial, 
+respectivamente, realizar el test sobre la hipótesis nula de 
+que ambos  provienen de la misma población para un valor de 
+significación $\alpha$. Se aplica el algoritmo 
+(\ref{alg:CMC-digitalizacion}) para realizar el test basado 
+en permutaciones calculando el $p$-valor utilizando el 
+algoritmo~\ref{alg:CMC-pvalue}.
+
+\begin{algorithm}
+	\caption{Test basado en permutaciones para validación en 
+			modelo de degradación}
+	\label{alg:CMC-digitalizacion}
+	\begin{algorithmic}[1]
+	\REQUIRE
+		\begin{enumerate}[a]
+		\item Datos reales $X = \{ x_1, \dots, x_N \}$
+		\item Datos generados $Y = \{ y_1, \dots, y_M \}$
+		\item Función distancia entre conjuntos $\rho(X,Y)$
+		\item Función distancia entre caracteres $\delta(x,y)$
+		\item Tamaño máximo del test $\alpha$
+		\end{enumerate}
+		\STATE Calcular $d_0 = \rho(X,Y)$
+		\STATE Crear una muestra 
+			$Z= \{x_1, \dots, x_N, y_1, \dots, y_M \}$.
+		\FOR { $i \in \{1, \dots, K\}$ }
+			\STATE Realizar una permutación de $Z$.
+			\STATE Particionar $Z$ en $X'$ e $Y'$ tales que 
+				$X' = \{ z_1, \dots, z_N \}$, $Y' = 
+				\{ z_{N+1}, \dots, z_{N+M} \} $.
+			\STATE Calcular $d_i = \rho(X,Y)$
+		\ENDFOR
+		\STATE Calcular la distribución empírica de las $d_i$
+		\STATE Calcular el $p$-valor: 
+			$\alpha_0 = P(d \geq d_0)$
+		\STATE Rechazar la hipótesis nula si 
+			$\alpha_0 \leq \alpha$
+	\end{algorithmic}
+\end{algorithm}
+
+	
+\paragraph{Comparación estadística de varios clasificadores} 
+\cite{DBLP:conf/mlmta/ChenC03} En este artículo se describe un método 
+para realizar la comparación estadística de varios 
+clasificadores sobre una misma base de datos a través del 
+test de Cochran, una generalización del test de McNemar. La 
+aplicación de un test no paramétrico en lugar de uno 
+paramétrico como ANOVA se justifica en el artículo debido a 
+que no se puede asegurar la independencia entre las 
+instancias clasificadas por un mismo clasificador, con lo que 
+queda en entredicho el desempeño del test ANOVA, por ejemplo. 
+Si la hipótesis nula, $H_0: \theta_1 = \dots = \theta_n$ 
+(todos los algoritmos tienen un rendimiento equivalente), es 
+cierta, no es necesario ningún análisis posterior. Si es 
+rechazada, se pretenden realizar múltiples comparaciones para 
+encontrar los algoritmos con mejor rendimiento. Para ello se 
+describen los métodos de Bonferroni y Scheffé. El primero 
+parte de una familia de $g$ contrastes, mientras que el 
+segundo considera la familia $L$ de todos los contrastes 
+posibles. Por ello, para el primero se deben prefijar las 
+comparaciones a realizar, mientras que para el segundo esto 
+se puede realizar \textit{a posteriori} según los datos 
+obtenidos. Para escoger entre un método u otro, se recomienda 
+escoger el primero cuando $Z_{1-\alpha/2g}$ (percentil $(1-
+\alpha/2g)100$ de una distribución normal estándar) es menor 
+que $\sqrt{\chi^2_{m-1,1-\alpha}}$ (donde $m$ es el número de 
+algoritmos en la comparación) debido a que en este caso el 
+método de Bonferroni tiene una mayor potencia. Escogeremos el 
+método de Scheffé en caso contrario.
+
+\paragraph{Comparación estadística de clasificadores en 
+varios conjuntos de datos} \cite{DBLP:journals/jmlr/Demsar06} De la comparación 
+utilizando un único conjunto de datos se pasa en este 
+artículo a presentar un método para comparar el rendimento 
+sobre varios conjuntos de datos utilizando test no 
+paramétricos.\\
+	Se incluyen en una primera sección las opciones para 
+realizar las comparaciones entre dos clasificadores para 
+varias conjuntos de datos, evaluando sus ventajas e 
+inconvenientes:
+	\begin{enumerate}
+	\item Media entre los conjuntos de datos: Arroja poca 
+		información poco valiosa al combinar puntuaciones 
+		obtenidas en distintos dominios.
+	\item $t$-test emparejados: El estadístico de este test 
+		paramétrico es similar al usado al realizar la media 
+		entre los conjuntos de datos. Además, se necesita que 
+		la diferencia siga una distribución normal, además de 
+		que los datos disponibles suelen ser reducidos. 
+	\item Test de signo: Como se ha dicho en el desarrollo de 
+		los test, no tiene en cuenta la magnitud de la 
+		diferencia.
+	\item Test de rangos con signo de Wilcoxon: Más seguro 
+		que el $t$-test al no suponer la distribución normal. 
+		Si no se dan las circunstancias adecuadas, este test 
+		puede tener mayor potencia que el $t$-test.
+	\end{enumerate}
+	
+	En cuanto a la comparación entre varios clasificadores, 
+se incluye una breve descripción del método ANOVA y una 
+descripción más extensa del test de Friedman. Se incluye el 
+estadístico $F_F = \frac{(n-1) \chi^2_F}{n(k-1) - \chi^2_F}$ 
+que sigue la distribución $F$ con $k-1$ y $(k-1)(n-1)$ grados 
+de libertad. Aunque el test ANOVA tiene mayor potencia cuando 
+las condiciones se cumplen, se incluye un experimento que 
+muestra que apenas hay diferencias si éstas no se dan.\\
+
+	Una vez se ha rechazado la hipótesis nula se describen 
+los test \textit{post-hoc} de Nemenyi, Bonferroni-Dunn, Holm, 
+Hochberg y Hommel.
+	
+	
+\paragraph{Extensión sobre los procedimientos 
+\textit{post-hoc}} \cite{garcia2008extension} Este artículo 
+extiende al anterior prestando una mayor atención a la 
+descripción de los procedimientos para la comparación entre 
+algoritmos una vez rechazada la hipótesis nula. Se introducen
+los procedimientos de Nemenyi y Holm. Debido a que las 
+posibles hipótesis sobre la comparación  por parejas están 
+relacionadas y no se pueden dar todas las posibles 
+combinaciones, se presentan los procedimientos de 
+Schaffer estático y dinámico. Bergmann y Hommel propusieron 
+un procedimiento basado en la idea de encontrar todas las 
+hipótesis que no pudieran ser rechazadas. En un estudio 
+comparativo sobre el rendimiento de cinco clasificadores 
+sobre treinta conjuntos de datos se observa como el 
+procedimiento de Bergmann y Hommel tiene una mayor 
+potencia.\\
+
+	Se aborda también el problema de calcular $p$-valores 
+ajustados (APV) que tengan en cuenta los demás test 
+realizados para poder utilizar directamente este valor 
+ajustado. Se indican el cálculo para cada procedimiento 
+\textit{post-hoc}. Tras realizar un nuevo estudio 
+introduciendo el uso de APV, se descarta el test de Nemenyi 
+debido a que es demasiado conservador. Se recomienda el 
+procedimiento estático de Schaffer frente al del Holm al 
+tener mayor potencia al usar las relaciones entre las 
+hipótesis y una dificultad no muy superior. Debido a su coste 
+computacional y su complejidad, se recomienda el método de 
+Bergmann-Hommel sólo para cuando las diferencias entre 
+clasificadores sean muy pequeñas y otros métodos no detecten 
+diferencias significantivas.
+
+	\paragraph{Estudio del uso de test no paramétricos} 
+	\cite{DBLP:journals/heuristics/GarciaMLH09} En este artículo se realiza un estudio
+sobre el uso de test no paramétricos para comparar el 
+rendimiento de algoritmos evolutivos en la Sesión Especial de 
+Optimización de parámetro real en el Congreso de Computación 
+Evolutiva (CEC 2005). Los datos disponibles son los errores 
+cometidos por los algoritmos a la hora de minimizar 25 
+funciones de 10, 30 y 50 variables reales. En primer lugar se 
+estudian las condiciones para realizar un test paramétrico 
+($t$-test) llevando a cabo test de normalidad (test de 
+Kolmogoro-Smirnov, test de Shapiro-Wilk y el de D'Agostino-
+Pearson) y el test de Levene de homocedasticidad. Se 
+pretende realizar en primer lugar la comparación entre dos de 
+los algoritmos para comprobar si hay diferencias entre ellos. 
+Sin embargo los test de normalidad rechazan para los 
+resultados en casi todas las funciones a minimizar la 
+hipótesis de normalidad y el test de Levene rechaza la 
+hipótesis de la equivalencia de las varianzas, con lo que no 
+se cumplen las condiciones para realizar el $t$-test. Si se 
+realizan el $t$-test y el test no paramétrico de Wilcoxon se 
+observa que los resultados son muy similares.\\
+	A la hora de afrontar la comparación en múltiples 
+problemas en lugar de problema por problema en este artículo 
+se toma la media de las distintas ejecuciones. Al realizar 
+los test de normalidad sobre las dos muestras de 25 elementos 
+para cada algoritmo se descarta la normalidad. El $t$-test y 
+el test de Wilcoxon no rechazan la hipótesis nula de que 
+ambos algoritmos sean igual de buenos, sin embargo el $p$-
+valor del test de Wilcoxon es bastante menor, lo que nos 
+lleva a pensar que, debido a la ausencia de normalidad y de 
+pocos datos y difíciles de incrementar (pues en este caso 
+deberíamos añadir nuevas funciones y sus 
+correspondientes evaluaciones para cada algoritmo), en estos 
+casos es mejor utilizar test no paramétricos.\\
+	Para realizar el análisis sobre todos los algoritmos se 
+separan las funciones fáciles, aquellas en las que algún 
+algoritmo alcanza el óptimo frente a las que ningún algoritmo 
+llegó al óptimo. El test no paramétrico de Friedman y el de 
+Iman-Davenport arrojan valores que nos llevan a rechazar la 
+hipótesis nula tanto usando el grupo de funciones difíciles 
+como usando el conjunto total de funciones.\\
+	El estudio posterior se centra en comparar los algoritmos 
+con aquel que consiguió un menor error medio, el 
+\textit{G-CMA-ES}. Para ello se utilizan el test de 
+Bonferroni-Dunn, el de Holm y el de Hochberg para los dos 
+grupos de funciones. El test de Hochberg llega a encontrar 
+diferencias entre el mejor algoritmo y todos los demás para 
+$\alpha=0.1$. 
+	
+	\paragraph{Estudio estadístico sobre algoritmos 
+genéticos: precisión e interpretabilidad} \cite{Garcia2008} En 
+este artículo se realiza la comparación sobre algoritmos 
+evolutivos utilizados en clasificación, comparando tanto la 
+tasa de clasificación como el valor kappa de Cohen y la 
+interpretabilidad de estos resultados. Al igual que en el 
+artículo anterior, se realizan test de normalidad y 
+homocedasticidad para comprobar si se dan las condiciones 
+para aplicar un test paramétrico. Si las comparaciones por 
+parejas de problemas se repiten crece el error asociado FWER 
+(\textit{family-wise error rate}), esto es la probabilidad de 
+cometer al menos un error en la familia de hipótesis. Para realizar 
+comparaciones entre varios algoritmos y fijar el FWER de 
+antemano se utilizan el test de Friedman y el de Iman-
+Davenport y los test de Bonferroni-Dunn y el de Holm para 
+buscar diferencias entre los algoritmos una vez descartada la 
+hipótesis de que todos tienen la misma media. Se 
+calculan también los $p$-valores ajustados.\\
+	Para realizar el análisis de la interpretabilidad de los 
+resultados se considera $\textit{Complejidad} = 
+\textit{Tamaño} \cdot ANT$. Se realiza para este estudio 
+únicamente un procedimiento para múltiples comparaciones, 
+obteniendo diferencias significativas con el test de 
+Bonferroni-Dunn y nivel de significación $\alpha=0.1$.
+	
+	\paragraph{Test avanzados para la comparación y análisis 
+experimental de la potencia} \cite{DBLP:journals/isci/GarciaFLH10} En este
+artículo se introducen con respecto a otros artículos 
+previos los test de múltiples signos y la estimación del 
+contraste basado en medianas como test básicos para realizar
+entre múltiples clasificadores y conjuntos de datos como 
+test básicos, y los más avanzados del test de Friedman
+de rangos alineados (\textit{Friedman Aligned Ranks}, 
+Friedman-AR) y el test de Quade. Además, para realizar las 
+comparaciones  posteriores  una vez descartada la hipótesis 
+de un igual  rendimiento entre todos los algoritmos, se 
+incluyen a los  procedimientos \textit{post-hoc} los de 
+Holland y Finner  dentro de  los métodos descendentes, el de 
+Rom como método  ascendente y el procedimiento de Li, para 
+rechazar hipótesis en dos pasos.\\
+	Se realiza un estudio sobre la potencia de los test
+de Friedman, de Friedman-AR y de Quade, utilizando 8 y 4
+algoritmos sobre 10 y 6 conjuntos de datos respectivamente. 
+Se observa que el test de Friedman-AR es más conservador
+cuando el número de algoritmos es elevado. En este estudio
+se observa que el test de Quade se comporta mejor, sin
+embargo depende de los conjuntos de datos utilizados. Para
+el estudio sobre los test \textit{post-hoc}, se utilizan
+8 algoritmos sobre 10 conjuntos de datos seleccionados
+de forma pseudo-aleatoria (regulando mediante un parámetro la 
+probabilidad de seleccionar una base de datos según la 
+diferencia de los algoritmos a comparar en ella). Los 
+resultados obtenidos hacen desaconsejar el test de 
+Bonferroni-Dunn, en un siguiente grupo estarían Holm, 
+Hochberg, Hommel, Holland y Rom con una potencia similar
+y los que mejores resultados obtienen son el test de Finner
+y el test de Li, el cual ofrece mejores resultados 
+cuando las diferencias entre el algoritmo de control y los 
+demás sean grandes.
+
+	
+	\paragraph{Análisis \textit{bootstrap} de múltiples 
+repeticiones de experimentos} \cite{Otero201488} En este artículo 
+se presenta la realización de test basados en permutaciones 
+para la comparación del rendimiento de algoritmos de 
+clasificación, realizando un estudio para el que el test 
+presentado tiene mayor potencia que los test de ANOVA o 
+Friedman. El contexto para el que se presenta este método es 
+el de la comparación entre algoritmos estocásticos (de ahí 
+que se realice la repetición de la ejecución de los 
+algoritmos con diferentes semillas) utilizando validación 
+cruzada. Se propone usar intervalos para recoger parte de la 
+variabilidad de los datos atribuible a la repetición del 
+experimento. Se plantea el problema del uso de la media entre 
+los distintos experimentos para evaluar un algoritmo debido a 
+que los valores extremos tienen una influencia excesiva y se 
+aboga por otros estadísticos como la mediana, el rango 
+intercuartílico o la media restringida a los valores 
+centrales.\\
+	El primer test es un test basado en permutaciones. Parte 
+de la muestra compuesta por $e_{adfr}$, que es el error del 
+algoritmo $a$-ésimo, el conjunto de datos $d$, para el 
+\textit{fold} $f$ y la repetición $r$. Se utiliza en este 
+test como estadístico para evaluar cada algoritmo la media de 
+las ejecuciones en todos los \textit{folds}, repeticiones y 
+conjuntos de datos como estimador, utilizando el algoritmo ~
+\ref{alg:CMC-pvalue}. Se rechazará la hipótesis nula (la 
+equivalencia de las medias) si para algún $a$ la media 
+inicial $\hat{e}_a$ se encuentra en las colas de la 
+distribución formada por los valores de las permutaciones $
+\hat{e}_a^*$ consistente en la cdf muestral:
+	\[ 
+		\hat{F}_{a \cdot \cdot \cdot}(x) =
+			\frac{1}{n_d n_r n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\sum\limits_{k=1}^{n_r}
+						\mathbb{I}[ e_{aijk} \leq x ].
+	\]
+	El segundo test sí hace uso de los intervalos, notando 
+por $[q_{-adf}, q_{+adf}]$ el intervalo de los errores para 
+un algoritmo, base de datos y \textit{fold}. Se definen las 
+cdf muestrales como
+	
+\begin{align*}
+	\hat{F}_{-a \cdot \cdot}(x) &=
+		\frac{1}{n_d n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\mathbb{I}[ q_{+aij} \leq x ], \\
+	\hat{F}_{+a \cdot \cdot}(x) &=
+		\frac{1}{n_d n_f}
+			\sum\limits_{i=1}^{n_d}
+				\sum\limits_{j=1}^{n_f}
+					\mathbb{I}[ x \in [q_{-aij},q_{+aij}) ] +
+			\hat{F}_{-a \cdot \cdot}(x) .			
+\end{align*}
+
+	En este test se aplica también el algoritmo 
+~\ref{alg:CMC-pvalue}, rechazando la hipótesis nula si el 
+intervalo $[\hat{q}_{-a}, \hat{q}_{+a}]$, con $\hat{q}_{-a}, 
+\hat{q}_{+a}$ las medias de los extremos inferiores y 
+superiores respectivamente para cada algoritmo con respecto a 
+las conjuntos de datos y \textit{fold}, se encuentra en las colas 
+de la distribución de los $[\hat{q}_{-a}^*, \hat{q}_{+a}^*]$.
+\\
+	Los resultados incluidos ofrecen una comparación entre la 
+potencia de estos test presentados, el test de Friedman y el 
+de ANOVA. Se realiza un experimento con datos sintéticos 
+consistentes en los resultados de los errores de 5 algoritmos 
+en 32 conjuntos de datos para una secuencia de diferencias en sus 
+medias preestablecidas. Para calcular la potencia se estima 
+para cada diferencia el porcentaje de experimentos para el 
+que se encuentran diferencias significativas entre los 
+algoritmos dos a dos. Los resultados indican una mayor 
+potencia de los test presentados en este artículo.
+
+
+\section{Revisión del estado del arte en la aplicación de test bayesianos}
+
+	Se presenta en este apartado una revisión del estado del 
+arte con diferentes métodos para la comparación de algoritmos
+de aprendizaje automático mediante la realización de test 
+estadísticos. 
+
+\paragraph{Versión bayesiana del test de Wilcoxon} 
+\cite{DBLP:conf/icml/BenavoliCMZR14} Para la comparación de algoritmos mediante
+muestras apareadas, se presenta el test de Wilcoxon en 
+versión bayesiana. Se realiza, al igual que en el test
+de signo y el de rangos con signo, utilizando el Proceso de
+Dirichlet para la distribución \textit{a priori}. La versión 
+bayesiana, a diferencia de la no paramétrica, no necesita 
+suponer la simetría de las muestras. Una cuestión importante
+es la elección de $G_0$ en caso de que no dispongamos
+información. El enfoque realizado se basa en la obtención
+del límite de $DP$ para $s \rightarrow 0$. Otro enfoque 
+consiste en modelar la falta de información \textit{a priori} 
+como un conjunto de distribuciones de probabilidad. 
+
+\paragraph{Procedimiento no paramétrico bayesiano para la 
+comparación de algoritmos} \cite{DBLP:conf/icml/BenavoliCMZ15} En este 
+artículo se presenta la versión bayesiana del test de 
+Friedman. Se presenta el test, que utiliza el $DP$ para 
+realizar la comparación de dos algoritmos en un primer
+momento y la versión para tres o más. Una vez se ha rechazado 
+la hipótesis de que los algoritmos se comporten de igual
+manera, se procede realizando la comparación dos a dos 
+para encontrar dónde se producen las diferencias. Se realiza 
+también en este artículo un experimento comparando el test
+bayesiano de Friedman con el test $F$-\textit{race}, test que
+compara varios algoritmos según aquel que consiga el mejor
+resultado.
+
+\paragraph{Test estadístico para el análisis conjunto de 
+medidas de rendimiento} \cite{DBLP:conf/jsai/BenavoliC15}	Para la 
+comparación de algoritmos con respecto a varias medidas
+se suelen utilizar o bien la media ponderada de las medidas
+para cada algoritmo o bien el frente de Pareto, donde se 
+consideran las soluciones no dominadas (aquellas que no son
+peor con respecto a otra solución para todos los criterios).
+En este artículo se presenta en primer lugar la realización 
+de un test basado en la razón de verosimilitud, que presenta
+las mismas desventajas que los THN. Para la realización del
+test bayesiano, se opta por usar como distribución 
+\textit{a priori} la distribución de Dirichlet, obteniéndose
+también como distribución \textit{a posteriori} la 
+distribución de Dirichlet de la que se calculan las 
+probabilidades deseadas mediante muestras aleatorias.
+Finalmente, se presenta una mejora de este método usando
+redes bayesianas.
+
+\paragraph{Comparación de algoritmos en múltiples bases de 
+datos con CV} \cite{DBLP:journals/ml/CoraniB15} En este artículo se introduce
+el $t$-test bayesiano (\ref{ssec:bayes-ttest}) y un test de 
+Poisson que compara dos clasificadores en varias bases de 
+datos teniendo en cuenta la correlación y la incertidumbre 
+provocada por la validación cruzada en cada conjunto de 
+datos.
+
+\paragraph{Tutorial para la comparación de clasificadores 
+mediante análisis bayesiano}. \cite{DBLP:journals/corr/BenavoliCDZ16} Este artículo 
+es un artículo divulgativo que presenta las ventajas de los 
+test bayesianos y expone su uso en diferentes casos, 
+aplicando el $t$-test bayesiano, el test de signos y el $t$-
+test bayesiano jerárquico, una extensión que permite realizar 
+inferencia en varios conjuntos de datos.
+
+\chapter{Software}
+
+\chapter{Experimentos}
+\section{Introducción al caso práctico}
+	Una vez hemos presentado las principales técnicas
+estadísticas que se utilizan en la comparación de algoritmos
+en aprendizaje automático, realizaremos un estudio práctico
+en \texttt{R} sobre la aplicación de estas técnicas.\\
+	Para ello, usaremos los resultados obtenidos por cinco
+algoritmos (Tabla~\ref{tab:algoritmos}) 
+sobre varios conjuntos de datos (Tabla~\ref{tab:DS}). Los
+conjuntos de datos constituyen un subconjunto de los 
+disponibles en el repositorio 
+\fnurl{KEEL}{http://www.keel.es/} 
+(\cite{alcala2010keel}) para problemas de clasificación
+supervisada. En dicho repositorio encontramos ya disponibles
+particiones de los conjuntos de datos para facilitar que los
+experimentos sean reproducibles. Se ha utilizado para cada 
+conjunto de datos la partición para realizar $10CV$, esto es,
+cada conjunto se particiona en 10 subconjuntos y en cada una 
+de las 10 repeticiones, utilizamos un subconjunto como test y
+los restantes 9 como datos de entrenamiento. Cada archivo
+contiene los diez pares de ficheros con datos de
+entrenamiento y test.
+
+\begin{table}[H]
+\centering
+\caption{Algoritmos}
+\label{tab:algoritmos}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+Algoritmo             & Descripción                                                                                                                             \\ \midrule
+\texttt{multinom}     & Regresión logística de la biblioteca \texttt{nnet} para un problema de clasificación con varias clases.                               \\
+\texttt{knn}          & Algoritmo de los $k$ vecinos más cercanos de la biblioteca \texttt{class}. 
+Se han utilizado los valores por defecto $k=1$, $l=0$.      \\
+\texttt{randomForest} & Algoritmo de la biblioteca \texttt{randomForest}. Se ha fijado el parámetro \texttt{mtray} al valor por defecto $mtray = \sqrt{p}$. \\
+\texttt{nnet}         & Red neuronal de la biblioteca \texttt{nnet}.                                                                                          \\
+\texttt{naiveBayes}   & Clasificador \textit{naive Bayes} de la biblioteca \texttt{e1071}.                                                                  \\ \bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Conjuntos de datos}
+\label{tab:DS}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Conjunto de datos & Número de atributos & Número de clases & Número de instancias \\ \midrule
+abalone           & 8                   & 28               & 4174                 \\
+australian        & 14                  & 2                & 690                  \\
+automobile        & 25                  & 6                & 205                  \\
+balance           & 4                   & 3                & 625                  \\
+breast            & 9                   & 2                & 277                  \\
+bupa              & 6                   & 2                & 345                  \\
+car               & 6                   & 4                & 1728                 \\
+cleveland         & 13                  & 5                & 303                  \\
+crx               & 15                  & 2                & 690                  \\
+dermatology       & 34                  & 6                & 366                  \\
+german            & 20                  & 2                & 1000                 \\
+glass             & 9                   & 7                & 214                  \\
+hayes-roth        & 4                   & 3                & 160                  \\
+heart             & 13                  & 2                & 270                  \\
+ionosphere        & 33                  & 2                & 351                  \\
+led7digit         & 7                   & 10               & 500                  \\
+letter            & 16                  & 26               & 20000                \\
+lymphography      & 18                  & 4                & 148                  \\
+mushroom          & 22                  & 2                & 8124                 \\
+optdigits         & 64                  & 10               & 5620                 \\
+satimage          & 36                  & 7                & 6435                 \\
+spambase          & 57                  & 2                & 4597                 \\
+splice            & 60                  & 3                & 3190                 \\
+tic-tac-toe       & 9                   & 2                & 958                  \\
+vehicle           & 18                  & 4                & 846                  \\
+vowel             & 13                  & 11               & 990                  \\
+wine              & 13                  & 3                & 178                  \\
+yeast             & 8                   & 10               & 1484                 \\
+zoo               & 16                  & 7                & 101                  \\ \bottomrule
+\end{tabular}
+\end{table}

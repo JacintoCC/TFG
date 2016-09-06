@@ -26,7 +26,7 @@
 \usepackage{longtable}
 
 \usepackage[colorlinks=true,linkcolor=black,
-			citecolor=blue]{hyperref} %referencia
+			citecolor=blue, urlcolor=cyan]{hyperref} %referencia
 
 \usepackage{float}
 \newcommand*{\at}{@}
@@ -210,12 +210,17 @@ pdfproducer = {pdflatex}
 \usepackage{amssymb}
 \usepackage{enumerate}
 \usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
 
 % Comandos para la escritura 
 \newcommand{\abs}[1]{\left\lvert#1\right\rvert}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\var}{\text{var}}
 \newcommand{\cov}{\text{cov}}
+\newcommand\fnurl[2]{%
+\href{#2}{#1}\footnote{\url{#2}}%
+}
 
 
 % Pseudocódigo
@@ -228,8 +233,8 @@ pdfproducer = {pdflatex}
 
 \begin{document}
 \pagenumbering{roman}
-%\input{portada/portada}
-%\input{prefacios/prefacio}
+\input{portada/portada}
+\input{prefacios/prefacio}
 %\frontmatter
 \tableofcontents
 %\listoffigures
@@ -238,8 +243,9 @@ pdfproducer = {pdflatex}
 %\mainmatter
 %\setlength{\parskip}{5pt}
 
-
 \input{capitulos/01_Introduccion}
+%
+\input{capitulos/01_Objetivos}
 %
 \input{capitulos/02_DesarrolloMatematico}
 %
