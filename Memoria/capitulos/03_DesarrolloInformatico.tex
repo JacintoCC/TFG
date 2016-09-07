@@ -396,7 +396,7 @@ algoritmos dos a dos. Los resultados indican una mayor
 potencia de los test presentados en este artículo.
 
 
-\section{Revisión del estado del arte en la aplicación de test bayesianos}
+\section{Test bayesianos}
 
 	Se presenta en este apartado una revisión del estado del 
 arte con diferentes métodos para la comparación de algoritmos
@@ -470,6 +470,42 @@ inferencia en varios conjuntos de datos.
 
 \section{Revisión software existente}
 
+	En esta sección se incluye una descripción del software 
+integrado en R.
+
+\subsection*{JavaNPST}
+	 
+	Este paquete desarrollado por Derrac \textit{et. al} 
+(\cite{2015arXiv150104222D}) implementado en \texttt{Java} 
+contiene cuarenta test estadísticos no paramétricos de las 
+siguientes familias:
+\begin{itemize}
+	\item Test de aleatoriedad
+	\item Test de bondad del ajuste
+	\item Procedimientos de una muestra y de muestras
+		 apareadas
+	\item Procedimientos generales de dos muestras
+	\item Test para problemas de localización
+	\item Test para problemas de escala
+	\item Test de igualdad de muestras independientes
+	\item Medidas de asociación para muestras bivariantes
+	\item Medidas de asociación en clasificaciones múltiples
+	\item Análisis del conteo de datos
+\end{itemize}
+	
+	La biblioteca \texttt{JavaNPST} incluye una definición de 
+las estructuras de datos (tablas y secuencias) usadas para 
+el manejo y la realización de los test incluidos. En el 
+artículo se incluyen un ejemplo de uso aplicado a la 
+comparación de algoritmos mediante los test de 
+signo y el test de Wilcoxon. 
+
+\subsection*{scmamp} 
+
+	
+	
+	
+	 
 \section{R}
 
 \chapter{Experimentos}
@@ -518,7 +554,7 @@ Se han utilizado los valores por defecto $k=1$, $l=0$.      \\
 \label{tab:DS}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-Conjunto de datos & Número de atributos & Número de clases & Número de instancias \\ \midrule
+Conjunto de datos & Núm. de atributos & Núm. de clases & Núm. de instancias \\ \midrule
 abalone           & 8                   & 28               & 4174                 \\
 australian        & 14                  & 2                & 690                  \\
 automobile        & 25                  & 6                & 205                  \\

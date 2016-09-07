@@ -1,9 +1,9 @@
 locate.max <- function(x){
-  vec <- sapply(x, function(y){ y == max(x)})
+  vec <- sapply(x, function(y){y == max(x)})
   return(vec/sum(vec))
 }
 
-bayesianSignTest.CMC <- function(x, y = NULL, s = 0.5, z_0 = 0,
+bayesianSign.CMC.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
                              rope.min = -0.01, rope.max = 0.01,
                              weights = c(0.5, rep(1, length(x))),
                              samples = 30000){
@@ -13,10 +13,13 @@ bayesianSignTest.CMC <- function(x, y = NULL, s = 0.5, z_0 = 0,
       diff <- x
     }
     else if(length(x) != length(y)){
-      cat("X and Y must be of the same length")
+      stop("X and Y must be of the same length")
     }
     else{
       diff <- x - y
+    }
+    if(rope.min > rope.max){
+      stop("rope.min should be smaller than rope.min")
     }
 
     # Creation of the vector with the pseudo-observation
@@ -47,10 +50,10 @@ bayesianSignTest.CMC <- function(x, y = NULL, s = 0.5, z_0 = 0,
     return(list(left = prob[1], rope = prob[2], right = prob[3]))
 }
 
-bayesianSignedRankTest <- function(x, y = NULL, s = 0.5, z_0 = 0,
-                                   rope.min = -0.01, rope.max = 0.01,
-                                   weights = c(0.5, rep(1, length(x))),
-                                   samples = 30000){
+bayesianSignedRank.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
+                                    rope.min = -0.01, rope.max = 0.01,
+                                    weights = c(0.5, rep(1, length(x))),
+                                    samples = 30000){
 
   # Check if the data corresponds with a pair of
   # observations or the difference between observations
@@ -94,4 +97,33 @@ bayesianSignedRankTest <- function(x, y = NULL, s = 0.5, z_0 = 0,
   prob <- apply(winners, 1, mean)
 
   return(list(left = prob[1], rope = prob[2], right = prob[3]))
+}
+
+
+correlatedBayesianT.test <- function(x, y = NULL, rho = ncol(x),
+                                    rope.min = -0.01, rope.max = 0.01){
+  # Check if the data corresponds with a pair of
+  # observations or the difference between observations
+  if(is.null(y)){
+    diff <- x
+  }
+  else if(length(x) != length(y)){
+    stop("X and Y must be of the same length")
+  }
+  else{
+    diff <- x - y
+  }
+  if(rope.min > rope.max){
+    stop("rope.min should be smaller than rope.min")
+  }
+
+  delta <- mean(diff)
+  n <- ncol(diff)*nrow(diff)
+  df <- n-1
+  stdX <- sd(diff)
+  sp <- sd(stdX)*sqrt(1/n + rho/(1-rho))
+  p.left <- pt((rope.min - delta)/sp, df)
+  p.rope <- pt((rope.max - delta)/sp, df) - p.left
+  results <- list('left' = p.left, 'rope' = p.rope, 'right'= 1 - p.left-p.rope)
+  return (results)
 }
