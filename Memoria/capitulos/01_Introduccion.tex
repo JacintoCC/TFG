@@ -1,4 +1,5 @@
 \chapter*{Planteamiento}\addcontentsline{toc}{chapter}{Planteamiento}
+\markboth{Planteamiento}{}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
@@ -238,11 +239,62 @@ en el capítulo~\ref{chapter:experimentos} se realiza un
 caso práctico donde se aplican los test estadísticos
 disponibles y se compara su potencia.
 
+\section*{Principales fuentes utilizadas}
 
+	Las principales fuentes utilizadas han sido los libros de
+Sheskin
+(\cite{sheskin2003handbook}), Japkowicz
+(\cite{DBLP:books/cu/Japkowicz2011})
+y Chakraborti y Gibbons (\cite{DBLP:reference/stat/GibbonsC11}) 
+para el desarrollo matemático
+y la descripción de los test estadísticos paramétricos y
+no paramétricos. Los métodos paramétricos están basados 
+también en los trabajos de Alpaydin (\cite{Alpaydin98combined5},
+\cite{Alpaydin:2010:IML:1734076}) y Ditterich
+ (\cite{dietterich1998approximate}).
+Las metodologías no paramétricas se
+han complementado principalmente con los artículos de 
+Dem\v{s}ar (\cite{DBLP:journals/jmlr/Demsar06}) y 
+García (\cite{garcia2008extension}, 
+\cite{DBLP:journals/isci/GarciaFLH10}). Para los test basados
+en permutaciones se ha utilizado fundamentalmente el 
+libro de Pesarin y Salmaso (\cite{pesarin2010permutation}).
+Los test bayesianos han sido desarrollados usando 
+principalmente el tutorial de Benavoli \textit{et. al} 
+(\cite{DBLP:journals/corr/BenavoliCDZ16}).\\
+	Para la parte de informática, se han utilizado la
+documentación disponible de los paquetes integrados
+(\cite{2015arXiv150104222D}, \cite{scmamp}, 
+\cite{DBLP:conf/icml/BenavoliCMZ15}).
 
+\section*{Objetivos}
 
-
-
+	El primer objetivo planteado fue realizar la 
+recopilación, el estudio bibliográfico y recoger la 
+taxonomía de las técnicas estadísticas que se aplican
+en estudios experimentales en el área del aprendizaje
+automático. La realización de este objetivo se realiza
+en la primera parte de la memoria (\ref{part:informatica}) y
+en la sección dedicada al estudio del estado del arte 
+(\ref{chapter:revision}), incluyendo también entre los
+test descritos algunos relacionados con comparación a
+pesar de no ser estrictamente ésta su finalidad
+como los test de aleatoriedad o los de bondad del 
+ajuste.\\
+	El segundo fue el diseño, desarrollo
+e implementación de una biblioteca que unificase los test
+estadísticos más potentes y utilizados, objetivo 
+realizado basándonos en bibliotecas ya creadas para 
+test específicos y que han sido unificadas en una biblioteca
+de \texttt{R} (\ref{chapter:software}).\\
+	El último objetivo planteado fue la evaluación y el 
+análisis experimental de las diferentes técnicas estadísticas 
+desarrolladas, para lo que se han obtenido datos 
+experimentales del rendimiento de varios algoritmos en 
+múltiples conjuntos de  datos sobre los que se aplican los 
+test descritos e implementados para realizar una comparación 
+acerca de su potencia y la información extraída de ellos
+(\ref{chapter:experimentos}).
 
 
 

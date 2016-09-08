@@ -7,7 +7,6 @@
 \input{portada/portada_2}
 
 
-
 \cleardoublepage
 \thispagestyle{empty}
 
@@ -18,11 +17,6 @@
 	\myName \\
 \end{center}
 
-%\vspace{0.7cm}
-\noindent{\textbf{Palabras clave}: aprendizaje automático,
-	evaluación de algoritmos, test paramétricos, test no 
-	paramétricos, test basados en permutaciones, test 
-	bayesianos, R}\\
 
 \vspace{0.7cm}
 \noindent{\textbf{Resumen}}\\
@@ -45,8 +39,13 @@
 	Este estudio nos permitirá observar las propiedades
 	de cada test y realizar la comparación entre la
 	potencia de cada uno de ellos.
+	
+%\vspace{0.7cm}
+\noindent{\textbf{Palabras clave}: aprendizaje automático,
+	evaluación de algoritmos, test paramétricos, test no 
+	paramétricos, test basados en permutaciones, test 
+	bayesianos, R}\\
 \cleardoublepage
-
 
 \thispagestyle{empty}
 
@@ -57,11 +56,6 @@
 \begin{center}
 	\myName	\\
 \end{center}
-
-%\vspace{0.7cm}
-\noindent{\textbf{Keywords}: Machine learning, algorithms' evaluation, 
-	parametric tests, non parametric tests, permutation tests, 
-	bayesian tests, R}\\
 
 \vspace{0.7cm}
 \noindent{\textbf{Abstract}}\\
@@ -134,8 +128,38 @@ signed-rank test.\\
 	We dedicate the second part of the memory to the 
 experimental study of the comparison between algorithms. The 
 first chapter contains a revision of state of the art 
-statistical techniques applied in recent years as well as 
-most influential articles in the field. 
+statistcal techniques applied in recent years as well as most 
+influential articles in the field.  Ditterich and  Alpaydin 
+were the first authors that proposed a specific method to 
+make comparisons between algorithms in a statistical way and 
+had a great influence on posterior experiments. Among non 
+parametric tests articles, the proposal of Dem\v{s}ar and its 
+extension made by García \textit{et. al} set up the basis for 
+this kind of comparisons. Recently, Benavoli and Corani has 
+proposed Bayesian methods to compare the performance of 
+machine learning algorithms. 
+	The computer tool developed consits in a wrapper of 
+different packages of statistical analysis for \texttt{R}. 
+The main goal of the developed package is using in \texttt{R} 
+the \texttt{Java} package of non parametric tests developed 
+by Derrac \textit{et. al} and it is possible thanks to 
+\texttt{rJava}. Others methods included in the packages come 
+from the \texttt{scmamp} package, which is dedicated to the 
+comparison between multiple algorithms over multiple data 
+sets. Finally, we make an implementation of the Bayesian test 
+described previously based on the work made by Benavoli. 
+	Finally, we present a case of study to illustrate the 
+concepts used in this document, comparing five classical 
+machine learning algorithms for classification problems 
+(logistic regression, $k$-NN, Naive Bayes classifier, neural 
+networks and random forest) over multiple data sets and 
+applying the methods implemented. We include an study of the 
+power of each test. 
+
+%\vspace{0.7cm}
+\noindent{\textbf{Keywords}: Machine learning, algorithms' 
+evaluation, parametric tests, non parametric tests,
+permutation tests, bayesian tests, R}\\
 
 
 
@@ -144,7 +168,7 @@ most influential articles in the field.
 
 \noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
 
-Yo, \textbf{\myName}, alumno de la titulación \myDegree de la \textbf{\myFaculty de la \myUni}, con DNI 32056356, autorizo la
+Yo, \textbf{\myName}, alumno de la titulación \myDegree de la \textbf{\myFaculty de la \myUni}, con DNI 32056356-Z, autorizo la
 ubicación de la siguiente copia de mi Trabajo Fin de Grado en la biblioteca de ambos centros para que pueda ser
 consultada por las personas que lo deseen.
 
@@ -183,7 +207,7 @@ que corresponda.
 
 \vspace{0.5cm}
 
-Y para que conste, expiden y firman el presente informe en Granada a X de septiembre de 2016.
+Y para que conste, expiden y firman el presente informe en Granada a 9 de septiembre de 2016.
 
 \vspace{1cm}
 
@@ -191,7 +215,7 @@ Y para que conste, expiden y firman el presente informe en Granada a X de septie
 
 \vspace{5cm}
 
-\noindent \textbf{\myProf \ \ \ \ \ \myOtherProf}
+\noindent \textbf{\myProf \ \ \ \ \ \ \myOtherProf}
 
 \chapter*{Agradecimientos}
 \thispagestyle{empty}

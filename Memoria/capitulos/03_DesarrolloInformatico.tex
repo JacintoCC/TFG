@@ -502,8 +502,58 @@ signo y el test de Wilcoxon.
 
 \subsection*{scmamp} 
 
-	
-	
+	Este paquete de \texttt{R} desarrollado por Calvo y 
+Santafe (\cite{scmamp}) implementa test estadísticos para
+la comparación de múltiples algoritmos en distintos 
+problemas. Podemos encontrar los siguientes tipos de 
+funciones en este paquete:
+
+\begin{description}
+	\item[Test para la comparación de múltiples algoritmos:]
+		Disponemos del test paramétrico ANOVA y de test
+		no paramétricos como el contraste basado en
+		medianas, el test de Friedman, el de rangos alineados
+		de Friedman o el test de Quade. Cada uno de ellos
+		tiene un método adicional para efectuar el test
+		 \textit{post hoc} asociado.
+	\item[Ajuste de $p$-valores] Se incluyen los métodos
+		para ajustar los $p$-valores descritos por García en
+		\cite{garcia2008extension} y 
+		\cite{DBLP:journals/isci/GarciaFLH10}:
+		Bergmann-Hommel, Finner, Holland, Li, Rom y Shaffer.
+		Se incluye una función para obtener los $p$-valores
+		de las comparaciones que deseemos realizar entre
+		algoritmos.
+	\item[Conjuntos de datos] utilizados en distintos
+		artículos sobre los que se realizan los experimentos. 
+	\item[Métodos auxiliares y creación de gráficos] La
+		representación de los resultados se facilita 
+		con las funciones incluidas en el paquete.
+\end{description}
+
+	Junto con el paquete viene un tutorial para saber cómo
+se manejan las funciones y cómo utilizar el paquete para
+la comparación del rendimiento de algoritmos.
+
+\subsection*{BayesianML-tutorial}
+
+	Por último, presentamos los test bayesianos implementados
+por Benavoli (\cite{DBLP:journals/corr/BenavoliCDZ16}) y 
+disponibles en el repositorio \fnurl{\texttt{tutorial}}
+{https://github.com/BayesianTestsML/tutorial/}. 
+En este repositorio se encuentra la implementación en 
+\texttt{R} para las versiones bayesianas de los test 
+estadísticos presentados en este artículo, es decir, 
+el test de Wilcoxon de rangos con signo, el test de signo
+y el $t$-test correlado bayesiano. Se incluye también el
+test jerárquico para la comparación sobre varios conjuntos
+de datos descrito por Corani \textit{et. al} en \cite{coranistatistical}. 
+El código para este método se ha realizado
+en \texttt{R} y \texttt{Stan}, un lenguaje para inferencia
+bayesiana. Para ilustrar la comparación, en el repositorio se 
+incluye una serie de \textit{Notebooks} escritos en el
+lenguaje \texttt{Julia} que representan un tutorial sobre
+qué se puede hacer con estos métodos. 
 	
 	 
 \section{R}
@@ -554,7 +604,7 @@ Se han utilizado los valores por defecto $k=1$, $l=0$.      \\
 \label{tab:DS}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-Conjunto de datos & Núm. de atributos & Núm. de clases & Núm. de instancias \\ \midrule
+Conjunto de datos & N$\degree$ de atributos & N$\degree$ de clases & N$\degree$ de instancias \\ \midrule
 abalone           & 8                   & 28               & 4174                 \\
 australian        & 14                  & 2                & 690                  \\
 automobile        & 25                  & 6                & 205                  \\

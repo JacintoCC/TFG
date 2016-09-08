@@ -1,8 +1,3 @@
-locate.max <- function(x){
-  vec <- sapply(x, function(y){y == max(x)})
-  return(vec/sum(vec))
-}
-
 bayesianSign.CMC.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
                              rope.min = -0.01, rope.max = 0.01,
                              weights = c(0.5, rep(1, length(x))),
