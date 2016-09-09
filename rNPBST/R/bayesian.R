@@ -1,7 +1,7 @@
-bayesianSign.CMC.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
+bayesianSign.test <- function(x, y = NULL, s = 1, z_0 = 0,
                              rope.min = -0.01, rope.max = 0.01,
                              weights = c(0.5, rep(1, length(x))),
-                             samples = 30000){
+                             n.samples = 100000){
     # Check if the data corresponds with a pair of
     # observations or the difference between observations
     if(is.null(y)){
@@ -17,32 +17,39 @@ bayesianSign.CMC.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
       stop("rope.min should be smaller than rope.min")
     }
 
-    # Creation of the vector with the pseudo-observation
-    diff <- c(z_0, diff)
-    num.elements <- length(diff)
+    n.diff <- length(diff)
 
-    # Generate the sampled weights
-    sampled.weights <- rdirichlet(samples, weights)
+    if(rope.min != rope.max){
+      # Belonging to an interval
+      belongs.left <- diff < rope.min
+      belongs.rope <- diff > rope.min & diff < rope.max
+      belongs.right <- diff > rope.max
 
-    # Belonging of an interval
-    belongs.left <- diff < rope.min
-    belongs.rope <- diff > rope.min & diff < rope.max
-    belongs.right <- diff > rope.max
+      # Compute counts
+      n.left  <- sum(belongs.left)
+      n.rope  <- sum(belongs.rope)
+      n.right <- sum(belongs.right)
 
-    # Selects the max according to sampled weights
-    #   In case of a tie, the score is divided
-    winners <- apply(sampled.weights, 1,
-                     function(x){
-                       locate.max(c(x %*% belongs.left,
-                                    x %*% belongs.rope,
-                                    x %*% belongs.right))
-                                }
-                    )
+      # Generate a random sample from Dirichlet distribution
+      weights <- c(n.left+s/3, n.rope+s/3, n.right+s/3)
+    }
+    else{
+      n.left  <- sum(diff < rope.min)
+      n.right  <- n.diff - n.left
 
-    # Compute of the probabilities
-    prob <- apply(winners, 1, mean)
+      if(n.left > n.right)
+        weights <- c(n.left+s, n.right)
+      else if(n.left < n.right)
+        weights <- c(n.left, n.right + s)
+      else
+        weights <- c(n.left + s/2, n.right + s/2)
+    }
 
-    return(list(left = prob[1], rope = prob[2], right = prob[3]))
+    sample <- rdirichlet(n.samples, weights)
+    probabilities <- c(n.left, n.diff - n.left - n.right, n.right)/n.diff
+
+    return(list(probabilities = probabilities,
+                sample = sample))
 }
 
 bayesianSignedRank.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
@@ -79,19 +86,23 @@ bayesianSignedRank.test <- function(x, y = NULL, s = 0.5, z_0 = 0,
 
   # Selects the max according to sampled weights
   #   In case of a tie, the score is divided
-  winners <- apply(sampled.weights, 1,
+  sample <- apply(sampled.weights, 1,
                    function(x){
+                     # Getting the coefficients
                      matrix.prod <- sapply(x, FUN = function(y) x*y)
-                     locate.max(c(sum(matrix.prod * belongs.left),
-                                  sum(matrix.prod * belongs.rope),
-                                  sum(matrix.prod * belongs.right)))
-                              }
+                     c(sum(matrix.prod * belongs.left),
+                       sum(matrix.prod * belongs.rope),
+                       sum(matrix.prod * belongs.right))
+                    }
                   )
 
-  # Compute of the probabilities
-  prob <- apply(winners, 1, mean)
+  winners <- apply(sample, 1, locate.max)
 
-  return(list(left = prob[1], rope = prob[2], right = prob[3]))
+  # Compute of the probabilities
+  probabilities <- apply(winners, 1, mean)
+  names(probabilities) <- c("left", "rope", "right")
+
+  return(list(probabilities, sample))
 }
 
 

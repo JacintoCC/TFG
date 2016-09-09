@@ -63,16 +63,18 @@
 	In recent years the interest in machine learning has 
 meant an increasing amount in the proposed machine learning 
 algorithms. Nevertheless, these new algorithms need to be 
-tested and the properties and results must be proved, so in 
-order to achieve this objective statistical tests are the 
-best approach.\\
+tested and the properties and results claimed by the 
+algorithms’ authors must be proved, so in order to achieve 
+this objective statistical tests are the best and the most 
+common approach.\\
 	In this project, we present a set of tests commonly used 
-in this problem, with a practical case of study analysing the 
-power of each test. \\
+in this problem, a computer tool that gathers different 
+packages to make all tests described and a practical case of 
+study analysing the power of each test. \\
 	In the first part of this memory, we present the 
 mathematical base of the statistical tests. This part 
 contains an introduction about measuring the algorithms’ 
-performance and the ways to obtein a reliable measure of this 
+performance and the ways to obtain a reliable measure of this 
 performance. The tests presented are classified in three 
 categories: parametric, non-parametric and Bayesian tests. In 
 each categorie we include tests with different goals: 
@@ -86,68 +88,75 @@ parametric tests, which are rarely given. \\
 	We describe these faults and present the non parametric 
 tests, which do not need these strict conditions about the 
 population like normality or homocedasticity but relaxed 
-conditions like the symmetry of the population. Non 
-parametric test are usually less powerful than parametric one 
-due to in non parametric test we have less information about 
-the underlying population of the data, but this lack of power 
-is compensated with the lack of precision in the parametric 
-tests when the number of data is low or the conditions are 
-not satisfied. The test presented in the non parametric 
-chapter allows us to obtain some valuable information as the 
-randomness of a sample or the goodness of fit of the data to 
-a given population, which are conditions to use the previous 
+conditions like the symmetry or the continuity of the 
+population. Non parametric test are usually less powerful 
+than parametric one due to in non parametric test we have 
+less information about the underlying population of the data, 
+but this lack of power is compensated with the lack of 
+precision in the parametric tests when the number of data is 
+low or the conditions are not satisfied. The tests presented 
+in the non parametric chapter allows us to obtain some 
+valuable information as the randomness of a sample (with  the 
+number of runs tests) or the goodness of fit of the data to a 
+given population (with the chi-square test, Kolmogorov-
+Smirnov test...), which are conditions to use the previous 
 parametric tests. Moreover, non parametric tests as Wilcoxon 
-Signed-ranks for comparing two algorithms or Friedman test 
-for multiple algorithms over multiple data sets are presented 
-in this chapter with some improvements like Iman-Davenport 
-test or Quade test, which takes account of the different 
-difficulties of the data sets. Once the null hypothesis of an 
-equal performance of all algorithms in the study is rejected, 
-we need a post-hoc method to find where is the difference 
-between algorithms, so we introduce some procedures, like 
-Finner’s, Hommel’s or Li’s procedures. As a special case of 
-non parametric tests, we include a general description of the 
+signed-ranks test for comparing two algorithms or Friedman 
+test for multiple algorithms over multiple data sets are 
+presented in this chapter with some improvements like Iman-
+Davenport test or Quade test, which takes account of the 
+different difficulties of the data sets. Once the null 
+hypothesis of an equal performance of all algorithms in the 
+study is rejected, we need a post-hoc method to find where is 
+the difference between algorithms and adjusting the $p$-
+value, so we introduce some procedures, like Finner’s, 
+Hommel’s or Li’s procedures. As a special case of non 
+parametric tests, we include a general description of the 
 base of permutation tests, which start with a sample of two 
 populations and collect information against the null 
-hypothesis making permutations of the sample.\\ 
+hypothesis making permutations of the sample. \\
 	As a complete different approach of the comparison, we 
 present Bayesian tests. Null hypothesis tests present some 
 problems mainly related with the understanding of what 
 information they give. More frequently that it should 
-happens, researchers thinks that the p-value given by a null 
-hypothesis test corresponds to the probability, given a 
+happens, researchers thinks that the $p$-value given by a 
+null hypothesis test corresponds to the probability, given a 
 sample, that the null hypothesis is true instead of the 
 actual meaning, that is the probability, assuming the null 
 hypothesis is true, of obtaining a sample as extreme or more 
 than our sample. The wanted statement is not achieved with 
 frequentist statistical methods but Bayesian ones, so we 
 present a series of differences between null hypothesis tests 
-and Bayesians tests. Moreover, we present a Bayesian version 
-of frequentist tests as t-test, sign test and Wilcoxon 
-signed-rank test.\\
+and Bayesians tests. Other desirable property is that 
+decision based on Bayesian tests is not dichotomic as in the 
+frequentist ones, but we obtain a distribution of the 
+parameters of the underlying population. The tests presented 
+are a Bayesian version of frequentist tests as t-test, sign 
+test and Wilcoxon signed-rank test.\\
 	We dedicate the second part of the memory to the 
-experimental study of the comparison between algorithms. The 
-first chapter contains a revision of state of the art 
-statistcal techniques applied in recent years as well as most 
-influential articles in the field.  Ditterich and  Alpaydin 
-were the first authors that proposed a specific method to 
-make comparisons between algorithms in a statistical way and 
-had a great influence on posterior experiments. Among non 
-parametric tests articles, the proposal of Dem\v{s}ar and its 
-extension made by García \textit{et. al} set up the basis for 
-this kind of comparisons. Recently, Benavoli and Corani has 
-proposed Bayesian methods to compare the performance of 
-machine learning algorithms. 
-	The computer tool developed consits in a wrapper of 
-different packages of statistical analysis for \texttt{R}. 
-The main goal of the developed package is using in \texttt{R} 
-the \texttt{Java} package of non parametric tests developed 
-by Derrac \textit{et. al} and it is possible thanks to 
+experimental study of the comparison between algorithms. 
+The first chapter contains a revision of state of the art 
+statistical techniques applied in recent years as well as 
+most influential articles in the field of machine learning.  
+Ditterich and  Alpaydin were the first authors that proposed 
+a specific method to make comparisons between algorithms in a 
+statistical way and had a great influence on posterior 
+experiments. Among non parametric tests articles, the 
+proposal of Dem\v{s}ar and its extension made by García 
+\textit{et. al} set up the basis for this kind of 
+comparisons. More recently, authors like Benavoli and Corani 
+has proposed Bayesian methods to compare the performance of 
+machine learning algorithms. \\
+	The computer tool developed consists in a wrapper for 
+\texttt{R} of different packages of statistical analysis. The 
+main goal of the developed package is using in \texttt{R} the 
+\texttt{Java} package of non parametric tests developed by 
+Derrac \textit{et. al} and it is possible thanks to 
 \texttt{rJava}. Others methods included in the packages come 
 from the \texttt{scmamp} package, which is dedicated to the 
 comparison between multiple algorithms over multiple data 
 sets. Finally, we make an implementation of the Bayesian test 
-described previously based on the work made by Benavoli. 
+previously described based on the work made by Benavoli. \\
 	Finally, we present a case of study to illustrate the 
 concepts used in this document, comparing five classical 
 machine learning algorithms for classification problems 

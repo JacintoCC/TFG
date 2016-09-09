@@ -1,5 +1,6 @@
 import("rJava")
 import("MCMCpack")
+import("ggtern")
 
 export("dataTable")
 export("fillSequence")
@@ -52,6 +53,7 @@ export("ad.test")
 export("waldWolfowitz.test")
 
 export("locate.max")
-export("bayesianSign.CMC.test")
+export("bayesianSign.test")
 export("bayesianSignedRank.test")
 export("correlatedBayesianT.test")
+export("drawSimplex")
