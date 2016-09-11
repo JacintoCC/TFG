@@ -24,20 +24,6 @@ dataTable <- function(matrix){
   return(table)
 }
 
-#' @title Fill a sequence with an array
-#'
-#' @export
-#' @description Function to fill a sequece
-#' @param array Array with the data to fill the sequence up
-#' @return Java sequece object
-fillSequence <- function(sequece, array){
-  for( s in array ){
-    .jcall(sequence, "V", "append", s)
-  }
-
-  return(sequence)
-}
-
 #' @title Create a string sequence
 #'
 #' @export
@@ -45,8 +31,12 @@ fillSequence <- function(sequece, array){
 #' @param array Array with the data to fill the sequence up
 #' @return Java String sequece object
 stringSequence <- function(array){
-  sequence <- j.new("javanpst.data.structures.sequence.StringSequence")
-  fillSequence(sequence, array)
+  sequence <- .jnew("javanpst.data.structures.sequence.StringSequence")
+
+  for( s in array ){
+    o <- .jnew("java.lang.String", s)
+    .jcall(sequence, "V", "append", .jcast(o))
+  }
 
   return(sequence)
 }
@@ -58,8 +48,11 @@ stringSequence <- function(array){
 #' @param array Array with the data to fill the sequence up
 #' @return Java String sequece object
 numericSequence <- function(array){
-  sequence <- j.new("javanpst.data.structures.sequence.NumericSequence")
-  fillSequence(sequence, array)
+  sequence <- .jnew("javanpst.data.structures.sequence.NumericSequence")
+  for( s in array ){
+    o <- .jnew("java.lang.Double", s)
+    .jcall(sequence, "V", "append", .jcast(o))
+  }
 
   return(sequence)
 }

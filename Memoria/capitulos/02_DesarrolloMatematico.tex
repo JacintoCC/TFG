@@ -105,7 +105,7 @@ de $\hat{\theta}_n$:
 	\item \textit{Consistencia}
 		\[ 
 			\lim_{n \rightarrow \infty} 
-				P(|\bar{\theta}_n - \theta| < \varepsilon) =
+				P(|\hat{\theta}_n - \theta| < \varepsilon) =
 				 0 \quad 
 				 \forall \varepsilon > 0 
 		\]
@@ -113,8 +113,8 @@ de $\hat{\theta}_n$:
 		\item Si $\hat{\theta}_n$ es un estimador insesgado 
 			de $\theta$ y $\underset{n \rightarrow \infty}
 			{\lim} \var(\hat{\theta}_n) = 0$, entonces $
-			\hat{\theta}_n$ es un estimador consistente por l
-			a desigualdad de Chebyshev.
+			\hat{\theta}_n$ es un estimador consistente por la 
+			desigualdad de Chebyshev.
 		\item $\hat{\theta}_n$ es un estimador consistente de 
 			$\theta$ si la distribución límite es la 
 			distribución degenerada con probabilidad $1$ en 
@@ -143,7 +143,7 @@ muestras tomadas como función de $\theta$. Esto es:
 	Un \textbf{estimador máximo verosímil} (MLE) de $\theta$ 
 es un valor $\bar{\theta}$ tal que 
 	\[ 
-		L(x_1, \dots, x_n; \bar{\theta}) \geq 
+		L(x_1, \dots, x_n; \hat{\theta}) \geq 
 			L(x_1, \dots, x_n; \theta) \; \forall \theta 	
 	\]
 	
@@ -212,7 +212,7 @@ especialmente relevante en los test no paramétricos.
 	
 \begin{definicion}[$p$-valor]
 	Probabilidad de obtener, siendo cierta la hipótesis nula 
-$H_0$, una muestra aleatoria tan extraña como la muestra
+$H_0$, una muestra aleatoria tan extrema como la muestra
 aleatoria observada.
 \end{definicion}
 
@@ -358,7 +358,7 @@ según el coste relativo de cada tipo de fallo. Se
 puede considerar que en las medidas anteriores se ha usado 
 la función de pérdida 
 $\mathcal{L}(x,y) = 1 - \delta_{x,y} $, donde $x$ es la clase 
-asignada e $y$ la clase real.
+real e $y$ la clase asignada.
 	
 \subsubsection*{Medidas de interpretabilidad} 
 	En algunos modelos y clasificadores se obtienen reglas 
@@ -517,7 +517,7 @@ número de conjuntos de entrenamiento y validación del
 conjunto de datos disponible. Si el conjunto es 
 suficientemente grande, podemos dividir aleatoriamente el 
 conjunto en $K$ partes, y de cada parte seleccionar la mitad 
-para entrenamiento y la otra mitad para test. $K$ suele ser 
+para entrenamiento y la otra mitad para contrastar. $K$ suele ser 
 10 ó 30. Sin embargo, los conjuntos de datos no suelen ser 
 tan grandes. Por tanto, lo que habitualmente se realiza es 
 utilizar varias veces los mismos datos pero de formas 
@@ -1017,7 +1017,10 @@ $R$, $f_Z(z)$. Entonces aplicamos la fórmula de Stirling y el
 límite queda de la forma
 	\[ \underset{n \rightarrow \infty}{\lim} \log f_Z(z)=
 			-\log \sqrt{2\pi} - \frac{1}{2} z^2,	\]
-	con lo que la distribución límite de $Z$ es la normal. 
+	con lo que la distribución límite de $Z$ es la normal. Por
+ejemplo, si $z_{\alpha/2}$ es el valor límite de la distribución
+normal siendo $\alpha$ el nivel de significación, rechazaremos
+la hipótesis nula si $\abs{Z} \geq z_{\alpha/2}$.
 	
 	
 \subsubsection{Test basado en rachas crecientes y decrecientes}	
@@ -1231,7 +1234,8 @@ nos queda
 	   \epsilon''	
 	\end{align*}	 
 	
-	Por la ley de los grandes números, $F_i/n$ es un 
+	Por la ley de los grandes números, $F_i/n$, 
+para $F_i$ la frecuencia de las clases, es un 
 estimador consistente de $\theta_i$, es decir
 	
 	\[ \lim_{n \rightarrow \infty} \left[
@@ -1504,7 +1508,7 @@ Definimos
 					 Z_i r(|D_i|) - \frac{N(N+1)}{2} \]
 	
 	Bajo la hipótesis nula, $Z_i$ sigue una distribución de 
-Bernouilli con $E(Z_i) = 1/2$ y $\var(Z_i) = 1/4$. Usando que 
+Bernouilli con $\mathbb{E}(Z_i) = 1/2$ y $\var(Z_i) = 1/4$. Usando que 
 $T^+$ es una combinación lineal de las variables $Z_i$, 
 tenemos
 	\[ \mathbb{E}[ T^+ | H_0 ] = \sum\limits_{i=1}^n 
@@ -1666,8 +1670,8 @@ de $U$, que se derivan de:
 	Además, dado que las observaciones en las diferentes 
 filas son independientes, para $i \neq p$, se tiene
 $\cov(R_{ij},R_{pq})=0$. Entonces
-	\[ E(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0, \] 
-	con lo que $\var(U) = kE(U^2)$, con
+	\[ \mathbb{E}(U) = k {n \choose 2} \cov(R_{ij},R_{pq})=0, \] 
+	con lo que $\var(U) = k\mathbb{E}(U^2)$, con
 	\begin{align*}
 		U^2 =& \sum\limits_{j=1}^k
 				\sum\limits_{1 \leq i < p \leq n}
@@ -1916,7 +1920,7 @@ problema.\\
 	Notemos además que $\mathbf{x}$ es un conjunto de 
 estadísticos suficientes para cualquier distribución en 
 $H_0$. Esto se debe a que, si $H_0$ es cierto, sea $f_P$ la 
-densidad de $P$, $f_P^{(n)}(x)$ la densidad de la variable 
+densidad de $P$, $f_P^{(n)}(x)$ es la densidad de la variable 
 $X^{(n)}$. Como $f_P^{(n)}(\mathbf{x}) = f_P^{(n)}(\mathbf{x}) 
 \cdot 1$ para todo $\mathbf{x} \in \Omega^n$, excepto para 
 $f_P^{(n)}(\mathbf{x}) = 0$ debido al teorema de 
@@ -2026,7 +2030,7 @@ permutación $\mathbf{X}^*$,
 					[ X(u_i^*), i = 1, \dots, n ]
 			\right\rbrace ,
 	\]
-	con $\mathbf{u}^*$ cualquier permutación de las etiquetas 
+con $\mathbf{u}^*$ cualquier permutación de las etiquetas 
 $(1, \dots, n)$.
 
 \paragraph{Definicion de los test basados en permutaciones}
@@ -2198,7 +2202,7 @@ un vector genérico $\mathbf{D}$, notamos $\bar{D} =
 \frac{\sum\limits_{i=1}^n D_i}{n}$, $\mu_r(\mathbf{D}) = 
 \frac{\sum\limits_{i=1}^n (D_i - \bar{D})^r}{n}$, 
 $W_r(\mathbf{D}) = \frac{\sum\limits_{i=1}^n 
-|D_i - \bar{D}|^r}{n}$, $R(\mathbb{D}) = 
+|D_i - \bar{D}|^r}{n}$, $R(\mathbf{D}) = 
 \underset{1 \leq i \leq n}{\max} D_i - 
 \underset{1 \leq i \leq n}{\min} D_i$.\\
 
@@ -2213,7 +2217,7 @@ $W_r(\mathbf{D}) = \frac{\sum\limits_{i=1}^n
 		(T(\mathbf{X}^*) - n\bar{X}\bar{A})^2 | 
 			\Omega_{/\mathbf{X}}
 		\right] &=
-		\frac{[n^2 \mu_2{\mathbf{X}} \mu_2{\mathbf{A}}]^2}
+		\frac{[n^2 \mu_2(\mathbf{X}) \mu_2(\mathbf{A})]^2}
 			{n-1}.
 \end{align*}
 
@@ -2254,7 +2258,7 @@ Entonces para $n \rightarrow \infty$,
 la estadística bayesiana y test basados en esta estadística
 para su aplicación en la comparación de algoritmos de
 aprendizaje automático.\\
-	Según A. Gelman (\cite{Gelman03-105949}), la inferencia 
+	Según Gelman (\cite{Gelman03-105949}), la inferencia 
 bayesiana es el proceso de ajustar un modelo de probabilidad 
 a un conjunto de datos y resumir el resultado  mediante una 
 distribución de probabilidad sobre los  parámetros del modelo 
@@ -2482,13 +2486,13 @@ siguen una distribución de Dirichlet. Para el análisis
 experimental procedemos de la siguiente manera. Calculamos:
 
 \begin{align*}
-	\theta_l = P[ z < -r ] = 
+	\theta_l &= P[ z < -r ] = 
 				\sum\limits_{i = 0}^q 
 					w_i \mathbb{I}[ z_i \in (-\infty,-r)],\\
-	\theta_e = P[ |z| \leq -r ] = 
+	\theta_e &= P[ |z| \leq r ] = 
 				\sum\limits_{i = 0}^q 
 					w_i \mathbb{I}[ z_i \in [-r,r]], \\
-	\theta_r = P[ z > r ] = 
+	\theta_r &= P[ z > r ] = 
 				\sum\limits_{i = 0}^q 
 					w_i \mathbb{I}[ z_i \in (r, \infty)].
 \end{align*}
@@ -2519,7 +2523,7 @@ priori} de la fuerza $s$ y la observación $z_0$.\\
 					w_i w_j 
 					\mathbb{I}[ z_i + z_j 
 								\in (-\infty,-2r)],\\
-	\theta_e &= P[ |z| \leq -r ] = 
+	\theta_e &= P[ |z| \leq r ] = 
 				\sum\limits_{i = 0}^q 
 				\sum\limits_{j = 0}^q 
 					w_i w_j 
