@@ -1,11 +1,27 @@
 \part{Desarrollo informático}
 \label{part:informatica}
 
-\chapter{Revisión del estado del arte en la aplicación de test estadísticos}
+\chapter{Revisión del estado del arte}
 \label{chapter:revision}
+
 \section{Test paramétricos}
 
-\subsection{5x2 CV $t$-test}
+\paragraph{Problemas a evitar y enfoque recomendado} 
+\cite{Salzberg1997} Este es uno de los primeros artículos 
+que hace una serie de recomendaciones para la realización
+de experimentos en el ámbito de la comparación 
+de algoritmos de aprendizaje automático. Se incluyen 
+también varias consideraciones sobre los problemas y
+prácticas incorrectas al realizar estos experimentos. Los
+test propuestos para la comparación son el test de McNemar, 
+el $t$-test y el test ANOVA para múltiples algoritmos. Para
+la realización de varios experimentos independientes 
+se propone el ajuste de Bonferroni del nivel de significación
+$\alpha$, que necesita que los experimentos sean
+independientes.
+
+
+\subsection*{5$\times$2 CV $t$-test}
 	
 	En la introducción (\ref{sec:CV}), se describe el 
 proceso de validación cruzada, especialmente útil cuando se
@@ -36,9 +52,49 @@ su suma $M = \frac{\sum\limits_{i=1}^5 s_i^2}{\sigma^2}
 		\sim t_5.
 \end{equation}
 
-\paragraph{Modificación} Nótese que en la 
+
+\paragraph{Comparación de algoritmos de clasificación} 
+\cite{dietterich1998approximate}
+En este artículo se estudia la comparación de algoritmos
+aplicados a un único problema cuando disponemos de pocos
+datos. Para el diseño y la evaluación de test estadísticos
+se identifican las principales fuentes de 
+variabilidad de los experimentos, como son los 
+datos utilizados, la posible aleatoriedad de los 
+propios algoritmos de aprendizaje y los posibles errores en
+los datos disponibles. Se proponen los test de McNemar, un
+test basado en él, usando el estadístico
+	\[
+		z = \frac{c_{01}-c_{10}}{\sqrt{2p(1-p)}}
+	\]
+	con $p$ el error medio de los dos clasificadores $\left(
+p = \frac{2c_{00}+c_{01}+c_{10}}{2N}\right)$, que sigue
+aproximadamente una distribución normal. Además,
+se proponen las modificaciones del $t$-test con repetidas
+muestras apareadas, el $t$-test pareado con validación
+cruzada sobre$k$-\textit{fold} o el 5$\times$2 CV $t$-test.\\
+	El experimento realizado consiste en, fijado un error 
+$\varepsilon$, se le asigna a la mitad de los puntos
+de un conjunto una probabilidad $\frac{\varepsilon}{2}$
+de ser erróneamente clasificados
+y a la otra mitad de los puntos la probabilidad
+$\frac{3\varepsilon}{2}$ para uno de los algoritmos a
+comparar. Para el otro algoritmo asignamos a la primera
+mitad la probabilidad $\frac{3\varepsilon}{2}$ y a la
+segunda mitad la probabilidad de fallar 
+$\frac{\varepsilon}{2}$. Por tanto no deberíamos
+rechazar la hipótesis nula, con lo que se realizan estos
+experimentos para calcular el error de tipo I
+para cada test. Se observa con la utilización de estos
+datos generados sintéticamente que el error de tipo I más
+elevado es para el $t$-test con repetidas
+muestras apareadas.
+
+
+\paragraph{Modificación sobre el 5$\times$2 CV $t$-test} Nótese que en la 
 ecuación~\ref{eq:5x2CVt} el valor $d_1^{(1)}$ podría ser
-ocupado por cualquier estadístico $d_i^{(j)}$. Alpaydin (\cite{Alpaydin98combined5})
+ocupado por cualquier estadístico $d_i^{(j)}$. Alpaydin 
+(\cite{Alpaydin98combined5})
 propuso combinar estos valores de la forma:
 	\[
 		N = \frac{\sum\limits_{i=1}^5
@@ -54,8 +110,7 @@ una distribución $F$ de Snedecor con 10 y 5 grados de
 libertad:
 	\[ 
 		f = \frac{N/10}{M/5} \sim F_{10,5}.
-	\]
-	
+	\]	
 	
 \section{Test no paramétricos}
  
@@ -553,7 +608,7 @@ de datos descrito por Corani \textit{et. al} en \cite{coranistatistical}.
 El código para este método se ha realizado
 en \texttt{R} y \texttt{Stan}, un lenguaje para inferencia
 bayesiana. Para ilustrar la comparación, en el repositorio
-se encuentran disponibles los tests en el lenguaje Julia 
+se encuentran disponibles los tests en el lenguaje \texttt{Julia} 
 y una serie de \textit{Notebooks} 
 de este lenguaje para ilustrar su uso, acompañándolo
 con gráficas de la distribución \textit{a posteriori}
@@ -563,7 +618,117 @@ de la media de las diferencias.
 \section{rNPBST}
 
 	En esta sección se describirá la herramienta software
-desarrollada, sus características.
+desarrollada. El objetivo inicial planteado consistía en
+la integración en un paquete de los test estadísticos
+más utilizados para la comparación de algoritmos. Para
+esta labor, partimos de los paquetes descritos.
+
+\subsection*{JavaNPST}
+
+	La integración del paquete \texttt{JavaNPST} en
+\texttt{R} se ha realizado usando \texttt{rJava}.\\
+Para ello, en primer lugar se definen en \texttt{R} los 
+métodos necesarios para pasar de los tipos de datos 
+habituales como las matrices y los vectores a las estructuras 
+usadas en el paquete  \texttt{JavaNPST}: \texttt{dataTable}, 
+que son el equivalente a las matrices, y la clase abstracta 
+\texttt{Sequence}  de la que heredan las clases 
+\texttt{NumericSequence} y \texttt{StringSequence}, que se 
+corresponden con vectores, bien de números o bien de cadenas 
+de caracteres.\\
+	Los test disponibles en el paquete \texttt{JavaNPST} 
+se corresponden con una clase de la cual se crea un 
+objeto y se le proporcionan unos datos, entonces realizamos
+el test y el objeto creado nos devuelve una serie de valores.
+Estos valores se corresponden con los estadísticos utilizados
+en la realización del test o los $p$-valores devueltos.
+La forma de llevar esto a \texttt{R} ha sido mediante
+una función para cada test, donde se crea un objeto
+de la clase correspondiente con los datos (bien una matriz
+o una secuencia), se ejecuta el test, obteniendo el informe
+generado por el paquete utilizado y finalmente se obtienen 
+los estadísticos utilizados en el test y los $p$-valores
+disponibles (según el test tendremos un $p$-valor o 
+varios según las hipótesis alternativas). Estos dos últimos
+datos, los estadísticos y los $p$-valores los introducimos
+en un objeto de la clase de \texttt{R} \texttt{htest},
+que frecuentemente se usa para guardar los resultados de un
+test estadístico.
+
+\subsection*{BayesianML-tutorial}
+
+	Como se ha descrito, en este repositorio están
+implementados los test bayesianos en \texttt{R}
+y en \texttt{Julia}, sin embargo, la información
+que devuelven es distinta: en la versión en \texttt{R}
+únicamente se devuelve la probabilidad \textit{a
+posteriori} de la pertenencia del parámetro 
+$\theta$ la diferencia entre los clasificadores
+a la región izquierda, a la \textit{rope} o a la
+región derecha; mientras que en la versión en
+\texttt{Julia} se devuelven una muestra de 
+la distribución de Dirichlet \textit{a posteriori},
+que facilita la representación gráfica.\\
+Por tanto, se ha descartado la opción de 
+llamar a estas funciones desde nuestro paquete
+(si quisiéramos una representación gráfica
+y la probabilidad de pertenencia estaríamos
+realizando dos veces el test) y optamos por
+escribir nuestra propia función para el
+test bayesiano de signo, el test bayesiano de 
+rangos con signos y la versión bayesiana 
+de $t$-test correlados. Además, se ha observado 						%TODO Revisar
+un tiempo de ejecución excesivo utilizando
+el test bayesiano de rangos con signos (en torno
+a dos minutos) en la versión del repositorio
+frente a la versión implementada (unos cinco
+segundos). Sin entrar en la implementación, se 
+describe a continuación el algoritmo utilizado:
+
+\begin{algorithm}[H]
+	\caption{Test bayesiano de rangos con signo}
+	\label{alg:TBRS}
+	\begin{algorithmic}[1]
+	\REQUIRE $x, y$, vectores de observaciones.
+	\REQUIRE $s, z_0, weights$, parámetros \textit{a priori}.
+	\REQUIRE $rope_{min}, rope_{max}$, extremos de la \textit{rope}
+	\REQUIRE $n_{samples}$ Número de muestras a obtener de
+		la distribución de los parámetros.
+	\STATE $d \leftarrow$ Diferencia entre los vectores 
+		de observaciones 
+	\STATE $pesos \leftarrow$ muestra aleatoria de 
+		la distribución de Dirichlet de tamaño $n_{samples}$.
+	\STATE $b_l, b_{rope}, b_r \leftarrow$ vector binario con
+		la pertenencia o no de cada elemento de $d$ a la 
+		región izquierda, a la \textit{rope} y a la derecha.
+	\FOR {$i \in [1, n_{samples}]$}
+		\STATE $coef \leftarrow pesos_i^T pesos_i$
+		\STATE $muestra_i \leftarrow$
+			$(coef \cdot b_l, coef \cdot b_{rope}, 
+			coef \cdot b_r)$,  
+	\ENDFOR
+	\STATE $probabilidades_{a\ posteriori} \leftarrow $
+		Media del número de veces que el máximo de la fila 
+		está en cada columna.
+	\RETURN $muestra, probabilidades_{a\ posteriori}$
+	\end{algorithmic}
+\end{algorithm} 
+
+
+Para la representación gráfica se ha utilizado
+la representación que vemos en el artículo
+de Benavoli (\cite{DBLP:journals/corr/BenavoliCDZ16}),
+\texttt{R} utilizando el paquete \texttt{ggtern} (\cite{ggtern})
+para la representación de ternas. Estos gráficos
+muestran la nube de puntos obtenida de realizar
+una muestra aleatoria de una distribución
+de Dirichlet con los parámetros obtenidos.
+El centro del triángulo representa el punto
+$\left( \frac{1}{3}, \frac{1}{3}, \frac{1}{3} \right)$
+es decir, hay una igual probabilidad para que el punto
+caiga en la \textit{rope}, de un lado u otro. 
+
+
 
 \chapter{Experimentos}
 \label{chapter:experimentos}
@@ -582,12 +747,15 @@ disponibles en el repositorio
 supervisada. En dicho repositorio encontramos ya disponibles
 particiones de los conjuntos de datos para facilitar que los
 experimentos sean reproducibles. Se ha utilizado para cada 
-conjunto de datos la partición para realizar $10CV$, esto es,
+conjunto de datos la partición para realizar 10-CV, esto es,
 cada conjunto se particiona en 10 subconjuntos y en cada una 
 de las 10 repeticiones, utilizamos un subconjunto como test y
 los restantes 9 como datos de entrenamiento. Cada archivo
 contiene los diez pares de ficheros con datos de
-entrenamiento y test.
+entrenamiento y test. Los algoritmos a comparar son
+ampliamente conocidos y no se entra en más detalle sobre
+ellos ya que la materia de este estudio no son los algoritmos
+sino los test utilizados para compararlos.
 
 \begin{table}[H]
 \centering
@@ -598,7 +766,7 @@ entrenamiento y test.
 Algoritmo             & Descripción                                                                                                                             \\ \midrule
 \texttt{multinom}     & Regresión logística de la biblioteca \texttt{nnet} para un problema de clasificación con varias clases.                               \\
 \texttt{knn}          & Algoritmo de los $k$ vecinos más cercanos de la biblioteca \texttt{class}. 
-Se han utilizado los valores por defecto $k=1$, $l=0$.      \\
+Se han utilizado los valores por defecto $k=1$, $l=0$ y la distancia euclídea.      \\
 \texttt{randomForest} & Algoritmo de la biblioteca \texttt{randomForest}. Se ha fijado el parámetro \texttt{mtray} al valor por defecto $mtray = \sqrt{p}$. \\
 \texttt{nnet}         & Red neuronal de la biblioteca \texttt{nnet}.                                                                                          \\
 \texttt{naiveBayes}   & Clasificador \textit{naive Bayes} de la biblioteca \texttt{e1071}.                                                                  \\ \bottomrule
@@ -643,3 +811,7 @@ yeast             & 8                   & 10               & 1484               
 zoo               & 16                  & 7                & 101                  \\ \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Aplicación de test estadísticos}
+
+\section{Comparación de test estadísticos}

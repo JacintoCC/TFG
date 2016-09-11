@@ -1332,7 +1332,7 @@ características de la fila y la columna.
 	
 \subsection{Test de McNemar}
 	
-	En este test suponemos una tabla $2 \times 2$ (\ref{Tb:McNemar}) que recoge 
+	En este test suponemos una tabla $2 \times 2$ (Tabla \ref{Tb:McNemar}) que recoge 
 la respuesta de $n$ elementos ante una cierta prueba antes y 
 después de un tratamiento o, en el caso en el que estamos, si 
 los $n$ individuos de la muestra están bien o mal 
@@ -1364,7 +1364,10 @@ escribe entonces como $H_0: \theta_{1 \cdot} =
 basado en $T = \frac{c_{1 \cdot} - c_{\cdot 1}}{N}$ como 
 estimador insesgado. Podemos escribir $T = \frac{c_{01} - 
 c_{10}}{N}$. El test de McNemar está basado en
-	\[ \frac{(c_{01} - c_{10})^2}{(c_{01} + c_{10})} \]
+\begin{equation}
+\label{eq:McNemarChi}
+	\chi = \frac{(c_{01} - c_{10})^2}{(c_{01} + c_{10})}
+\end{equation} 
 	que sigue aproximadamente una distribución $\chi^2$ con 
 un grado de libertad. Obtengamos ahora la esperanza y 
 varianza de $T$. Puesto que $c_{01}$ y $c_{10}$ siguen una 
