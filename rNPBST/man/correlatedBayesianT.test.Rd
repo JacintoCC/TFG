@@ -4,7 +4,7 @@
 \alias{correlatedBayesianT.test}
 \title{Bayesian signed rank test}
 \usage{
-correlatedBayesianT.test(x, y = NULL, rho = ncol(x), rope.min = -0.01,
+correlatedBayesianT.test(x, y = NULL, rho = 1/length(x), rope.min = -0.01,
   rope.max = 0.01)
 }
 \arguments{

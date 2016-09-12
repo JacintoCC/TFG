@@ -4,7 +4,7 @@
 \alias{chiSquare.test}
 \title{Chi square test for goodness of fit}
 \usage{
-chiSquare.test(sequece)
+chiSquare.test(sequence)
 }
 \arguments{
 \item{sequence}{Sequence of data}

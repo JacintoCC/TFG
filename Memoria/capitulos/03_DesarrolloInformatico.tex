@@ -677,7 +677,7 @@ realizando dos veces el test) y optamos por
 escribir nuestra propia función para el
 test bayesiano de signo, el test bayesiano de 
 rangos con signos y la versión bayesiana 
-de $t$-test correlados. Además, se ha observado 						%TODO Revisar
+de $t$-test correlados. Además, se ha observado 	
 un tiempo de ejecución excesivo utilizando
 el test bayesiano de rangos con signos (en torno
 a dos minutos) en la versión del repositorio
@@ -757,7 +757,7 @@ ampliamente conocidos y no se entra en más detalle sobre
 ellos ya que la materia de este estudio no son los algoritmos
 sino los test utilizados para compararlos.
 
-\begin{table}[H]
+\begin{table}[]
 \centering
 \caption{Algoritmos}
 \label{tab:algoritmos}
@@ -773,7 +773,7 @@ Se han utilizado los valores por defecto $k=1$, $l=0$ y la distancia euclídea. 
 \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[]
 \centering
 \caption{Conjuntos de datos}
 \label{tab:DS}
@@ -814,4 +814,59 @@ zoo               & 16                  & 7                & 101                
 
 \section{Aplicación de test estadísticos}
 
-\section{Comparación de test estadísticos}
+	Esta sección se puede considerar como un ejemplo de qué
+pasos seguiríamos al comparar varios algoritmos sobre
+múltiples bases de datos.\\
+	Por tener una idea de la distribución del error de los 
+algoritmos a comparar, y así tener una primera estimación
+de la normalidad de la población, condición necesaria para
+los test paramétricos, mostramos el gráfico con la 
+distribución de los errores obtenidos:
+
+\includegraphics[width=0.7\textwidth]{imagenes/DensityPlot.pdf}
+
+	En esta gráfica podemos observar que las distribución del
+error no es simétrica ni unimodal, con lo que no podemos
+suponer la normalidad de la distribución. Realizamos en 
+primer lugar como ya se ha descrito a lo largo de la memoria
+el test con hipótesis nula la igualdad de las medias del
+rendimiento de los algoritmos con nivel de significación
+$\alpha = 0.05$. Para ello podemos usar
+los test no paramétricos de Friedman, el test de
+rangos alineados de Friedman, el de Iman-Davenport o el
+test de Quade. Al aplicar cualquiera de estos test sobre
+los resultados obtenidos de los algoritmos se obtiene
+un $p$-valor mucho menor que $\alpha$. En cambio, 
+si realizamos el test ANOVA, no rechazamos la hipótesis
+nula, lo que hace pensar que para esta pequeña cantidad de
+datos y sobre todo debido a la falta de normalidad, la
+potencia es inferior. Como primer método \textit{post hoc}
+a utilizar, escogemos el método de Nemenyi, basado en la
+diferencia de las medias de los ránquines de los 
+clasificadores. Consideraremos que dos algoritmos tienen
+resultados distinguibles si la diferencia en valor absoluto
+es mayor que el estadístico obtenido. En nuestro caso, 
+se obtiene que únicamente \texttt{random.forest} es distinto
+a los otros cuatro, entre los que no se encuentran 
+diferencias significativas. Para ilustrar este resultado
+se incluye la representación de la diferencia crítica.
+
+\includegraphics[width=0.7\textwidth]{imagenes/CDplot.pdf}
+
+
+	También podemos utilizar los procedimientos \textit{post
+hoc} asociados a los test, especialmente debido a que no
+se da la normalidad de los datos, teniendo en cuenta que
+debemos ajustar los $p$-valores con alguno de los métodos
+vistos anteriormente. En nuestro caso, ningún test 
+\textit{post hoc} a presentado una mayor potencia que el
+test de Nemenyi, pues no se distinguen más diferencias que 
+entre el algoritmo \texttt{random.forest} y los demás y, por
+ejemplo no se encuentras diferencias significativas entre  
+regresión logística y \textit{random forest}.
+
+\includegraphics[width=0.7\textwidth]{imagenes/AlgGraphFinner.pdf}
+
+\subsection*{Test bayesianos}
+
+

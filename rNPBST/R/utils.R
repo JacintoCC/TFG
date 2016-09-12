@@ -43,3 +43,23 @@ plotSimplex <- function(points){
                                         zend=c(1,0,0)),
                     color = 'orange', size = 1)
 }
+
+#' @title Plot of posterior distribution
+#'
+#' @export
+#' @description This function plots the posterior distribution of the parameter
+#' @param x Sequence in x-axis
+#' @param y Values of difference distribution
+#' @param names Names of the algorithms
+plotPosterior <- function (x, y, names,...) {
+  qplot(x, y, geom = "line") +
+    ggtitle(paste(names[1], "vs.", names[2])) +
+    xlab("Difference") +
+    ylab("Value") +
+    geom_area(aes(fill="distribution"), fill = "lightblue") +
+    geom_line(color="darkblue") +
+    geom_vline(xintercept = -0.01, color = "orange") +
+    geom_vline(xintercept = 0.01, color = "orange") +
+    geom_segment(data = data.frame(x = -0.01, y = 0, xend=0.01, yend = 0),
+                 aes(x = -0.01, y = 0, xend=0.01, yend = 0), color = "orange")
+}

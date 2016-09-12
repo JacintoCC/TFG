@@ -4,7 +4,7 @@
 \alias{lilliefors.test}
 \title{Lilliefors test for goodness of fit}
 \usage{
-lilliefors.test(sequece)
+lilliefors.test(sequence)
 }
 \arguments{
 \item{sequence}{Sequence of data}
