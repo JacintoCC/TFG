@@ -156,8 +156,10 @@ correlatedBayesianT.test <- function(x, y = NULL, rho = 1/length(x),
   sp <- stdX * sqrt(1/n + rho/(1-rho))
   p.left <- pt((rope.min - delta)/sp, df)
   p.rope <- pt((rope.max - delta)/sp, df) - p.left
-  x <- seq(delta-3*stdX, delta+3*stdX, by = 0.001)
+
+  x <- seq(min(delta-3*stdX, -0.02), max(delta+3*stdX, 0.02), by = 0.001)
   y <- sapply(x, function(t) dt((t - delta)/sp, df))
+
   results <- list('left' = p.left, 'rope' = p.rope, 'right'= 1 - p.left-p.rope,
                   'dist' = data.frame(x = x, y = y))
   return (results)

@@ -1,5 +1,6 @@
 #' @title Heaviside step function
 #'
+#' @export
 #' @description This function implements Heaviside step function
 #' @param x Object to be evaluated
 #' @param a Frontier value
@@ -9,6 +10,7 @@ heaviside <- function(x, a=0){
 
 #' @title Location of the maximum(s) in a vector
 #'
+#' @export
 #' @description Returns a vector with an 1 in the maximum position. If there are more than one then 1/num. maximums is situated in each position
 #' @param x Vector where find the maximum(s)
 locate.max <- function(x){
@@ -18,6 +20,7 @@ locate.max <- function(x){
 
 #' @title Projection of 3-simplex points
 #'
+#' @export
 #' @description This function projects 3-simplex points to a 2D triangle
 #' @param points Simplex points to be projected
 plotSimplex <- function(points){
@@ -51,9 +54,10 @@ plotSimplex <- function(points){
 #' @param x Sequence in x-axis
 #' @param y Values of difference distribution
 #' @param names Names of the algorithms
-plotPosterior <- function (x, y, names,...) {
-  qplot(x, y, geom = "line") +
-    ggtitle(paste(names[1], "vs.", names[2])) +
+#' @param dataset Names of the dataset
+plotPosterior <- function (data, names, dataset,...) {
+  qplot(data$x, data$y, geom = "line") +
+    ggtitle(paste(names[1], "vs.", names[2], "\nDataset:", dataset)) +
     xlab("Difference") +
     ylab("Value") +
     geom_area(aes(fill="distribution"), fill = "lightblue") +

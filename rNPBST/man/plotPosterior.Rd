@@ -4,14 +4,16 @@
 \alias{plotPosterior}
 \title{Plot of posterior distribution}
 \usage{
-plotPosterior(x, y, names, ...)
+plotPosterior(data, names, dataset, ...)
 }
 \arguments{
+\item{names}{Names of the algorithms}
+
+\item{dataset}{Names of the dataset}
+
 \item{x}{Sequence in x-axis}
 
 \item{y}{Values of difference distribution}
-
-\item{names}{Names of the algorithms}
 }
 \description{
 This function plots the posterior distribution of the parameter

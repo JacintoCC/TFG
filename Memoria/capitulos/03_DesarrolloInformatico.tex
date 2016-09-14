@@ -726,7 +726,8 @@ de Dirichlet con los parámetros obtenidos.
 El centro del triángulo representa el punto
 $\left( \frac{1}{3}, \frac{1}{3}, \frac{1}{3} \right)$
 es decir, hay una igual probabilidad para que el punto
-caiga en la \textit{rope}, de un lado u otro. 
+caiga en la \textit{rope}, de un lado u otro.\\
+Para el $t$-test correlado se 
 
 
 
@@ -823,7 +824,12 @@ de la normalidad de la población, condición necesaria para
 los test paramétricos, mostramos el gráfico con la 
 distribución de los errores obtenidos:
 
-\includegraphics[width=0.7\textwidth]{imagenes/DensityPlot.pdf}
+\begin{figure}[H]
+\centering
+\label{fig:densplot}
+\caption{Gráfico de densidad}
+\includegraphics[width=0.5\textwidth]{imagenes/DensityPlot.pdf}
+\end{figure}
 
 	En esta gráfica podemos observar que las distribución del
 error no es simétrica ni unimodal, con lo que no podemos
@@ -848,11 +854,31 @@ resultados distinguibles si la diferencia en valor absoluto
 es mayor que el estadístico obtenido. En nuestro caso, 
 se obtiene que únicamente \texttt{random.forest} es distinto
 a los otros cuatro, entre los que no se encuentran 
-diferencias significativas. Para ilustrar este resultado
-se incluye la representación de la diferencia crítica.
+diferencias significativas (Tabla~\ref{tab:Nemenyi}). Para ilustrar este resultado
+se incluye la representación de la diferencia crítica (Figura~\ref{fig:cdplot}).
 
+\begin{table}[]
+\centering
+\caption{Test de Nemenyi}
+\label{tab:Nemenyi}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+                    & logistic.regression & KNN                & random.forest     & naive.bayes        & neural.network     \\ \hline
+logistic.regression & 0                   & -0.689655172413793 & 1.41379310344828  & -0.896551724137931 & -0.344827586206896 \\ \hline
+KNN                 & -0.689655172413793  & 0                  & 2.10344827586207  & -0.206896551724138 & 0.344827586206897  \\ \hline
+random.forest       & 1.41379310344828    & 2.10344827586207   & 0                 & -2.31034482758621  & -1.75862068965517  \\ \hline
+naive.bayes         & -0.896551724137931  & -0.206896551724138 & -2.31034482758621 & 0                  & 0.551724137931035  \\ \hline
+neural.network      & -0.344827586206896  & 0.344827586206897  & -1.75862068965517 & 0.551724137931035  & 0                  \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+\label{fig:cdplot}
+\centering
+\caption{Critical Difference Plot}
 \includegraphics[width=0.7\textwidth]{imagenes/CDplot.pdf}
-
+\end{figure}
 
 	También podemos utilizar los procedimientos \textit{post
 hoc} asociados a los test, especialmente debido a que no
@@ -863,10 +889,97 @@ vistos anteriormente. En nuestro caso, ningún test
 test de Nemenyi, pues no se distinguen más diferencias que 
 entre el algoritmo \texttt{random.forest} y los demás y, por
 ejemplo no se encuentras diferencias significativas entre  
-regresión logística y \textit{random forest}.
+regresión logística y \textit{random forest}. En la Figura\ref{fig:grafo}
+se representan mediante un grafo las diferencias encontradas
+entre los algoritmos, existiendo un arco entre aquellos 
+para los cuales no se descarta la hipótesis nula.
 
-\includegraphics[width=0.7\textwidth]{imagenes/AlgGraphFinner.pdf}
+\begin{figure}[H]
+\centering
+\caption{Grafo}
+\label{fig:grafo}
+\includegraphics[width=0.5\textwidth]{imagenes/AlgGraphFinner.pdf}
+\end{figure}
 
 \subsection*{Test bayesianos}
+
+	Podemos realizar también los test bayesianos implementados, 
+que ofrecen unos resultados más intuitivos al representarlos
+gráficamente.\\
+	El primer test para el que mostraremos resultados es
+la versión bayesiana del $t$-test correlado. Este test
+se realiza sobre un par de algoritmos aplicados sobre un
+problema. Los datos de entrada son las $k$ medidas tomadas
+para cada partición en entrenamiento y test, y tomaremos 
+como correlación por defecto $\rho = \frac{1}{k}$, pues
+supondremos que estamos realizando validación cruzada y 
+por tanto el número de datos usados para validación y el 
+número de datos totales seguirá la razón $\frac{1}{k}$.\\
+Habiendo comprobado ya con métodos frecuentistas dónde se
+sitúan las principales diferencias entre algoritmos, se
+muestran ejemplos con distintos resultados.
+
+\begin{figure}[H]
+\centering
+\subfloat[$\theta_l=0.457$,$ \theta_{rope}=0.158$, $\theta_r=0.385$]{
+   \label{fig:ttbc1}
+   \includegraphics[width=0.5\textwidth]{imagenes/KNN-LR-automobile.pdf}}
+\subfloat[$\theta_l=0.997, \theta_{rope}=0.001, \theta_r=0.002$]{
+   \label{fig:ttbc2}
+   \includegraphics[width=0.5\textwidth]{imagenes/LR-RF-hayes-roth.pdf}}
+   \newline
+   \centering
+   \subfloat[$\theta_l=0.050, \theta_{rope}=0.93, \theta_r=0.02$]{
+   \label{fig:ttbc3}
+   \includegraphics[width=0.5\textwidth]{imagenes/KNN-RF-zoo.pdf}}
+\caption{Resultados de $t$-test correlado bayesiano}
+\end{figure}
+
+En la comparación que mostramos en la Figura\ref{fig:ttbc1} 
+observamos que no podemos deducir nada. En la Figura \ref{fig:ttbc2}, 
+al estar la distribución prácticamente fuera de la
+ \textit{rope} en su totalidad, deducimos que para el 
+ conjunto de datos de \textit{hayes-roth} el algoritmo
+ \texttt{random forest} funciona mejor que la regresión 
+ logística. Por último, en la Figura \ref{fig:ttbc3} la
+ mayor parte de la distribución se encuentra \textit{rope}
+ (habiendo tomado como extremos -0.05, 0.05 en este caso),
+ con lo que podemos deducir que el rendimiento del \texttt{KNN} y del algoritmo \texttt{random forest} es 
+ equivalente en este caso.\\
+ 
+ Pasamos entonces al problema de la comparación del
+rendimiento para múltiples problemas. Aquí, no usamos los
+datos sobre cada conjunto de datos sino los resultados 
+promediados entre las distintas particiones. Para realizar
+esta comparación usamos tanto el test bayesiano de rangos
+con signos como el test de signo. Al igual que para los 
+test anteriores, mostramos sus resultados de manera gráfica.
+Para la obtención de los datos, se obtiene una muestra de la distribución \textit{a posteriori}:
+
+\begin{figure}[H]
+\centering
+\subfloat[Test bayesiano de rangos alineados]{
+   \label{fig:tbra1}
+   \includegraphics[width=0.5\textwidth]{imagenes/BSR-RF-NB.pdf}}
+\caption{Comparación entre \textit{random forest} y \textit{naive bayes}}
+\end{figure}
+
+	En esta figura se aprecia que la distribución a posteriori se sitúan a la derecha de la \textit{rope}, lo que significa que, según los datos obtenidos, \textit{random forest} tiene un mejor desempeño que el clasificador \textit{naive bayes} con un 100$\%$ de probabilidad. La probabilidad de que esto ocurra usando el test bayesiano de signo baja al $86\%$.
+
+\begin{figure}[H]
+\centering
+\subfloat[Test bayesiano de signo]{
+   \label{fig:tbs2}
+   \includegraphics[width=0.5\textwidth]{imagenes/BS-KNN-NNET.pdf}}
+\subfloat[Test bayesiano de rangos alineados]{
+   \label{fig:tbra2}
+   \includegraphics[width=0.5\textwidth]{imagenes/BSR-KNN-NNET.pdf}}
+\caption{Comparación entre \texttt{KNN} y red neuronal, tomando como extremos de la \textit{rope} -0.02, 0.02}
+\end{figure}
+
+	Por otra parte, considerando que dos algoritmos tienen un 
+rendimiento equivalente si su diferencia es menor a un $2\%$, 
+observamos que el test de signo da una probabilidad casi equivalente para cada región, y que en cambio el test de rangos alineados da más del $50\%$ de probabilidad a que los algoritmos sean equivalentes.
+
 
 
