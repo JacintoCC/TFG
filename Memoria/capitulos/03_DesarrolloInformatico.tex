@@ -727,7 +727,6 @@ El centro del triángulo representa el punto
 $\left( \frac{1}{3}, \frac{1}{3}, \frac{1}{3} \right)$
 es decir, hay una igual probabilidad para que el punto
 caiga en la \textit{rope}, de un lado u otro.\\
-Para el $t$-test correlado se 
 
 
 
@@ -855,7 +854,7 @@ es mayor que el estadístico obtenido. En nuestro caso,
 se obtiene que únicamente \texttt{random.forest} es distinto
 a los otros cuatro, entre los que no se encuentran 
 diferencias significativas (Tabla~\ref{tab:Nemenyi}). Para ilustrar este resultado
-se incluye la representación de la diferencia crítica (Figura~\ref{fig:cdplot}).
+se incluye la representación de la diferencia crítica (Figura \ref{fig:cdplot}).
 
 \begin{table}[]
 \centering
@@ -873,10 +872,11 @@ neural.network      & -0.344827586206896  & 0.344827586206897  & -1.758620689655
 \end{tabular}}
 \end{table}
 
+
 \begin{figure}[H]
-\label{fig:cdplot}
 \centering
 \caption{Critical Difference Plot}
+\label{fig:cdplot}
 \includegraphics[width=0.7\textwidth]{imagenes/CDplot.pdf}
 \end{figure}
 
@@ -885,11 +885,11 @@ hoc} asociados a los test, especialmente debido a que no
 se da la normalidad de los datos, teniendo en cuenta que
 debemos ajustar los $p$-valores con alguno de los métodos
 vistos anteriormente. En nuestro caso, ningún test 
-\textit{post hoc} a presentado una mayor potencia que el
+\textit{post hoc} ha presentado una mayor potencia que el
 test de Nemenyi, pues no se distinguen más diferencias que 
 entre el algoritmo \texttt{random.forest} y los demás y, por
 ejemplo no se encuentras diferencias significativas entre  
-regresión logística y \textit{random forest}. En la Figura\ref{fig:grafo}
+regresión logística y \textit{random forest}. En la Figura~\ref{fig:grafo}
 se representan mediante un grafo las diferencias encontradas
 entre los algoritmos, existiendo un arco entre aquellos 
 para los cuales no se descarta la hipótesis nula.

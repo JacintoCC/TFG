@@ -1,0 +1,250 @@
+\documentclass[leqno]{beamer}
+\usepackage[spanish,activeacute]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\usetheme{CambridgeUS}
+\usecolortheme{spruce}
+\setbeameroption{show notes} %un-comment to see the notes
+
+\title{Trabajo de Fin de Grado}
+\subtitle{Evaluación del estado del arte en técnicas estadísticas para el análisis comparativo de algoritmos de aprendizaje automático}
+\author{Jacinto Carrasco Castillo}
+
+\newtheoremstyle{definition_wo_parentheses}
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {0pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {.}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}\thmnumber{ #2.}\thmnote{ #3}}
+  
+  
+\theoremstyle{definition_wo_parentheses}
+\newtheorem{definicion}{Definición}
+
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+\section{Planteamiento}
+
+
+\begin{frame}{Descripción del problema}
+	La comparación de algoritmos debe realizarse de manera 
+rigurosa para reducir la aleatoriedad asociada a los 
+experimentos. Para realizar una correcta comparación es 
+necesario:
+	
+\begin{itemize}
+	\item Selección de medida del rendimiento.
+	\item Validación cruzada y remuestreo. 
+	\item Test estadísticos.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Objetivos}
+\begin{itemize}
+	\item Estudio de los test estadísticos disponibles.
+	\item Integración de herramientas informáticas existentes
+	 para la aplicación de estos test.
+	\item Comparación de las propiedades de los test.
+\end{itemize}
+\end{frame}
+
+\section{Contenido matemático}
+
+\subsection{Test paramétricos}
+\begin{frame}{Test paramétricos}
+
+	Suponen que la muestra pertenece a una distribución conocida. 
+
+\begin{description}
+\item[Test binomial para una muestra] Comprobación de que 
+	el rendimiento para un problema sea igual a un valor 
+	$\theta_0$.
+\item[$t$-test para muestras apareadas]  Comparación de la 
+	media de dos muestras. Comparación de dos algoritmos
+	para un conjunto de datos.
+\item[ANOVA] Comparación de la media de múltiples algoritmos
+	en múltiples problemas. Trata la varianza
+	en un grupo, entre grupos y la combinación de ellas.
+\end{description}
+\end{frame}
+
+\subsection{Test no paramétricos}
+
+\begin{frame}{Test no paramétricos}{Comparación con test paramétricos}
+\begin{itemize}
+\item Los test no paramétricos no suponen la pertenencia 
+	de la distribución a ninguna familia de distribuciones.
+\item Las hipótesis para aplicar estos test son más
+	generales. 
+\item Si se dan las hipótesis necesarias para los test
+	paramétricos, tienen una menor potencia.
+\item Si se disponen de pocos datos las hipótesis de los
+	test paramétricos no suelen darse y los test no
+	paramétricos suplen la falta de potencia con mayor
+	precisión.
+\end{itemize}		
+\end{frame}
+
+\begin{frame}{Test no paramétricos}
+	Tipos de test no paramétricos:
+\begin{itemize}
+\item Test de aleatoriedad: basados en el número de rachas.
+\item Test de bondad del ajuste: Test chi cuadrado, 
+	Kolmogorov-Smirnov.
+\item Análisis del conteo de datos: Test de McNemar.
+\item Test basado en una muestra y muestras apareadas: Test
+	de signo, test de rangos con signos de Wilcoxon. 
+\item Análisis bidimensional de la varianza: Test de 
+	Friedman, modificación de Iman-Davenport, test de 
+	rangos alineados de Friedman, test de Quade.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Test no paramétricos}{Procedimientos \textit{post-hoc}}
+	Los test que comparan múltiples algoritmos indican la
+existencia de diferencias entre ellos. Necesitan un
+test adicional para indicar dónde están estas diferencias.
+
+\begin{itemize}
+\item $p$-valores ajustados: Al realizar múltiples comparaciones aumenta la probabilidad de cometer un error de tipo I. Hay distintos métodos para ajustar los $p$-valores obtenidos.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Test no paramétricos}{Test basados en permutaciones}
+	Son test no paramétricos. La hipótesis nula es que una muestra $\mathbf{x}$ proviene de una misma población.\\
+	Suponiendo $H_0$ cierta, los individuos de cada 
+subconjunto de la muestra se puede intercambiar por los de 
+otro subconjunto.
+\begin{definicion}[Principio de los test basados en permutaciones] Si dos experimentos toman valores en el mismo
+espacio muestral $\Omega$ con distribuciones $P_1, P_2$ dan
+el mismo conjunto de datos, las inferencias condicionales
+a los datos usando el mismo estadístico deben ser la misma.
+\end{definicion}
+\end{frame}
+
+
+\subsection{Test bayesianos}
+\begin{frame}{Comparación con THN}
+	La inferencia bayesiana ajusta un modelo de probabilidad
+a los datos y obtiene una distribución sobre los parámetros
+del modelo. Las diferencias con los test de hipótesis nula son:
+
+\begin{itemize}
+\item Se evitan decisiones dicotómicas marcadas por $\alpha$.
+\item Los THN no estiman la probabilidad de la hipótesis.
+\item Con suficientes datos se rechaza casi toda hip. nula.
+\item No se tiene en cuenta magnitud de la diferencia ni incertidumbre.
+\item No se obtiene información si no se rechaza la hipótesis nula.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Test bayesianos}
+\begin{description}
+\item[$t$-test bayesiano correlado] Comparación de dos
+dos algoritmos en un único conjunto de datos. Tiene en cuenta
+la correlación de los conjuntos de entrenamientos en CV.
+Se obtiene una distribución $T$ de Student sobre la
+diferencia de las medias.
+\item[Test bayesiano de signo] Versión bayesiana del test de 
+signo. Se obtiene distribución sobre la probabilidad de que 
+la diferencia entre algoritmos sea menor que 0, prácticamente 
+nula o mayor que 0.
+\item[Test bayesiano de rangos alineados] Versión bayesiana 
+del test de rangos alineados. No se obtiene una distribución clara de los parámetros, pero se puede obtener una muestra.
+\end{description}
+\end{frame}
+
+\section{Contenido informático}
+
+\begin{frame}{rNPBST}
+	Paquete desarrollado en \texttt{R}. Incluye:
+	
+\begin{itemize}
+\item Conjunto de datos sobre la aplicación de 5 algoritmos 
+	en 29 conjuntos de datos para realizar los test.
+\item Test no paramétricos de la biblioteca \texttt{JavaNPST} 
+	a los que se accede mediante \texttt{rJava}.
+\item Test bayesianos y representación gráfica de 
+	sus resultados.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{rNPBST}{Instalación}
+Paquete de \texttt{R} disponible en 
+\begin{center}
+\url{https://github.com/JacintoCC/TFG/tree/master/rNPBST}
+\end{center}
+Para la instalación, ejecutar donde se encuentre la carpeta con el software:
+	\begin{verbatim}
+	> R CMD build rNPBST
+	> R CMD INSTALL rNPBST
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Aplicación de test}
+\begin{verbatim}
+ > data("results")
+ > ft <- friedman.test(results)
+ > ft$htest
+ 	Friedman test
+ data:  
+s = 2812.000, q = 39.056, p-value = 6.789e-08
+\end{verbatim}
+Con estos resultados rechazaríamos la hipótesis nula de la 
+equivalencia de los algoritmos. El test nos devuelve en el 
+parámetro \texttt{report} también la suma del ránquin
+medio de cada algoritmo. 
+\end{frame}
+
+
+\begin{frame}[fragile]{Aplicación de test}{Test bayesianos - $t$-Test bayesiano correlado}
+   \begin{verbatim}
+   > dataset.index <- 13
+   > correlatedBayesianT.test(results.lr[dataset.index, ],
+                              results.rf[dataset.index, ])
+   \end{verbatim}
+   \begin{center}
+   \includegraphics[width=0.4\textwidth]{imagenes/LR-RF-hayes-roth.pdf}
+   \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Aplicación de test}{Test bayesianos - Test bayesiano de rangos con signo}
+   \begin{verbatim}
+   > bayesianSignedRank.test(results$KNN,
+                            results$neural.network)
+   \end{verbatim}
+   \begin{center}
+   \includegraphics[width=0.5\textwidth]{imagenes/BSR-KNN-NNET.pdf}
+   \end{center}
+\end{frame}
+
+\end{document}
