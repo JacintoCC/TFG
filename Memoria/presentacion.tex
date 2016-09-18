@@ -47,10 +47,6 @@
 \titlepage
 \end{frame}
 
-\begin{frame}
-\tableofcontents
-\end{frame}
-
 \section{Planteamiento}
 
 
@@ -66,6 +62,20 @@ necesario:
 	\item Test estadísticos.
 \end{itemize}
 \end{frame}
+
+\note{
+\textbf{Selección de medida del rendimiento}. Diferentes medidas 
+según el problema a resolver. Podemos interesarnos por maximizar 
+la precisión o minimizar una función de coste o pérdida.\\
+\textbf{Validación cruzada y remuestreo}. Para la validación de los 
+resultados es necesario repetir los experimentos. Debido a que el
+número de datos disponibles es limitado es necesario reutilizar los datos.\\
+\textbf{Test estadísticos}. Responden a las preguntas sobre si se pueden justificar
+los resultados estadísticamente o se han obtenido por azar. 
+Los test se aplica a comparar dos algoritmos en un dominio, dos algoritmos
+sobre varios problemas o comparar múltiples algoritmos en varios dominios.
+}
+
 
 \begin{frame}{Objetivos}
 \begin{itemize}
@@ -96,6 +106,18 @@ necesario:
 \end{description}
 \end{frame}
 
+\note{
+\textbf{$t$-test}: Para el $t$-test surgen modificaciones
+que ofrecen mejores resultados usando validación cruzada $5 \times 2$,
+esto es, se se divide en dos particiones, usando cada una de ellas como
+entrenamiento y validación, y se repite cinco veces.
+Para cada test se incluye en la memoria la obtención del
+estadístico y la distribución que sigue para determinar
+si se encuentra en la región crítica, 
+esto es, la región donde rechazaríamos la hipótesis nula.
+}
+
+
 \subsection{Test no paramétricos}
 
 \begin{frame}{Test no paramétricos}{Comparación con test paramétricos}
@@ -113,6 +135,15 @@ necesario:
 \end{itemize}		
 \end{frame}
 
+\note{
+Las hipótesis de los test paramétricos son cuestiones 
+más generales como la simetría de la población o la 
+continuidad, mientras que en los test paramétricos
+se suelen exigir la normalidad de la población o 
+la igualdad de las varianzas.
+}
+
+
 \begin{frame}{Test no paramétricos}
 	Tipos de test no paramétricos:
 \begin{itemize}
@@ -128,6 +159,16 @@ necesario:
 \end{itemize}
 \end{frame}
 
+\note{
+Los test de bondad del ajuste podemos usarlos para aplicar
+test paramétricos con mayor certeza sobre la normalidad de la población.\\
+Usamos para la comparación de dos algoritmos en un problema el test de McNemar,
+los test de signo y de rangos con signos para varios problemas.\\
+Los restantes test para múltiples algoritmos en varios problemas. El test de 
+Iman-Davenport tiene una mayor potencia. El test de Quade tiene en cuenta
+la dificultad de los test.
+}
+
 \begin{frame}{Test no paramétricos}{Procedimientos \textit{post-hoc}}
 	Los test que comparan múltiples algoritmos indican la
 existencia de diferencias entre ellos. Necesitan un
@@ -135,8 +176,20 @@ test adicional para indicar dónde están estas diferencias.
 
 \begin{itemize}
 \item $p$-valores ajustados: Al realizar múltiples comparaciones aumenta la probabilidad de cometer un error de tipo I. Hay distintos métodos para ajustar los $p$-valores obtenidos.
+\begin{itemize}
+\item Procedimientos de un paso: Bonferroni-Dunn.
+\item Procedimiento descendente: Holm, Holland, Finner.
+\item Procedimiento ascendente:  Hochberg, Hommel, Rom.
+\item Procedimiento en dos pasos: Li.
+\end{itemize}
 \end{itemize}
 \end{frame}
+
+\note{
+El procedimiento de Hommel es más complejo. El procedimiento de Li ofrece
+resultados más inestables cuando los $p$-valores originales son mayores
+a 0.05. 
+}
 
 \begin{frame}{Test no paramétricos}{Test basados en permutaciones}
 	Son test no paramétricos. La hipótesis nula es que una muestra $\mathbf{x}$ proviene de una misma población.\\
@@ -167,6 +220,17 @@ del modelo. Las diferencias con los test de hipótesis nula son:
 
 \end{frame}
 
+\note{
+Con los test bayesianos sí se responde a la pregunta
+más natural de ``¿cuál es la probabilidad de 
+que el rendimiento de dos clasificadores sea el mismo?''.\\
+Con los THN podríamos pensar que se obtienen datos hasta
+que se consigue rechazar la hipótesis nula.\\
+El enfoque realizado es la estimación bayesiana de parámetros, 
+pues en el análisis mediante el factor de Bayes se 
+dan problemas similares a los mencionados.
+}
+
 \begin{frame}{Test bayesianos}
 \begin{description}
 \item[$t$-test bayesiano correlado] Comparación de dos
@@ -176,12 +240,22 @@ Se obtiene una distribución $T$ de Student sobre la
 diferencia de las medias.
 \item[Test bayesiano de signo] Versión bayesiana del test de 
 signo. Se obtiene distribución sobre la probabilidad de que 
-la diferencia entre algoritmos sea menor que 0, prácticamente 
-nula o mayor que 0.
+la diferencia entre algoritmos esté en la \textit{rope}, a la 
+izquierda o a la derecha.
 \item[Test bayesiano de rangos alineados] Versión bayesiana 
-del test de rangos alineados. No se obtiene una distribución clara de los parámetros, pero se puede obtener una muestra.
+del test de rangos alineados. No se obtiene una distribución clara de los parámetros, 
+pero se puede obtener una muestra. 
 \end{description}
 \end{frame}
+
+\note{
+Se considera la \textit{rope} la región de una equivalencia
+entre los algoritmos.Si la distribución se encuentra dentro 
+de esta región, consideraremos equivalentes el rendimiento 
+de los algoritmos para ese conjunto de datos. Si la 
+distribución se encuentra a la derecha o a la izquierda,
+un algoritmo será mejor que otro.
+}
 
 \section{Contenido informático}
 
@@ -215,9 +289,9 @@ Para la instalación, ejecutar donde se encuentre la carpeta con el software:
  > data("results")
  > ft <- friedman.test(results)
  > ft$htest
- 	Friedman test
- data:  
-s = 2812.000, q = 39.056, p-value = 6.789e-08
+      Friedman test
+   data: results
+   s = 2812.000, q = 39.056, p-value = 6.789e-08
 \end{verbatim}
 Con estos resultados rechazaríamos la hipótesis nula de la 
 equivalencia de los algoritmos. El test nos devuelve en el 
@@ -237,6 +311,10 @@ medio de cada algoritmo.
    \end{center}
 \end{frame}
 
+\note{Al situarse la mayor parte de la distribución a la izquierda 
+de la \textit{rope}, tenemos que para este conjunto de datos el algoritmo
+\textit{random forest} funciona mejor que la regresión logística.}
+
 \begin{frame}[fragile]{Aplicación de test}{Test bayesianos - Test bayesiano de rangos con signo}
    \begin{verbatim}
    > bayesianSignedRank.test(results$KNN,
@@ -246,5 +324,28 @@ medio de cada algoritmo.
    \includegraphics[width=0.5\textwidth]{imagenes/BSR-KNN-NNET.pdf}
    \end{center}
 \end{frame}
+
+\note{Se observa una mayor concentración en la región
+donde hay más probabilidad de que el parámetro caiga en la
+\textit{rope}, con lo que no podríamos decir que hay 
+diferencias entre los algoritmos comparados}
+
+
+\begin{frame}[fragile]{Comparación de la potencia de test estadísticos}
+   \begin{center}
+   \includegraphics[width=0.6\textwidth]{imagenes/ComparacionesTest.pdf}
+   \end{center}
+\end{frame}
+
+\note{Se han seleccionado aleatoriamente un subconjunto de conjuntos de datos
+y se ha comprobado el número de hipótesis nulas rechazadas.
+El parámetro $K$ influye en escoger aquellos conjuntos de datos 
+con una mayor diferencia. Para estos datos el test
+de Quade obtiene los peores resultados y los métodos
+para ajustar los $p$-valores con mayor potencia son 
+el de Finner y el de Bergmann y Hommel. Otro posible 
+experimento podría consistir en ver el error de tipo I de cada test, es decir,
+cuándo se rechaza la hipótesis nula siendo cierta.
+}
 
 \end{document}
