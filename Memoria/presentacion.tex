@@ -5,11 +5,12 @@
 \usepackage{enumerate}
 \usepackage{amsthm}
 \usepackage{graphicx}
-\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{xtab,array,booktabs}
 
 \usetheme{CambridgeUS}
 \usecolortheme{spruce}
-\setbeameroption{show notes} %un-comment to see the notes
+%\setbeameroption{show notes} %un-comment to see the notes
 
 \title{Trabajo de Fin de Grado}
 \subtitle{Evaluación del estado del arte en técnicas estadísticas para el análisis comparativo de algoritmos de aprendizaje automático}
@@ -205,7 +206,8 @@ a los datos usando el mismo estadístico deben ser la misma.
 
 
 \subsection{Test bayesianos}
-\begin{frame}{Comparación con THN}
+
+\begin{frame}{Test bayesianos}{Comparación con THN}
 	La inferencia bayesiana ajusta un modelo de probabilidad
 a los datos y obtiene una distribución sobre los parámetros
 del modelo. Las diferencias con los test de hipótesis nula son:
@@ -259,17 +261,21 @@ un algoritmo será mejor que otro.
 
 \section{Contenido informático}
 
-\begin{frame}{rNPBST}
-	Paquete desarrollado en \texttt{R}. Incluye:
-	
-\begin{itemize}
-\item Conjunto de datos sobre la aplicación de 5 algoritmos 
-	en 29 conjuntos de datos para realizar los test.
-\item Test no paramétricos de la biblioteca \texttt{JavaNPST} 
-	a los que se accede mediante \texttt{rJava}.
-\item Test bayesianos y representación gráfica de 
-	sus resultados.
-\end{itemize}
+\begin{frame}[fragile]{rNPBST}{Características del paquete}
+
+\begin{table}[]
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+Característica &    \\
+\midrule
+Lenguaje             & \texttt{R}\\
+Test no paramétricos & Integrados a partir del paquete \texttt{JavaNPST} usando \texttt{rJava}.\\
+Test bayesianos      & Implementados \texttt{R}. Mayor eficiencia y reusabilidad que los paquetes disponibles. 
+						Incluye métodos para la representación gráfica de los resultados de estos test. \\
+Datos de prueba      & Se incluyen los resultados de 5 algoritmos sobre 29 conjuntos de datos para ejemplificar el uso del paquete.\\
+\bottomrule
+\end{tabularx}
+\end{table}
 \end{frame}
 
 \begin{frame}[fragile]{rNPBST}{Instalación}
@@ -284,6 +290,7 @@ Para la instalación, ejecutar donde se encuentre la carpeta con el software:
 	\end{verbatim}
 \end{frame}
 
+
 \begin{frame}[fragile]{Aplicación de test}
 \begin{verbatim}
  > data("results")
@@ -295,7 +302,7 @@ Para la instalación, ejecutar donde se encuentre la carpeta con el software:
 \end{verbatim}
 Con estos resultados rechazaríamos la hipótesis nula de la 
 equivalencia de los algoritmos. El test nos devuelve en el 
-parámetro \texttt{report} también la suma del ránquin
+parámetro \texttt{report} también la suma del orden
 medio de cada algoritmo. 
 \end{frame}
 
@@ -347,5 +354,25 @@ el de Finner y el de Bergmann y Hommel. Otro posible
 experimento podría consistir en ver el error de tipo I de cada test, es decir,
 cuándo se rechaza la hipótesis nula siendo cierta.
 }
+
+\section{Conclusiones}
+
+\begin{frame}{Conclusiones}
+	Se presentan las conclusiones obtenidas tras la realización del trabajo:
+\begin{itemize}
+\item Necesidad de comprobar las condiciones necesarias para la aplicación de test.
+\item Relevancia de los test basados en \textit{rankings} para la comparación de múltiples algoritmos.
+\item Diferencias entre THN y test bayesianos.
+\item Importancia de disponer una única herramienta para la realización de test.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Trabajos futuros}
+\begin{itemize}
+\item Seguir profundizando en nuevos métodos para realizar la comparación propuestos
+\item Complementar la biblioteca de \texttt{R} con estos nuevos métodos propuestos, test basados en permutaciones.
+\item Realizar un estudio más detallado sobre las propiedades de los test y métodos, incluir comparación de test bayesianos.
+\end{itemize}
+\end{frame}
 
 \end{document}
