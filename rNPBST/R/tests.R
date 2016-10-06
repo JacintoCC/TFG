@@ -176,7 +176,7 @@ danielTrend.test <- function(matrix){
   statistic <- c(r = .jcall(java.test.object, "D", "getR"),
                     z = .jcall(java.test.object, "D", "getZ"))
   pvalue <- .jcall(java.test.object, "D", "getExactPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "daniel trend")
   return(list(htest=htest,report=report))
@@ -194,7 +194,7 @@ kendall.test <- function(matrix){
   statistic <- c(t = .jcall(java.test.object, "D", "getT"),
                     z = .jcall(java.test.object, "D", "getZ"))
   pvalue <- .jcall(java.test.object, "D", "getExactPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "kendall")
   return(list(htest=htest,report=report))
@@ -214,7 +214,7 @@ contingency.coeff.test <- function(matrix){
   coefficients <- list(c = .jcall(java.test.object, "D", "getC"),
                        phi = .jcall(java.test.object, "D", "getPhi"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = q, p.value = pvalue,
                       coefficients = coefficients,
                       method = "contingency coeff")
@@ -234,7 +234,7 @@ fisher.test <- function(matrix){
   pvalue <- .jcall(java.test.object, "D", "getAsymptoticPValue")
   exact.left.p.value <- .jcall(java.test.object, "D", "getExactLeftPValue")
   exact.right.p.value <- .jcall(java.test.object, "D", "getExactRightPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = q, p.value = pvalue,
                       exact.left.p.value = exact.left.p.value,
                       exact.right.p.value = exact.right.p.value,
@@ -257,7 +257,7 @@ mcNemar.test <- function(matrix){
   pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
                  asymptotic.normal = .jcall(java.test.object, "D", "getAsymptoticNormalPValue"),
                  asymptotic.chi = .jcall(java.test.object, "D", "getAsymptoticChiPValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "mcNemar")
   return(list(htest=htest,report=report))
@@ -275,7 +275,7 @@ multinomialEq.test <- function(matrix){
   report <- runTest(java.test.object)
   q <- .jcall(java.test.object, "D", "getQ")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = q, p.value = pvalue,
                       method = "multinomial equality")
   return(list(htest=htest,report=report))
@@ -296,7 +296,7 @@ orderedEq.test <- function(matrix){
   pvalue <- c(right = .jcall(java.test.object, "D", "getRightPValue"),
                  left = .jcall(java.test.object, "D", "getLeftPValue"),
                  double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "ordered equality")
   return(list(htest=htest,report=report))
@@ -315,7 +315,7 @@ cd.test <- function(matrix){
                     W = .jcall(java.test.object, "D", "getW"))
   pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
                  asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "CD")
   return(list(htest=htest,report=report))
@@ -335,7 +335,7 @@ extendedMedian.test <- function(matrix){
                     q = .jcall(java.test.object, "D", "getQ"),
                     improved.q = .jcall(java.test.object, "D", "getImprovedQ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "exteded median")
   return(list(htest=htest,report=report))
@@ -354,7 +354,7 @@ jt.test <- function(matrix){
   statistic <- c(b = .jcall(java.test.object, "D", "getB"),
                  z = .jcall(java.test.object, "D", "getZ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "JT")
   return(list(htest=htest,report=report))
@@ -370,7 +370,7 @@ kruskalWallis.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.equality.kruskalWallisTest.KruskalWallisTest",
                             dataTable(matrix))
   report <- runTest(java.test.object)
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       method = "Kruskal Wallis")
   return(list(htest=htest,report=report))
 }
@@ -387,7 +387,7 @@ ad.test <- function(matrix){
   report <- runTest(java.test.object)
   a <- .jcall(java.test.object, "D", "getA")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = a, p.value = pvalue,
                       method = "AD")
   return(list(htest=htest,report=report))
@@ -405,7 +405,7 @@ chiSquare.test <- function(sequence){
   report <- runTest(java.test.object)
   q <- .jcall(java.test.object, "D", "getQ")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = q, p.value = pvalue,
                       method = "chi square")
   return(list(htest=htest,report=report))
@@ -422,7 +422,7 @@ ks.test <- function(sequence){
   report <- runTest(java.test.object)
   Dn <- .jcall(java.test.object, "D", "getDn")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = Dn, p.value = pvalue,
                       method = "KS")
   return(list(htest=htest,report=report))
@@ -439,7 +439,7 @@ lilliefors.test <- function(sequence){
   report <- runTest(java.test.object)
   Dn <- .jcall(java.test.object, "D", "getDn")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = Dn, p.value = pvalue,
                       method = "lilliefors")
   return(list(htest=htest,report=report))
@@ -460,7 +460,7 @@ normalScores.test <- function(matrix){
   pvalue <- c(left = .jcall(java.test.object, "D", "getLeftPValue"),
                  right = .jcall(java.test.object, "D", "getRightPValue"),
                  double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "normal scores")
   return(list(htest=htest,report=report))
@@ -486,7 +486,7 @@ wilcoxonRankSum.test <- function(matrix){
                  asymptotic.double = .jcall(java.test.object, "D", "getExactDoublePValue"))
   confidenceInterval <- list(confidenceInterval95 = .jcall(java.test.object, "S", "printConfidenceInterval95"),
                              confidenceInterval90 = .jcall(java.test.object, "S", "printConfidenceInterval90"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = w, p.value = pvalue,
                       method = "wilcoxon rank sum", report = report,
                       confidenceInterval = confidenceInterval)
@@ -507,7 +507,7 @@ concordanceCoeff.test <- function(matrix){
                     q = .jcall(java.test.object, "D", "getQ"),
                     w = .jcall(java.test.object, "D", "getW"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                      method = "concordance coeff")
   return(list(htest=htest,report=report))
@@ -526,7 +526,7 @@ friedman.test <- function(matrix){
   statistic <- c(s = .jcall(java.test.object, "D", "getS"),
                  q = .jcall(java.test.object, "D", "getQ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "Friedman test")
   return(list(htest=htest,report=report))
@@ -546,7 +546,7 @@ incompleteConcordance.test <- function(matrix, lambda){
   statistic <- c(q = .jcall(java.test.object, "D", "getQ"),
                     w = .jcall(java.test.object, "D", "getW"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "incomplete concordance")
   return(list(htest=htest,report=report))
@@ -564,7 +564,7 @@ page.test <- function(matrix){
   l <- .jcall(java.test.object, "D", "getL")
   pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
                  asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = l, p.value = pvalue,
                       method = "page")
   return(list(htest=htest,report=report))
@@ -581,7 +581,7 @@ partialCorrelation.test <- function(matrix){
   report <- runTest(java.test.object)
   tau <- .jcall(java.test.object, "D", "getTau")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = tau, p.value = pvalue,
                       method = "partial correlation")
   return(list(htest=htest,report=report))
@@ -618,7 +618,7 @@ populationQuantile.test <- function(sequence, quantile, value){
   pvalue <- c(left = .jcall(java.test.object, "D", "getExactLeftPValue"),
                  right = .jcall(java.test.object, "D", "getExactRightPValue"),
                  double = .jcall(java.test.object, "D", "getExactDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = statistic, p.value = pvalue,
                       method = "population quantile")
   return(list(htest=htest,report=report))
@@ -642,7 +642,7 @@ sign.test <- function(sequence){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = statistic, p.value = pvalue,
                       method = "sign")
   return(list(htest=htest,report=report))
@@ -665,7 +665,7 @@ wilcoxon.test <- function(matrix){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "wilcoxon")
   return(list(htest=htest,report=report))
@@ -687,7 +687,7 @@ numberRuns.test <- function(sequence){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = runs, p.value = pvalue,
                       method = "number runs")
   return(list(htest=htest,report=report))
@@ -710,7 +710,7 @@ numberRunsUpDownMedian.test <- function(sequence){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = statistic, p.value = pvalue,
                       method = "number runs median")
   return(list(htest=htest,report=report))
@@ -732,7 +732,7 @@ numberRunsUpDown.test <- function(sequence){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = runs, p.value = pvalue,
                       method = "number runs up down")
   return(list(htest=htest,report=report))
@@ -755,7 +755,7 @@ vonNeumann.test <- function(sequence){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(sequence)),
+  htest <- make.htest(data.name = deparse(substitute(sequence)),
                       statistic = statistic, p.value = pvalue,
                       method = "vonNeumann")
   return(list(htest=htest,report=report))
@@ -776,7 +776,7 @@ davidBarton.test <- function(matrix){
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "david barton")
   return(list(htest=htest,report=report))
@@ -797,7 +797,7 @@ freundAnsariBradley.test <- function(matrix){
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "freund ansari bradley")
   return(list(htest=htest,report=report))
@@ -817,7 +817,7 @@ klotz.test <- function(matrix){
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(x.pvalue = .jcall(java.test.object, "D", "getPValue1"),
                  y.pvalue = .jcall(java.test.object, "D", "getPValue2"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "klotz")
   return(list(htest=htest,report=report))
@@ -837,7 +837,7 @@ mood.test <- function(matrix){
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(x.pvalue = .jcall(java.test.object, "D", "getPValue1"),
                  y.pvalue = .jcall(java.test.object, "D", "getPValue2"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "mood")
   return(list(htest=htest,report=report))
@@ -860,7 +860,7 @@ siegelTukey.test <- function(matrix){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "siegel tukey")
   return(list(htest=htest,report=report))
@@ -880,7 +880,7 @@ sukhatme.test <- function(matrix){
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = sukhatme, p.value = pvalue,
                       method = "sukhatme")
   return(list(htest=htest,report=report))
@@ -906,7 +906,7 @@ controlMedian.test <- function(matrix){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "control median")
   return(list(htest=htest,report=report))
@@ -930,7 +930,7 @@ ks.test <- function(matrix){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "ks")
   return(list(htest=htest,report=report))
@@ -955,7 +955,7 @@ median.test <- function(matrix){
                  asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "median")
   return(list(htest=htest,report=report))
@@ -973,7 +973,7 @@ waldWolfowitz.test <- function(matrix){
   r <- .jcall(java.test.object, "D", "getR")
   pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
                  asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data = deparse(substitute(matrix)),
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "median")
   return(list(htest=htest,report=report))
