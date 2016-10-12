@@ -5,4 +5,10 @@ Date: 2008-05-13
 Description: This package is a wrapper of the Java package JavaNPTS for R and
     Bayesian tests based on Benavoli work.
 License: GPL-2
+Imports:
+    rJava,
+    MCMCpack,
+    ggtern,
+    XML
 RoxygenNote: 5.0.1
+LazyData: true
