@@ -5,7 +5,6 @@
 #' @param matrix Matrix of data
 #' @return A htest object with pvalues and statistics
 danielTrend.test <- function(matrix){
-
   # Checks
   if(ncol(matrix) != 2)
     stop("This test only can be employed with two samples")
@@ -46,16 +45,20 @@ danielTrend.test <- function(matrix){
   no.dependence.pvalue <- 2 * min(positive.dependence.pvalue,
                                   negative.dependence.pvalue)
 
-  statistic <- list(D = sumD, R = R, Z = Z)
-  pvalues <- ifelse(n <= 30, list(pvale = pvalue,
-                                  pos.dep.pvalue = positive.dependence.pvalue,
-                                  neg.dep.pvalue = negative.dependence.pvalue,
-                                  no.dependence.pvalue = no.dependence.pvalue),
-                             list(pos.dep.pvalue = positive.dependence.pvalue,
-                                  neg.dep.pvalue = negative.dependence.pvalue,
-                                  no.dependence.pvalue = no.dependence.pvalue))
+  statistic <- c(D = sumD, R = R, Z = Z)
+  if(n <= 30){
+    pvalues <- c("R" = pvalue,
+                 "pos.dep.pvalue" = positive.dependence.pvalue,
+                 "neg.dep.pvalue" = negative.dependence.pvalue,
+                 "no.dependence.pvalue" = no.dependence.pvalue)
+  }
+  else{
+    pvalues <- c("pos.dep.pvalue" = positive.dependence.pvalue,
+                 "neg.dep.pvalue" = negative.dependence.pvalue,
+                 "no.dependence.pvalue" = no.dependence.pvalue)
+  }
 
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
+  htest <- list(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalues,
                       method = "Daniel Trend")
   return(htest)

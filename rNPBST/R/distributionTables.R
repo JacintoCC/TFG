@@ -53,8 +53,8 @@ xmlQuantileDistributionToMatrix <-function(xml.file, pvalues){
 #' @param T Value of the statistic
 #' @param epsilon Threshold for compare the statistic
 #' @return p-value computed
-getFromDistributionTable <- function(table, n.value, T.value, epsilon = 0.002){
-  value <- table[which(table$n == n.value) && which(abs(table$T - T.value) < epsilon),
+getFromDistributionTable <- function(table, n, T, epsilon = 0.002){
+  value <- table[which(table$n == n) && which(abs(table$T - T) < epsilon),
                  "distribution"]
   return(value)
 }

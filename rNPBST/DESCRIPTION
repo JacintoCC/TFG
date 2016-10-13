@@ -10,5 +10,7 @@ Imports:
     MCMCpack,
     ggtern,
     XML
+Depends:
+  EnvStats
 RoxygenNote: 5.0.1
 LazyData: true
