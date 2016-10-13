@@ -17,8 +17,7 @@ runTest <- function(java.test.object){
 #' @param test.name Name of the test.
 #' @return The function returns the report of the test in a string
 doTest <- function(test.name, ...){
-  java.t.classes <- c("javanpst.tests.bivariate.danielTrendTest.DanielTrendTest",
-                      "javanpst.tests.bivariate.kendallTest.KendallTest",
+  java.t.classes <- c("javanpst.tests.bivariate.kendallTest.KendallTest",
                       "javanpst.tests.countData.contingencyCoefficient.ContingencyCoefficient",
                       "javanpst.tests.countData.fisherTest.FisherTest",
                       "javanpst.tests.countData.mcNemarTest.McNemarTest",
@@ -58,8 +57,7 @@ doTest <- function(test.name, ...){
                       "javanpst.tests.twoSample.medianTest.MedianTest",
                       "javanpst.tests.twoSample.wald_WolfowitzTest.Wald_WolfowitzTest")
 
-  names(java.t.classes) <-  c("daniel trend",
-                              "kendall",
+  names(java.t.classes) <-  c("kendall",
                               "contingency coeff",
                               "fisher",
                               "mcNemar",
@@ -121,25 +119,6 @@ make.htest <- function(...){
   return(htest)
 }
 
-
-#' @title Kendall test for bivariated samples
-#'
-#' @description This function performs the Kendall test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-kendall.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.bivariate.kendallTest.KendallTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(t = .jcall(java.test.object, "D", "getT"),
-                    z = .jcall(java.test.object, "D", "getZ"))
-  pvalue <- .jcall(java.test.object, "D", "getExactPValue")
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "kendall")
-  return(htest)
-}
-
 #' @title Contingency Coefficient test for count data
 #'
 #' @export
@@ -158,48 +137,6 @@ contingency.coeff.test <- function(matrix){
                       statistic = q, p.value = pvalue,
                       coefficients = coefficients,
                       method = "contingency coeff")
-  return(htest)
-}
-
-#' @title Fisher test for count data
-#'
-#' @description This function performs the Fisher test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-fisher.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.countData.fisherTest.FisherTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  q <- .jcall(java.test.object, "D", "getQ")
-  pvalue <- .jcall(java.test.object, "D", "getAsymptoticPValue")
-  exact.left.p.value <- .jcall(java.test.object, "D", "getExactLeftPValue")
-  exact.right.p.value <- .jcall(java.test.object, "D", "getExactRightPValue")
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = q, p.value = pvalue,
-                      exact.left.p.value = exact.left.p.value,
-                      exact.right.p.value = exact.right.p.value,
-                      method = "fisher")
-  return(htest)
-}
-
-#' @title McNemar test for count data
-#'
-#' @description This function performs the McNemar test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-mcNemar.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.countData.mcNemarTest.McNemarTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(s = .jcall(java.test.object, "D", "getS"),
-                    z = .jcall(java.test.object, "D", "getZ"),
-                    t = .jcall(java.test.object, "D", "getT"))
-  pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
-                 asymptotic.normal = .jcall(java.test.object, "D", "getAsymptoticNormalPValue"),
-                 asymptotic.chi = .jcall(java.test.object, "D", "getAsymptoticChiPValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "mcNemar")
   return(htest)
 }
 
@@ -242,24 +179,6 @@ orderedEq.test <- function(matrix){
   return(htest)
 }
 
-#' @title Charkraborti and Desu test for equality
-#'
-#' @description This function performs the  Charkraborti and Desu test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-cd.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.equality.CDTest.CDTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(median = .jcall(java.test.object, "D", "getZ"),
-                    W = .jcall(java.test.object, "D", "getW"))
-  pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
-                 asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "CD")
-  return(htest)
-}
 
 #' @title Extended Median test for equality
 #'

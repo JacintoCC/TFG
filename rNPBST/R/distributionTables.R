@@ -88,3 +88,30 @@ computeAproximatedProbability <- function(table, n, T){
 
   return(1.0)
 }
+
+#' @title Kolmogorov probability
+#'
+#' @description Computes p-value of the Kolmogorov distribution
+#' @param n Size of the population
+#' @param Dn Kolmogorov statistic
+#' @return p-value computed
+computeKolmogorovProbability <- function(n, Dn){
+  data(KolmogorovTable)
+  asymptoticValues <- c(1.07,1.22,1.36,1.52,1.63)
+
+  if(n <= 40){
+    for(i in ncol(KolmogorovTable):1){
+      if(Dn >= table[as.character(n),i])
+        return(colnames(table)[i])
+    }
+  }
+  else{
+    size <- sqrt(n)
+    for(i in ncol(KolmogorovTable):1){
+      if(Dn >= asymptoticValues[i]/size)
+        return(colnames(table)[i])
+    }
+  }
+
+  return(1.0)
+}
