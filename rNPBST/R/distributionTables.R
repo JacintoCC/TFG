@@ -22,6 +22,18 @@ xmlDistributionToDataFrame <-function(xml.file){
   dist.data.frame <- as.data.frame(t(xpathSApply(parsed.file, "//*/element", attParse)),
                                    stringsAsFactors = FALSE)
   colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "distribution"
+  dist.data.frame <- transform(dist.data.frame,  distribution = as.numeric(distribution))
+
+  if(ncol(dist.data.frame) == 3){
+    dist.data.frame <- transform(dist.data.frame,  n = as.integer(n))
+    dist.data.frame <- transform(dist.data.frame,  T = as.numeric(T))
+  }
+  else{
+    dist.data.frame <- transform(dist.data.frame,  x = as.integer(x))
+    dist.data.frame <- transform(dist.data.frame,  y = as.integer(y))
+    dist.data.frame <- transform(dist.data.frame,  z = as.integer(z))
+  }
+
   return(dist.data.frame)
 }
 
@@ -95,7 +107,7 @@ computeAproximatedProbability <- function(table, n, T){
 #' @param n Size of the population
 #' @param Dn Kolmogorov statistic
 #' @return p-value computed
-computeKolmogorovProbability <- function(n, Dn){
+pkolmogorov <- function(n, Dn){
   data(KolmogorovTable)
   asymptoticValues <- c(1.07,1.22,1.36,1.52,1.63)
 
@@ -114,4 +126,23 @@ computeKolmogorovProbability <- function(n, Dn){
   }
 
   return(1.0)
+}
+
+#' @title Get cumulative probability function
+#'
+#' @description  Get cumulative probability function according to distribution
+#' @param distribution Distribution name
+#' @return Cumulative probability function
+getCumulativeProbabilityFunction <- function(distribution, ...){
+    switch(distribution,
+      "NORMAL" = function(x) pnorm(q = x, ...),
+      "UNIFORM" = function(x) punif(q = x, ...),
+      "CHI_SQUARE" =function(x) pchisq(q = x, ...) ,
+      "EXPONENTIAL" = function(x) pexp(q = x, ...),
+      "GAMMA" = function(x) pgamma(q = x, ...),
+      "LAPLACE" = function(x) plaplace(q = x, ...),
+      "LOGISTIC" = function(x) plogis(q = x, ...),
+      "WEIBULL" = function(x) pweibull(q = x, ...),
+      "KOLMOGOROV" = function(x) pkolmogorov(Dn = x, ...)
+    )
 }

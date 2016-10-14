@@ -17,13 +17,9 @@ runTest <- function(java.test.object){
 #' @param test.name Name of the test.
 #' @return The function returns the report of the test in a string
 doTest <- function(test.name, ...){
-  java.t.classes <- c("javanpst.tests.bivariate.kendallTest.KendallTest",
-                      "javanpst.tests.countData.contingencyCoefficient.ContingencyCoefficient",
-                      "javanpst.tests.countData.fisherTest.FisherTest",
-                      "javanpst.tests.countData.mcNemarTest.McNemarTest",
+  java.t.classes <- c("javanpst.tests.countData.contingencyCoefficient.ContingencyCoefficient",
                       "javanpst.tests.countData.multinomialEqualityTest.MultinomialEqualityTest",
                       "javanpst.tests.countData.orderedEqualityTest.OrderedEqualityTest",
-                      "javanpst.tests.equality.CDTest.CDTest",
                       "javanpst.tests.equality.extendedMedianTest.ExtendedMedianTest",
                       "javanpst.tests.equality.JTTest.JTTest",
                       "javanpst.tests.equality.kruskalWallisTest.KruskalWallisTest",
@@ -59,11 +55,8 @@ doTest <- function(test.name, ...){
 
   names(java.t.classes) <-  c("kendall",
                               "contingency coeff",
-                              "fisher",
-                              "mcNemar",
                               "multinomial equality",
                               "ordered equality",
-                              "CD",
                               "extended median",
                               "JT",
                               "kruskal",
@@ -270,39 +263,6 @@ chiSquare.test <- function(sequence){
   return(htest)
 }
 
-#' @title Kolmogorov Smirnov test for goodness of fit
-#'
-#' @description This function performs the Kolmogorov Smirnov test
-#' @param sequence Sequence of data
-#' @return A htest object with pvalues and statistics
-ks.test <- function(sequence){
-  java.test.object <- .jnew("javanpst.tests.goodness.K_STest.K_STest",
-                            numericSequence(sequence))
-  report <- runTest(java.test.object)
-  Dn <- .jcall(java.test.object, "D", "getDn")
-  pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data.name = deparse(substitute(sequence)),
-                      statistic = Dn, p.value = pvalue,
-                      method = "KS")
-  return(htest)
-}
-
-#' @title Lilliefors test for goodness of fit
-#'
-#' @description This function performs the Lilliefors test
-#' @param sequence Sequence of data
-#' @return A htest object with pvalues and statistics
-lilliefors.test <- function(sequence){
-  java.test.object <- .jnew("javanpst.tests.goodness.lillieforsTest.LillieforsTest",
-                            numericSequence(sequence))
-  report <- runTest(java.test.object)
-  Dn <- .jcall(java.test.object, "D", "getDn")
-  pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data.name = deparse(substitute(sequence)),
-                      statistic = Dn, p.value = pvalue,
-                      method = "lilliefors")
-  return(htest)
-}
 
 #' @title Normal scores test for location
 #'
