@@ -3,6 +3,7 @@
 #' @export
 #' @description This function performs the Kolmogorov-Smirnov test
 #' @param sequence Secuence of data
+#' @param distribution Distribution name to perform test
 #' @return A htest object with pvalues and statistics
 ks.test <- function(sequence, distribution = "NORMAL", ...){
   # Order sequence
@@ -31,6 +32,7 @@ ks.test <- function(sequence, distribution = "NORMAL", ...){
 #' @export
 #' @description This function performs the Lilliefors test
 #' @param sequence Secuence of data
+#' @param distribution Distribution name to perform test
 #' @return A htest object with pvalues and statistics
 lilliefors.test <- function(sequence, distribution = "NORMAL"){
   # Order sequence

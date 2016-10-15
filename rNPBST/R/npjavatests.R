@@ -345,41 +345,6 @@ incompleteConcordance.test <- function(matrix, lambda){
   return(htest)
 }
 
-#' @title Page test for multiple comparisons
-#'
-#' @description This function performs the Page test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-page.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.multiple.pageTest.PageTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  l <- .jcall(java.test.object, "D", "getL")
-  pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
-                 asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = l, p.value = pvalue,
-                      method = "page")
-  return(htest)
-}
-
-#' @title Partial correlation test for multiple comparisons
-#'
-#' @description This function performs the partial correlation test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-partialCorrelation.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.multiple.partialCorrelationTest.PartialCorrelationTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  tau <- .jcall(java.test.object, "D", "getTau")
-  pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = tau, p.value = pvalue,
-                      method = "partial correlation")
-  return(htest)
-}
-
 #' @title Confidence Quantile for one sample
 #'
 #' @export
