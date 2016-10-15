@@ -285,32 +285,6 @@ normalScores.test <- function(matrix){
   return(htest)
 }
 
-#' @title Wilcoxon Rank Sum test for location
-#'
-#' @description This function performs the Wilcoxon Rank Sum test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-wilcoxonRankSum.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.location.wilcoxonRankSumTest.WilcoxonRankSumTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  w <- .jcall(java.test.object, "D", "getStatistic1")
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 exact.double.90 = .jcall(java.test.object, "D", "getExactConfidence90"),
-                 exact.double.95 = .jcall(java.test.object, "D", "getExactConfidence95"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getAsymptoticLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getAsymptoticRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getExactDoublePValue"))
-  confidenceInterval <- list(confidenceInterval95 = .jcall(java.test.object, "S", "printConfidenceInterval95"),
-                             confidenceInterval90 = .jcall(java.test.object, "S", "printConfidenceInterval90"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = w, p.value = pvalue,
-                      method = "wilcoxon rank sum", report = report,
-                      confidenceInterval = confidenceInterval)
-  return(htest)
-}
 
 #' @title Concordance Coefficient test for multiple comparisons
 #'
