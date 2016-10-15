@@ -406,29 +406,6 @@ sign.test <- function(sequence){
   return(htest)
 }
 
-#' @title Wilcoxon test for one sample
-#'
-#' @description This function performs the Wilcoxon test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-wilcoxon.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.oneSample.wilcoxonTest.WilcoxonTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(r.plus = .jcall(java.test.object, "D", "getRPlus"),
-                    r.minus = .jcall(java.test.object, "D", "getRMinus"))
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "wilcoxon")
-  return(htest)
-}
-
 #' @title Number of Runs test for randomness
 #'
 #' @description This function performs the Number Of Runs test

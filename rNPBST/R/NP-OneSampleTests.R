@@ -109,6 +109,6 @@ wilcoxon.test <- function(matrix){
 
   htest <- list(data.name = deparse(substitute(matrix)),
                 statistic = c(Dn = Dn) p.value = pvalues,
-                method = "Kolmogorov-Smirnov")
+                method = "Wilcoxon")
   return(htest)
 }
