@@ -331,7 +331,7 @@ vonNeumann.test <- function(sequence){
   pvalues <- c(exact.values, asymptotic.values)
 
   htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = runs, p.value = pvalues,
+                statistic = c("NM" = NM, "RVN" = RVN), p.value = pvalues,
                 method = "Von Neumann")
   return(htest)
 }

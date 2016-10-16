@@ -488,29 +488,6 @@ mood.test <- function(matrix){
   return(htest)
 }
 
-#' @title Siegel Tukey test for scale
-#'
-#' @description This function performs the Siegel Tukey test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-siegelTukey.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.scale.siegel_TukeyTest.Siegel_TukeyTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(ST1 = .jcall(java.test.object, "D", "getTestStatistic1"),
-                    ST2 = .jcall(java.test.object, "D", "getTestStatistic2"))
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "siegel tukey")
-  return(htest)
-}
-
 #' @title Sukhatme test for scale
 #'
 #' @export
