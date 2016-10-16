@@ -86,11 +86,11 @@ computeNumberOfRunsAsymptoticProbability <- function(a, b, runs){
   z <- numerator / denominator
   left.pvalue <- pnorm(z)
 
-  double.pvalue <- min(min(left.pvalue,right.pvalue) * 2, 1)
+  double.pvalue <-doubleTailProbability(left.pvalue,right.pvalue)
 
   return(c("Asymptotic Left Tail" = left.pvalue,
            "Asymptotic Right Tail" = right.pvalue,
-           "Asymptotic Double Tail" = doulbe.pvalue))
+           "Asymptotic Double Tail" = double.pvalue))
 }
 
 #' @title Number of runs test for randomness
@@ -113,7 +113,7 @@ numberRuns.test <- function(sequence){
 
   exact.left.tail <- computeNumberOfRunsLeftTailProbability(n1, n2, runs)
   exact.right.tail <- computeNumberOfRunsRightTailProbability(n1, n2, runs)
-  exact.double.tail <- min(min(exact.left.tail, exact.right.tail) * 2, 1)
+  exact.double.tail <- doubleTailProbability(exact.left.tail,exact.right.tail)
 
   asymptotic.values <- computeNumberOfRunsAsymptoticProbability(n1, n2, runs)
 
@@ -151,7 +151,7 @@ numberRunsUpDownMedian.test <- function(sequence){
 
   exact.left.tail <- computeNumberOfRunsLeftTailProbability(n1, n2, runs)
   exact.right.tail <- computeNumberOfRunsRightTailProbability(n1, n2, runs)
-  exact.double.tail <- min(min(exact.left.tail, exact.right.tail) * 2, 1)
+  exact.double.tail <- doubleTailProbability(exact.left.tail,exact.right.tail)
 
   asymptotic.values <- computeNumberOfRunsAsymptoticProbability(n1, n2, runs)
 
@@ -169,7 +169,9 @@ numberRunsUpDownMedian.test <- function(sequence){
 ################
 # NUMBER OF RUNS UP AND DOWN TEST
 ################
-#' @title Exact Left tail probability fo number of runs distribution
+
+
+#' @title Exact tail probability fo number of runs distribution
 #'
 #' @description  Computes exact p-value of the Runs up down distribution
 #' @param n Number of elements
@@ -216,11 +218,11 @@ computeNumberOfRunsAsymptoticProbability <- function(n, R){
   z <- numerator / denominator
   left.pvalue <- pnorm(z)
 
-  double.pvalue <- min(min(left.pvalue,right.pvalue) * 2, 1)
+  double.pvalue <- doubleTailProbability(left.pvalue,right.pvalue)
 
   return(c("Asymptotic Left Tail" = left.pvalue,
            "Asymptotic Right Tail" = right.pvalue,
-           "Asymptotic Double Tail" = doulbe.pvalue))
+           "Asymptotic Double Tail" = double.pvalue))
 }
 
 #' @title Number of runs up and down median test for randomness
@@ -244,5 +246,92 @@ numberRunsUpDown.test <- function(sequence){
   htest <- list(data.name = deparse(substitute(sequence)),
                 statistic = runs, p.value = pvalues,
                 method = "Number of runs up and down")
+  return(htest)
+}
+
+
+
+
+################
+# VON NEUMANN TEST
+################
+
+#' @title Exact tail probability for Von Neumann distribution
+#'
+#' @description  Computes exact p-value of the Von Neumann distribution
+#' @param n Number of elements
+#' @param NM NM statistic
+#' @param RVN RVN statistic
+#' @return pvalue computed
+computeRunsUpDownExactProbability <- function(n, NM, RVN){
+
+  if(n < 10){
+    data(NMRanksLeft)
+    data(NMRanksRight)
+
+    int.NM <- ceil(NM)
+    left <- NMRanksLeft$distribution[NMRanksLeft$x == n & NMRanksLeft$y == int.NM]
+
+    if(left == -1){
+      probs <- NMRanksLeft$distribution[NMRanksLeft$x == n & NMRanksLeft$y > int.NM]
+      if(length(probs[probs != -1] > 0)
+        left <- 1
+    }
+
+    int.NM <- floor(NM)
+    right <- NMRanksRight$distribution[NMRanksRight$x == n & NMRanksRight$y == int.NM]
+
+    if(right == -1){
+      probs <- NMRanksRight$distribution[NMRanksRight$x == n & NMRanksRight$y > int.NM]
+      if(length(probs[probs != -1] > 0)
+        right <- 1
+    }
+  }
+  else{
+    data(RanksVonNeumann)
+
+    row <- RanksVonNeumann[n, ]
+    left <- colnames(row[row >= RVN])[1]
+    right <- colnames(row[4 - row <= RVN])[1]
+  }
+
+  return(c("Exact Left Tail" = left,
+           "Exact Right Tail" = right,
+           "Double Tail" = doubleTailProbability(left, right)))
+}
+
+#' @title Von Neumann test for randomness
+#'
+#' @export
+#' @description This function performs the Von Neumann
+#' @param sequence Sequence of data
+#' @return A htest object with pvalues and statistics
+vonNeumann.test <- function(sequence){
+  n <- length(sequence)
+  ranks <- rank(sequence)
+
+  #Compute NM statistic
+  NM.vector <- sapply(1:(n-1), function(i) (ranks[i]-ranks[i+1])*(ranks[i]-ranks[i+1]))
+  NM <- sum(NM.vector)
+
+  # Compute RVN statistic
+  denominator <- sum((ranks - (n+1) / 2) * (ranks - (n+1) / 2))
+  RVN <- NM / denominator
+
+  exact.values <- computeVonNewmannExactProbability(n, NM, RVN)
+
+  variance <- 4 * (n-2) * (5*n*n - 2*n - 9) / (5 * n * (n+1) * (n-1) * (n-1))
+  z <- (RVN - 2) / sqrt(variance)
+
+
+  asymptotic.values <- c("Asymptotic Left Tail" = pnorm(z),
+                         "Asymptotic Right Tail" = 1 - pnorm(z),
+                         "Asymptotic Double Tail" = doubleTailProbability(pnorm(z), 1 - pnorm(z)))
+
+  pvalues <- c(exact.values, asymptotic.values)
+
+  htest <- list(data.name = deparse(substitute(sequence)),
+                statistic = runs, p.value = pvalues,
+                method = "Von Neumann")
   return(htest)
 }

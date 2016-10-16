@@ -72,7 +72,7 @@ computeWilcoxonRankPValues <- function(combined, n1, n2, WRank){
     rank = WRank
     exact.left.tail <- computeWilcoxonRankLeftProbability(n2, n1, rank)
     exact.right.tail <- computeWilcoxonRankRightProbability(n2, n1, rank)
-    exact.double.tail <- min(min(exact.left.tail, exact.right.tail) * 2, 1)
+    exact.double.tail <- doubleTailProbability(exact.left.tail, exact.right.tail)
     pvalues <- c("Exact Left Tail" = exact.left.tail,
                  "Exact Right Tail" = exact.right.tail,
                  "Exact Double Tail" = exact.double.tail)
@@ -108,7 +108,7 @@ computeWilcoxonRankPValues <- function(combined, n1, n2, WRank){
   z <- numerator / denominator
 
   asymptotic.left.tail <- pnorm(z)
-  asymptotic.double.tail <- min(min(asymptotic.left.tail,asymptotic.right.tail)*2, 1)
+  asymptotic.double.tail <- doubleTailProbability(asymptotic.left.tail,asymptotic.right.tail)
 
   pvalues <- c(pvalues,
                "Asymptotic Left Tail" = asymptotic.left.tail,

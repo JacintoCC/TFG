@@ -146,3 +146,13 @@ getCumulativeProbabilityFunction <- function(distribution, ...){
       "KOLMOGOROV" = function(x) pkolmogorov(Dn = x, ...)
     )
 }
+
+#' @title Double tail probability
+#'
+#' @description  Get double tail probability
+#' @param l Left tail probability
+#' @param r Right tail probability
+#' @return Double tail probability
+doubleTailProbability <- function(l, r){
+  return(min(min(l,r)*2, 1))
+}

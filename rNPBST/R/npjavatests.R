@@ -406,30 +406,6 @@ sign.test <- function(sequence){
   return(htest)
 }
 
-
-#' @title Von Neumann test for randomness
-#'
-#' @description This function performs the Von Neumann test
-#' @param sequence Sequence of data
-#' @return A htest object with pvalues and statistics
-vonNeumann.test <- function(sequence){
-  java.test.object <- .jnew("javanpst.tests.randomness.vonNeumannTest.VonNeumannTest",
-                            numericSequence(sequence))
-  report <- runTest(java.test.object)
-  statistic <- c(NM = .jcall(java.test.object, "D", "getNM"),
-                    RVN = .jcall(java.test.object, "D", "getRVN"))
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data.name = deparse(substitute(sequence)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "vonNeumann")
-  return(htest)
-}
-
 #' @title David Barton test for scale
 #'
 #' @export

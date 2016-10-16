@@ -31,7 +31,7 @@ computeWilcoxonAsymptoticProbability <- function(n, R, ties){
 
   right.tail <- 1 - pnorm(numerator1 / denominator)
   left.tail <- pnorm(numerator2 / denominator)
-  double.tail <- min(min(left.tail, right.tail) * 2, 1)
+  double.tail <- doubleTailProbability(left.tail, right.tail)
 
   return(c("Asymptotic Left Tail" = left.tail,
            "Asymptotic Right Tail" = right.tail,
