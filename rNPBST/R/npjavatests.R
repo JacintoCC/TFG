@@ -582,21 +582,3 @@ median.test <- function(matrix){
                       method = "median")
   return(htest)
 }
-
-#' @title Wald-Wolfowitz for two samples
-#'
-#' @description This function performs the Wald-Wolfowitz test
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-waldWolfowitz.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.twoSample.wald_WolfowitzTest.Wald_WolfowitzTest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  r <- .jcall(java.test.object, "D", "getR")
-  pvalue <- c(exact = .jcall(java.test.object, "D", "getExactPValue"),
-                 asymptotic = .jcall(java.test.object, "D", "getAsymptoticPValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "median")
-  return(htest)
-}
