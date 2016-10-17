@@ -22,7 +22,8 @@ ks.test <- function(sequence, distribution = "NORMAL", ...){
   pvalue <- pkolmogorov(n, Dn)
 
   htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = c(Dn = Dn) p.value = pvalue,
+                statistic = Dn,
+                p.value = pvalue,
                 method = "Kolmogorov-Smirnov")
   return(htest)
 }
@@ -67,7 +68,8 @@ lilliefors.test <- function(sequence, distribution = "NORMAL"){
 
   htest <- list(data.name = deparse(substitute(sequence)),
                 parameters = parameters,
-                statistic = c(Dn = Dn) p.value = pvalue,
+                statistic = Dn,
+                p.value = pvalue,
                 method = "Lilliefors")
   return(htest)
 }

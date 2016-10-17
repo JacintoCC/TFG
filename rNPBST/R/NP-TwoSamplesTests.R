@@ -14,9 +14,9 @@ computeKolmogorovExactProbability <- function(n, Dn){
   if(n < 9){
     data(KolmogorovTwoSample)
     nmDn <- round(n * n * Dn)
-    pvalue <- KolmogorovTwoSample$distribution[KolmogorovTwoSample$x = n &
-                                               KolmogorovTwoSample$y = n &
-                                               KolmogorovTwoSample$Dn = nmDn]
+    pvalue <- KolmogorovTwoSample$distribution[KolmogorovTwoSample$x == n &
+                                               KolmogorovTwoSample$y == n &
+                                               KolmogorovTwoSample$Dn == nmDn]
     pvalue <- ifelse(pvalue == -1, 1, pvalue)
     return(pvalue)
   }
@@ -43,7 +43,7 @@ computeKolmogorovAsymptoticProbability <- function(n, Dn){
     size <- sqrt(2*n)/n
     v <- Dn >= c(1.07,1.22,1.36,1.52,1.63)/size
     if(length(v) > 0){
-      pvalue <- colnames(KolmogorovTwoSampleAsymptotic)[v[length(v)]
+      pvalue <- colnames(KolmogorovTwoSampleAsymptotic)[v[length(v)]]
       return(pvalue)
     }
     else
@@ -82,8 +82,8 @@ ksTwoSamples.test <- function(matrix){
 
   # Sn and Sm arrays
 
-  Sn <- combinedCdf[combined in sample1]
-  Sm <- combinedCdf[combined in sample2]
+  Sn <- combinedCdf[combined %in% sample1]
+  Sm <- combinedCdf[combined %in% sample2]
 
   # Diff
   diff <- Sm - Sn
@@ -126,9 +126,9 @@ waldWolfowitzSequence <- function(sample1, sample2){
   combined <- c(sample1, sample2)
   combined <- combined[combined]
   sequence <- sapply(combined, function(i){
-      if(i in sample1 & !(i in sample2))
+      if(i %in% sample1 & !(i %in% sample2))
         return(1)
-      else if(!(i in sample1) & i in sample2){
+      else if(!(i %in% sample1) & i %in% sample2)
         return(-1)
       else
         return(0)

@@ -7,7 +7,7 @@
 #' @return Exact p-value computed
 computePageExactProbability <- function(N, k, L){
   if(N <= 8 & N >= 3 & k <= 12 & k >= 2){
-    data(PageTable)page
+    data(PageTable)
     pvalues <- PageTable$p[PageTable$N == N &
                            PageTable$k == m &
                            PageTable$L == L]
@@ -82,17 +82,17 @@ page.test <- function(matrix){
   # Sorted by Z
   ranks <- ranks[ , order(ranks[3, ])]
 
-  TxzQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] > ranks[1, ]))
-  TxzC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] <= ranks[1, ]))
+  TxzQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] > ranks[1, ])))
+  TxzC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] <= ranks[1, ])))
 
-  TyzQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[2,i] > ranks[2, ]))
-  TyzC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[2,i] <= ranks[2, ]))
+  TyzQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[2,i] > ranks[2, ])))
+  TyzC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[2,i] <= ranks[2, ])))
 
   # Sorted by Y
   ranks <- ranks[ , order(ranks[2, ])]
 
-  TxyQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] > ranks[1, ]))
-  TxyC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] <= ranks[1, ]))
+  TxyQ <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] > ranks[1, ])))
+  TxyC <- sum(sapply(1:n, function(i) sum(i < 1:n & ranks[1,i] <= ranks[1, ])))
 
   # T statistics
   Txy <- 2 * (TxyC - TxyQ) / (n * (n-1))

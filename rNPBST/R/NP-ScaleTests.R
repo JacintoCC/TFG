@@ -31,14 +31,14 @@ siegelTukey.test <- function(matrix){
       ifelse(i <= n/2,
              ifelse(i %% 2 == 0, 2 * i, 2 * i -1),
              ifelse(i == n/2 + 1, 0,
-                    ifelse(i %% 2 == 0, 2 * (n-i) + 2, 2 * (n-i) + 1)))
+                    ifelse(i %% 2 == 0, 2 * (n-i) + 2, 2 * (n-i) + 1))))
   }
 
   sumWeights <- sum(weights)
 
   ST1 <- ifelse(n1 <= n2,
-                sum(weights[combined in sample1]),
-                sum(weights[combined in sample2]))
+                sum(weights[combined %in% sample1]),
+                sum(weights[combined %in% sample2]))
   ST2 <- sumWeights - ST1
 
   if(n1 <= 10 & n2 <= 10){

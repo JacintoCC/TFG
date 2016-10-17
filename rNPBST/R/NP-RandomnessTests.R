@@ -30,7 +30,7 @@ computeNumberOfRunsLeftTailProbability <- function(a, b, runs){
   if(left.tail == -1)
     left.tail <- 1 - right.tail
 
-  return left.tail
+  return(left.tail)
 }
 
 #' @title Exact Left tail probability fo number of runs distribution
@@ -61,7 +61,7 @@ computeNumberOfRunsRightTailProbability <- function(a, b, runs){
   if(left.tail == -1)
     right.tail <- 1 - left.tail
 
-  return right.tail
+  return(right.tail)
 }
 
 
@@ -198,7 +198,7 @@ computeRunsUpDownExactProbability <- function(n, R){
   }
 
   return(c("Exact Left Tail" = left,
-           "Exact Right Tail" = right)
+           "Exact Right Tail" = right))
 }
 
 
@@ -274,7 +274,7 @@ computeRunsUpDownExactProbability <- function(n, NM, RVN){
 
     if(left == -1){
       probs <- NMRanksLeft$distribution[NMRanksLeft$x == n & NMRanksLeft$y > int.NM]
-      if(length(probs[probs != -1] > 0)
+      if(length(probs[probs != -1]) > 0)
         left <- 1
     }
 
@@ -283,7 +283,7 @@ computeRunsUpDownExactProbability <- function(n, NM, RVN){
 
     if(right == -1){
       probs <- NMRanksRight$distribution[NMRanksRight$x == n & NMRanksRight$y > int.NM]
-      if(length(probs[probs != -1] > 0)
+      if(length(probs[probs != -1]) > 0)
         right <- 1
     }
   }

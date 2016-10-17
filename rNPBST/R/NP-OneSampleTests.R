@@ -108,7 +108,8 @@ wilcoxon.test <- function(matrix){
                computeWilcoxonAsymptoticProbability(n.wo.ties, rPlus, tiesWeight))
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = c(Dn = Dn) p.value = pvalues,
+                statistic = Dn,
+                p.value = pvalues,
                 method = "Wilcoxon")
   return(htest)
 }
