@@ -50,22 +50,22 @@ danielTrend.test <- function(matrix){
   # Compute asymptotic p-value
   Z <- R * sqrt(n-1)
 
-  positive.dependence.pvalue <- pnorm(Z)
-  negative.dependence.pvalue <- 1 - pnorm(Z)
+  positive.dependence.pvalue <- 1 - pnorm(Z)
+  negative.dependence.pvalue <- pnorm(Z)
   no.dependence.pvalue <- 2 * min(positive.dependence.pvalue,
                                   negative.dependence.pvalue)
 
   statistic <- c(D = sumD, R = R, Z = Z)
   if(n <= 30){
-    pvalues <- c("R" = pvalue,
-                 "pos.dep.pvalue" = positive.dependence.pvalue,
-                 "neg.dep.pvalue" = negative.dependence.pvalue,
-                 "no.dependence.pvalue" = no.dependence.pvalue)
+    pvalues <- c("pvalue" = pvalue,
+                 "Positive Dependence pvalue" = positive.dependence.pvalue,
+                 "Negative Dependence pvalue" = negative.dependence.pvalue,
+                 "No Dependence pvalue" = no.dependence.pvalue)
   }
   else{
-    pvalues <- c("pos.dep.pvalue" = positive.dependence.pvalue,
-                 "neg.dep.pvalue" = negative.dependence.pvalue,
-                 "no.dependence.pvalue" = no.dependence.pvalue)
+    pvalues <- c("Positive Dependence pvalue" = positive.dependence.pvalue,
+                 "Negative Dependence pvalue" = negative.dependence.pvalue,
+                 "No Dependence pvalue" = no.dependence.pvalue)
   }
 
   htest <- list(data.name = deparse(substitute(matrix)),
@@ -82,40 +82,33 @@ danielTrend.test <- function(matrix){
 #' @param matrix Matrix of data
 #' @return A htest object with pvalues and statistics
 kendall.test <- function(matrix){
-  # Check Conditions
   checkBivariateConditions(matrix)
 
   n <- nrow(matrix)
 
   # Ascending rank for both columns
-  rank.first <- rank(matrix[ ,a1])
+  rank.first <- rank(matrix[ ,1])
   rank.second <- rank(matrix[ ,2])
 
   # Sort pairs of ranks according to first sample
   rank.matrix <- matrix(c(rank.first, rank.second), ncol = 2)
   rank.matrix <- rank.matrix[order(rank.first), ]
 
+  # Print ranks
+  print("Ranks computed")
+  print(rank.matrix)
 
-  # Compute C statistic
+  # Compute C and Q statistic
   C <- vector("numeric", length = n)
-  for(i in n:2){
-    value <- rank.second[i]
-    for(j in (i-1):1){
-      if(value > rank.second[j])
-        C[j] <- C[j] + 1
-    }
-  }
-  C <- sum(C)
-
-  # Compute Q statistic
   Q <- vector("numeric", length = n)
+
   for(i in n:2){
-    value <- rank.second[i]
-    for(j in (i-1):1){
-      if(value > rank.second[j])
-        Q[j] <- Q[j] + 1
-    }
+    value <- rank.matrix[i, 2]
+    C[(i-1):1] <- C[(i-1):1] + (rank.matrix[(i-1):1,2] < value)
+    Q[(i-1):1] <- Q[(i-1):1] + (rank.matrix[(i-1):1,2] > value)
   }
+
+  C <- sum(C)
   Q <- sum(Q)
 
   # Compute T statistic
@@ -125,6 +118,7 @@ kendall.test <- function(matrix){
   if(n <= 10){
     data(KendallExactTable)
     pvalue <- computeExactProbability(KendallExactTable, n, T)
+    print(pvalue)
   }
   else if(n <= 30){
     data(KendallQuantileTable)
@@ -136,22 +130,22 @@ kendall.test <- function(matrix){
   stdDev <- sqrt(2 * (2*n + 5))
   Z <- numerator / stdDev
 
-  positive.dependence.pvalue <- pnorm(Z)
-  negative.dependence.pvalue <- 1 - pnorm(Z)
+  positive.dependence.pvalue <- 1 - pnorm(Z)
+  negative.dependence.pvalue <- pnorm(Z)
   no.dependence.pvalue <- 2 * min(positive.dependence.pvalue,
                                   negative.dependence.pvalue)
 
-  statistic <- c(T = T, C = C, R = R, Z = Z)
+  statistic <- c(T = T, C = C, Q = Q, Z = Z)
   if(n <= 30){
-    pvalues <- c("R" = pvalue,
-                 "pos.dep.pvalue" = positive.dependence.pvalue,
-                 "neg.dep.pvalue" = negative.dependence.pvalue,
-                 "no.dependence.pvalue" = no.dependence.pvalue)
+    pvalues <- c("Exact pvalue" = pvalue,
+                 "Positive Dependence pvalue" = positive.dependence.pvalue,
+                 "Negative Dependence pvalue" = negative.dependence.pvalue,
+                 "No Dependence pvalue" = no.dependence.pvalue)
   }
   else{
-    pvalues <- c("pos.dep.pvalue" = positive.dependence.pvalue,
-                 "neg.dep.pvalue" = negative.dependence.pvalue,
-                 "no.dependence.pvalue" = no.dependence.pvalue)
+    pvalues <- c("Positive Dependence pvalue" = positive.dependence.pvalue,
+                 "Negative Dependence pvalue" = negative.dependence.pvalue,
+                 "No Dependence pvalue" = no.dependence.pvalue)
   }
 
   htest <- list(data.name = deparse(substitute(matrix)),

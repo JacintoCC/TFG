@@ -16,22 +16,40 @@ attParse <- function(x){
 #'
 #' @description Parse XML distribution to a data frame
 #' @param xml.file XML file with the distribution
+#' @param name.distribution Name of the distribution
 #' @return Distribution data frame
-xmlDistributionToDataFrame <-function(xml.file){
+xmlDistributionToDataFrame <-function(xml.file, name.distribution){
   parsed.file <- xmlParse(xml.file)
   dist.data.frame <- as.data.frame(t(xpathSApply(parsed.file, "//*/element", attParse)),
                                    stringsAsFactors = FALSE)
-  colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "distribution"
-  dist.data.frame <- transform(dist.data.frame,  distribution = as.numeric(distribution))
 
-  if(ncol(dist.data.frame) == 3){
+  if(name.distribution == "Kendall" | name.distribution == "Spearman" | name.distribution == "Kolmogorov"){
+    colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "distribution"
+    dist.data.frame <- transform(dist.data.frame,  distribution = as.numeric(distribution))
     dist.data.frame <- transform(dist.data.frame,  n = as.integer(n))
     dist.data.frame <- transform(dist.data.frame,  T = as.numeric(T))
   }
-  else{
+  if(name.distribution == "RunsUpDown" |name.distribution == "NMRanksRight" |name.distribution == "NMRanksLeft"){
+    colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "distribution"
+    dist.data.frame <- transform(dist.data.frame,  distribution = as.numeric(distribution))
+    dist.data.frame <- transform(dist.data.frame,  x = as.integer(x))
+    dist.data.frame <- transform(dist.data.frame,  y = as.numeric(y))
+  }
+  else if(name.distribution == "WilcoxonRanksSum" | name.distribution == "TotalNumberOfRuns-Right" |
+          name.distribution == "TotalNumberOfRuns-Left" | name.distribution == "TwoSample"){
+    colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "distribution"
+    dist.data.frame <- transform(dist.data.frame,  distribution = as.numeric(distribution))
     dist.data.frame <- transform(dist.data.frame,  x = as.integer(x))
     dist.data.frame <- transform(dist.data.frame,  y = as.integer(y))
     dist.data.frame <- transform(dist.data.frame,  z = as.integer(z))
+  }
+  else if(name.distribution == "Page"){
+    colnames(dist.data.frame)[which(colnames(dist.data.frame) == "text")] <- "L"
+    dist.data.frame <- transform(dist.data.frame,  L = as.integer(L))
+    dist.data.frame <- transform(dist.data.frame,  k = as.integer(k))
+    dist.data.frame <- transform(dist.data.frame,  p = as.numeric(p))
+    dist.data.frame <- transform(dist.data.frame,  N = as.integer(N))
+
   }
 
   return(dist.data.frame)
@@ -66,8 +84,7 @@ xmlQuantileDistributionToMatrix <-function(xml.file, pvalues){
 #' @param epsilon Threshold for compare the statistic
 #' @return p-value computed
 getFromDistributionTable <- function(table, n, T, epsilon = 0.002){
-  value <- table[which(table$n == n) && which(abs(table$T - T) < epsilon),
-                 "distribution"]
+  value <- table$distribution[table$n == n & abs(table$T - T) < epsilon]
   return(value)
 }
 

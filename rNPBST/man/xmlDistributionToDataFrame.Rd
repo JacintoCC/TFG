@@ -4,10 +4,12 @@
 \alias{xmlDistributionToDataFrame}
 \title{Parse XML distribution to a data frame}
 \usage{
-xmlDistributionToDataFrame(xml.file)
+xmlDistributionToDataFrame(xml.file, name.distribution)
 }
 \arguments{
 \item{xml.file}{XML file with the distribution}
+
+\item{name.distribution}{Name of the distribution}
 }
 \value{
 Distribution data frame
