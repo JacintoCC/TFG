@@ -10,7 +10,6 @@ ks.test <- function(sequence, distribution = "NORMAL", ...){
   sequence <- sequence[order(sequence)]
 
   cumulative.probability.fun <- getCumulativeProbabilityFunction(distribution, ...)
-
   n <- length(sequence)
   Sn <- (1:n)/n
   F0 <- cumulative.probability.fun(sequence)

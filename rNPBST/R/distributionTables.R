@@ -130,8 +130,8 @@ pkolmogorov <- function(n, Dn){
 
   if(n <= 40){
     for(i in ncol(KolmogorovTable):1){
-      if(Dn >= table[as.character(n),i])
-        return(colnames(table)[i])
+      if(Dn >= KolmogorovTable[as.character(n),i])
+        return(colnames(KolmogorovTable)[i])
     }
   }
   else{
@@ -159,8 +159,7 @@ getCumulativeProbabilityFunction <- function(distribution, ...){
       "GAMMA" = function(x) pgamma(q = x, ...),
       "LAPLACE" = function(x) plaplace(q = x, ...),
       "LOGISTIC" = function(x) plogis(q = x, ...),
-      "WEIBULL" = function(x) pweibull(q = x, ...),
-      "KOLMOGOROV" = function(x) pkolmogorov(Dn = x, ...)
+      "WEIBULL" = function(x) pweibull(q = x, ...)
     )
 }
 

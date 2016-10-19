@@ -22,9 +22,9 @@ checkCountDataConditions <- function(matrix){
 computeFisherLeftExactProbability <- function(N, n1, n2, Y, n00){
   numerator <- 0
   for(i in n00:n1)
-    numerator <- numerator + combn(n1, i) * combn(n2, Y-i)
+    numerator <- numerator + choose(n1, i) * choose(n2, Y-i)
 
-  return(numerator / combn(N, Y))
+  return(numerator / choose(N, Y))
 }
 
 #' @title Compute Fisher Right Exact Probability
@@ -39,9 +39,9 @@ computeFisherLeftExactProbability <- function(N, n1, n2, Y, n00){
 computeFisherRightExactProbability <- function(N, n1, n2, Y, n00){
   numerator <- 0
   for(i in n00:0)
-    numerator <- numerator + combn(n1, i) * combn(n2, Y-i)
+    numerator <- numerator + choose(n1, i) * choose(n2, Y-i)
 
-  return(numerator / combn(N, Y))
+  return(numerator / choose(N, Y))
 }
 
 #' @title Fisher test for counts of data
@@ -81,7 +81,7 @@ fisher.test <- function(matrix){
                "Asymtotic p-value" = asymptotic.pvalue)
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = Q, p.value = pvalues,
+                statistic = c("Q" = Q), p.value = pvalues,
                 method = "Fisher")
   return(htest)
 }
@@ -93,7 +93,6 @@ fisher.test <- function(matrix){
 #' @param matrix Matrix of data
 #' @return A htest object with pvalues and statistics
 mcNemar.test <- function(matrix){
-
   checkCountDataConditions(matrix)
 
   # Compute statistics
@@ -101,16 +100,16 @@ mcNemar.test <- function(matrix){
   Z <- (matrix[1,2] - matrix[2,1] + 0.5) / sqrt(matrix[1,2] + matrix[2,1])
   T <- (matrix[1,2] - matrix[2,1]) * (matrix[1,2] - matrix[2,1]) / (matrix[1,2] + matrix[2,1])
 
-  exact.pvalue <- pbinom(S, matrix[1,2])
+  exact.pvalue <- pbinom(matrix[1,2], S,  0.5)
   asymptotic.normal.pvalue <- pnorm(Z)
-  asymptotic.chi.pvalue <- pchisq(T, 1)
+  asymptotic.chi.pvalue <- 1 - pchisq(T, 1)
 
   pvalues <- c("Exact p-value" = exact.pvalue,
                "Asymtotic Normal p-value" = asymptotic.normal.pvalue,
                "Asymtotic Chi p-value" = asymptotic.chi.pvalue)
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = Q, p.value = pvalues,
-                method = "Fisher")
+                statistic = c("S" = S, "Z" = Z, "T"=T), p.value = pvalues,
+                method = "McNemar")
   return(htest)
 }

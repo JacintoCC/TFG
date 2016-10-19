@@ -123,12 +123,14 @@ contingency.coeff.test <- function(matrix){
                             dataTable(matrix))
   report <- runTest(java.test.object)
   q <- .jcall(java.test.object, "D", "getQ")
-  coefficients <- list(c = .jcall(java.test.object, "D", "getC"),
-                       phi = .jcall(java.test.object, "D", "getPhi"))
+  c <- .jcall(java.test.object, "D", "getC")
+  phi <- .jcall(java.test.object, "D", "getPhi")
+  estimate <- c("C contingency coefficient" = c,
+                "Phi contingency coefficient" = phi)
   pvalue <- .jcall(java.test.object, "D", "getPValue")
   htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = q, p.value = pvalue,
-                      coefficients = coefficients,
+                      statistic = c(Q = q), p.value = pvalue,
+                      estimate = estimate,
                       method = "contingency coeff")
   return(htest)
 }
@@ -142,7 +144,7 @@ contingency.coeff.test <- function(matrix){
 multinomialEq.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.countData.multinomialEqualityTest.MultinomialEqualityTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   q <- .jcall(java.test.object, "D", "getQ")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
   htest <- make.htest(data.name = deparse(substitute(matrix)),
@@ -249,17 +251,28 @@ ad.test <- function(matrix){
 #'
 #' @export
 #' @description This function performs the Chi square test
-#' @param sequence Sequence of data
+#' @param matrix Matrix of data
+#' @param n N parameter for Uniform distribution
+#' @param p P parameter for uniform distribution
 #' @return A htest object with pvalues and statistics
-chiSquare.test <- function(sequence){
+chiSquare.test <- function(matrix, n, p = NULL){
   java.test.object <- .jnew("javanpst.tests.goodness.chiSquareTest.ChiSquareTest",
-                            numericSequence(sequence))
-  report <- runTest(java.test.object)
+                            dataTable(matrix))
+  if(is.null(p))
+    .jcall(java.test.object, "V", "adjustBinomial",as.integer(n))
+  else{
+    p = (matrix[ ,2] %*% matrix[,1])/ (n*sum(matrix[ ,2]))
+    .jcall(java.test.object, "V", "adjustBinomial",as.integer(n), p)
+  }
+
+  .jcall(java.test.object, "V", "doTest")
   q <- .jcall(java.test.object, "D", "getQ")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
-  htest <- make.htest(data.name = deparse(substitute(sequence)),
-                      statistic = q, p.value = pvalue,
-                      method = "chi square")
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
+                      statistic = c("Q" = q), p.value = pvalue,
+                      method = "chi square",
+                      parameters = c("N" = n),
+                      estimate = c("P" = p))
   return(htest)
 }
 
@@ -531,30 +544,6 @@ controlMedian.test <- function(matrix){
   htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "control median")
-  return(htest)
-}
-
-#' @title  Kolmogorov-Smirnov test for two samples
-#'
-#' @description This function performs the Kolmogorov-Smirnov test for two samples
-#' @param matrix Matrix of data
-#' @return A htest object with pvalues and statistics
-ks.test <- function(matrix){
-  java.test.object <- .jnew("javanpst.tests.twoSample.K_STest.K_STest",
-                            dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(DnPos = .jcall(java.test.object, "D", "getDnPos"),
-                    DnNeg = .jcall(java.test.object, "D", "getDnNeg"),
-                    Dn = .jcall(java.test.object, "D", "getDn"))
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = statistic, p.value = pvalue,
-                      method = "ks")
   return(htest)
 }
 
