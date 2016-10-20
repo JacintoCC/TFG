@@ -133,8 +133,8 @@ wilcoxonRankSum.test <- function(matrix){
   sample1 <- matrix[ ,1]
   sample2 <- matrix[ ,2]
 
-  sample1 <- sample1[!is.NA(sample1) & !is.NULL(sample1)]
-  sample2 <- sample2[!is.NA(sample2) & !is.NULL(sample2)]
+  sample1 <- sample1[!is.na(sample1) & !is.NULL(sample1)]
+  sample2 <- sample2[!is.na(sample2) & !is.NULL(sample2)]
 
   n1 <- length(sample1)
   n2 <- length(sample2)

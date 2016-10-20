@@ -9,9 +9,11 @@ computePageExactProbability <- function(N, k, L){
   if(N <= 8 & N >= 3 & k <= 12 & k >= 2){
     data(PageTable)
     pvalues <- PageTable$p[PageTable$N == N &
-                           PageTable$k == m &
-                           PageTable$L == L]
-    return(pvalues[1])
+                           PageTable$k == k &
+                           PageTable$L < L]
+
+    pvalue <- ifelse(length(pvalues) > 0, pvalues[1], 1)
+    return(pvalue)
   }
 
   return(-1)
@@ -30,7 +32,7 @@ computePageAsymptoticProbability <- function(N, k, L){
   denominator <- N * (N + 1) * sqrt(k * (N - 1))
   Z <- numerator / denominator
 
-  return(pnorm(Z))
+  return(1 - pnorm(Z))
 }
 
 #' @title Page test for multiple comparisons
@@ -52,11 +54,11 @@ page.test <- function(matrix){
 
   exact.pvalue <- computePageExactProbability(ncol(matrix), nrow(matrix), L)
   asymptotic.pvalue <- computePageAsymptoticProbability(ncol(matrix), nrow(matrix), L)
-  pvalues <- c("Exact pvalue" = exact.pvalue,
+  pvalues <- c("Exact pvalue <=" = exact.pvalue,
                "Asymtotic pvalue" = asymptotic.pvalue)
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = L, p.value = pvalues,
+                statistic = c("L" = L), p.value = pvalues,
                 method = "Page")
   return(htest)
 }
@@ -67,7 +69,7 @@ page.test <- function(matrix){
 #' @description This function performs the Partial correlation test
 #' @param matrix Matrix of data
 #' @return A htest object with pvalues and statistics
-page.test <- function(matrix){
+partialcorrelation.test <- function(matrix){
   if(nrow(matrix) != 3)
     stop("Partial correlation test only can be employed with three variables: X, Y and Z")
 
@@ -101,12 +103,12 @@ page.test <- function(matrix){
 
   tau <- (Txy - Txz * Tyz) / sqrt((1 - Txz * Txz) * (1 - Tyz * Tyz))
 
-  # Pvale
+  # Pvalue
   data(PartialCorrelationTable)
-  pvalue <- computeAproximatedProbability(PartialCorrelationTable, n, tau)
+  pvalue <- as.numeric(computeAproximatedProbability(PartialCorrelationTable, n, tau))
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = tau, p.value = pvalue,
+                statistic = c("tau" = tau), p.value = ("pvalue <=" = pvalue),
                 method = "Partial correlation")
   return(htest)
 }

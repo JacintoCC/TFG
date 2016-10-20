@@ -4,10 +4,10 @@
 \alias{sign.test}
 \title{Sign test for one sample}
 \usage{
-\method{sign}{test}(sequence)
+\method{sign}{test}(matrix)
 }
 \arguments{
-\item{sequence}{Sequence of data}
+\item{matrix}{Sequence of data}
 }
 \value{
 A htest object with pvalues and statistics

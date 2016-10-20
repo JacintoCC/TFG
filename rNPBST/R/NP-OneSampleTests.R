@@ -9,10 +9,21 @@ computeWilcoxonExactProbability <- function(n, R){
     return(-1)
   else{
     data(WilcoxonTable)
-    if(R - floor(R) == 0)
-      return(WilcoxonTable[n,R])
-    else
-      return(mean(WilcoxonTable[n, floor(R)], WilcoxonTable[n, ceil(R)]))
+    if(R - floor(R) == 0){
+      pvalue <- unname(WilcoxonTable[R,n])
+      pvalue <- ifelse(pvalue == -1, 1, pvalue)
+    }
+    else{
+      v1 <- unname(WilcoxonTable[floor(R),n])
+      v1 <- ifelse(v1 == -1, 1, v1)
+
+      v2 <- unname(WilcoxonTable[ceil(R),n])
+      v2 <- ifelse(v2 == -1, 1, v2)
+
+      pvalue <- mean(v1, v2)
+    }
+
+    return(pvalue)
   }
 }
 
@@ -67,6 +78,7 @@ wilcoxon.test <- function(matrix){
 
   # Compute ranks and sum of ranks
   ranks <- rank(differences.wo.ties)
+
   rPlus <- ranks %*% sign
   rMinus <- ranks %*% !sign
 
@@ -94,7 +106,7 @@ wilcoxon.test <- function(matrix){
   else{
     exact.double.tail <- aux.pvalue2
     exact.right.tail <- exact.double.tail / 2
-    exact.left.tail <- 1 - exact.left.tail
+    exact.left.tail <- 1 - exact.right.tail
   }
 
   uniq <- unique(ranks)
@@ -103,12 +115,12 @@ wilcoxon.test <- function(matrix){
   tiesWeight <- sum(tied * (tied * tied - 1))
 
   pvalues <- c("Exact Left pvalue" = exact.left.tail,
-               "Exact Left pvalue" = exact.left.tail,
-               "Exact Left pvalue" = exact.left.tail,
+               "Exact Right pvalue" = exact.right.tail,
+               "Exact Double pvalue" = exact.double.tail,
                computeWilcoxonAsymptoticProbability(n.wo.ties, rPlus, tiesWeight))
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = Dn,
+                statistic = c("R+" = rPlus, "R-" = rMinus),
                 p.value = pvalues,
                 method = "Wilcoxon")
   return(htest)

@@ -25,36 +25,23 @@ doTest <- function(test.name, ...){
                       "javanpst.tests.equality.kruskalWallisTest.KruskalWallisTest",
                       "javanpst.tests.goodness.A_DTest.A_DTest",
                       "javanpst.tests.goodness.chiSquareTest.ChiSquareTest",
-                      "javanpst.tests.goodness.K_STest.K_STest",
-                      "javanpst.tests.goodness.lillieforsTest.LillieforsTest",
                       "javanpst.tests.location.normalScoresTest.NormalScoresTest",
-                      "javanpst.tests.location.wilcoxonRankSumTest.WilcoxonRankSumTest",
                       "javanpst.tests.multiple.concordanceCoefficient.ConcordanceCoefficient",
                       "javanpst.tests.multiple.friedmanTest.FriedmanTest",
                       "javanpst.tests.multiple.incompleteConcordance.IncompleteConcordance",
-                      "javanpst.tests.multiple.pageTest.PageTest",
                       "javanpst.tests.multiple.partialCorrelationTest.PartialCorrelationTest",
                       "javanpst.tests.oneSample.confidenceQuantile.ConfidenceQuantile",
                       "javanpst.tests.oneSample.populationQuantile.PopulationQuantile",
                       "javanpst.tests.oneSample.signTest.SignTest",
-                      "javanpst.tests.oneSample.wilcoxonTest.WilcoxonTest",
-                      "javanpst.tests.randomness.numberRunsTest.NumberRunsTest",
-                      "javanpst.tests.randomness.runsUpDownMedianTest.RunsUpDownMedianTest",
-                      "javanpst.tests.randomness.runsUpDownTest.RunsUpDownTest",
-                      "javanpst.tests.randomness.vonNeumannTest.VonNeumannTest",
                       "javanpst.tests.scale.david_BartonTest.David_BartonTest",
                       "javanpst.tests.scale.freund_Ansari_BradleyTest.Freund_Ansari_BradleyTest",
                       "javanpst.tests.scale.klotzTest.KlotzTest",
                       "javanpst.tests.scale.moodTest.MoodTest",
-                      "javanpst.tests.scale.siegel_TukeyTest.Siegel_TukeyTest",
                       "javanpst.tests.scale.sukhatmeTest.SukhatmeTest",
                       "javanpst.tests.twoSample.controlMedianTest.ControlMedianTest",
-                      "javanpst.tests.twoSample.K_STest.K_STest",
-                      "javanpst.tests.twoSample.medianTest.MedianTest",
-                      "javanpst.tests.twoSample.wald_WolfowitzTest.Wald_WolfowitzTest")
+                      "javanpst.tests.twoSample.medianTest.MedianTest")
 
-  names(java.t.classes) <-  c("kendall",
-                              "contingency coeff",
+  names(java.t.classes) <-  c("contingency coeff",
                               "multinomial equality",
                               "ordered equality",
                               "extended median",
@@ -62,33 +49,21 @@ doTest <- function(test.name, ...){
                               "kruskal",
                               "AD",
                               "chi square",
-                              "KS",
-                              "lilliefors",
                               "normal scores",
-                              "wilcoxon rank sum",
                               "concordance coeff",
                               "friedman",
                               "incomplete concordance",
-                              "page",
                               "partial correlation",
                               "confidence quantile",
                               "population quantile",
                               "sign",
-                              "wilcoxon",
-                              "number runs",
-                              "runs median",
-                              "runs up down",
-                              "vonNeumann",
                               "david barton",
                               "freud ansari bradley",
                               "klotz",
                               "mood",
-                              "siegel tukey",
                               "sukhatme",
                               "control median",
-                              "KS",
-                              "median",
-                              "wald wolfowitz")
+                              "median")
 
   if(test.name %in% names(java.t.classes)){
     # Create Java object
@@ -121,7 +96,7 @@ make.htest <- function(...){
 contingency.coeff.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.countData.contingencyCoefficient.ContingencyCoefficient",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   q <- .jcall(java.test.object, "D", "getQ")
   c <- .jcall(java.test.object, "D", "getC")
   phi <- .jcall(java.test.object, "D", "getPhi")
@@ -162,7 +137,7 @@ multinomialEq.test <- function(matrix){
 orderedEq.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.countData.orderedEqualityTest.OrderedEqualityTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(Wx = .jcall(java.test.object, "D", "getWx"),
                     Wy = .jcall(java.test.object, "D", "getWy"))
   pvalue <- c(right = .jcall(java.test.object, "D", "getRightPValue"),
@@ -184,14 +159,14 @@ orderedEq.test <- function(matrix){
 extendedMedian.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.equality.extendedMedianTest.ExtendedMedianTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
-  statistic <- c(median = .jcall(java.test.object, "D", "getMedian"),
-                    q = .jcall(java.test.object, "D", "getQ"),
-                    improved.q = .jcall(java.test.object, "D", "getImprovedQ"))
+  .jcall(java.test.object, "V", "doTest")
+  statistic <- c("Median" = .jcall(java.test.object, "D", "getMedian"),
+                  "Q" = .jcall(java.test.object, "D", "getQ"),
+                  "Improved Q" = .jcall(java.test.object, "D", "getImprovedQ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
   htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
-                      method = "exteded median")
+                      method = "Exteded median")
   return(htest)
 }
 
@@ -204,7 +179,7 @@ extendedMedian.test <- function(matrix){
 jt.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.equality.JTTest.JTTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(b = .jcall(java.test.object, "D", "getB"),
                  z = .jcall(java.test.object, "D", "getZ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
@@ -219,12 +194,20 @@ jt.test <- function(matrix){
 #' @export
 #' @description This function performs the Kruskal-Wallis test
 #' @param matrix Matrix of data
+#' @param print.multiple If True, prints
 #' @return A htest object with pvalues and statistics
-kruskalWallis.test <- function(matrix){
+kruskalWallis.test <- function(matrix, print.multiple = F){
   java.test.object <- .jnew("javanpst.tests.equality.kruskalWallisTest.KruskalWallisTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
+
+  H <- .jcall(java.test.object, "D", "getH")
+  pvalue <- .jcall(java.test.object, "D", "getPValue")
+  if(print.multiple)
+    cat(.jcall(java.test.object, "S", "printMultipleComparisonsProcedureReport"))
+
   htest <- make.htest(data.name = deparse(substitute(matrix)),
+                      statistic = c("H" = H), p.value = pvalue,
                       method = "Kruskal Wallis")
   return(htest)
 }
@@ -238,7 +221,7 @@ kruskalWallis.test <- function(matrix){
 ad.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.goodness.A_DTest.A_DTest",
                             numericSequence(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   a <- .jcall(java.test.object, "D", "getA")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
   htest <- make.htest(data.name = deparse(substitute(matrix)),
@@ -286,7 +269,7 @@ chiSquare.test <- function(matrix, n, p = NULL){
 normalScores.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.location.normalScoresTest.NormalScoresTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(normalStatistic1 = .jcall(java.test.object, "D", "getNormalStatistic1"),
                     normalStatistic2 = .jcall(java.test.object, "D", "getNormalStatistic2"))
   pvalue <- c(left = .jcall(java.test.object, "D", "getLeftPValue"),
@@ -308,7 +291,7 @@ normalScores.test <- function(matrix){
 concordanceCoeff.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.multiple.concordanceCoefficient.ConcordanceCoefficient",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(s = .jcall(java.test.object, "D", "getS"),
                     q = .jcall(java.test.object, "D", "getQ"),
                     w = .jcall(java.test.object, "D", "getW"))
@@ -328,7 +311,7 @@ concordanceCoeff.test <- function(matrix){
 friedman.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.multiple.friedmanTest.FriedmanTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(s = .jcall(java.test.object, "D", "getS"),
                  q = .jcall(java.test.object, "D", "getQ"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
@@ -348,7 +331,7 @@ friedman.test <- function(matrix){
 incompleteConcordance.test <- function(matrix, lambda){
   java.test.object <- .jnew("javanpst.tests.multiple.incompleteConcordance.IncompleteConcordance",
                             dataTable(matrix), lambda)
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(q = .jcall(java.test.object, "D", "getQ"),
                     w = .jcall(java.test.object, "D", "getW"))
   pvalue <- .jcall(java.test.object, "D", "getPValue")
@@ -368,9 +351,9 @@ incompleteConcordance.test <- function(matrix, lambda){
 #' @return Report of the test in a string
 confidenceQuantile.test <- function(n, p, q){
   java.test.object <- .jnew("javanpst.tests.oneSample.confidenceQuantile.ConfidenceQuantile",
-                            n, p, q)
+                            as.integer(n), p, q)
   report <- runTest(java.test.object)
-  return(report=report)
+  cat(report)
 }
 
 #' @title Population quantile for one sample
@@ -384,13 +367,13 @@ confidenceQuantile.test <- function(n, p, q){
 populationQuantile.test <- function(sequence, quantile, value){
   java.test.object <- .jnew("javanpst.tests.oneSample.populationQuantile.PopulationQuantile",
                             numericSequence(sequence), quantile, value)
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   k <- .jcall(java.test.object, "D", "getK")
-  pvalue <- c(left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 double = .jcall(java.test.object, "D", "getExactDoublePValue"))
+  pvalue <- c("Exact Left" = .jcall(java.test.object, "D", "getExactLeftPValue"),
+              "Exact Right" = .jcall(java.test.object, "D", "getExactRightPValue"),
+              "Exact Double" = .jcall(java.test.object, "D", "getExactDoublePValue"))
   htest <- make.htest(data.name = deparse(substitute(sequence)),
-                      statistic = statistic, p.value = pvalue,
+                      statistic = c("K" = k), p.value = pvalue,
                       method = "population quantile")
   return(htest)
 }
@@ -399,21 +382,26 @@ populationQuantile.test <- function(sequence, quantile, value){
 #'
 #' @export
 #' @description This function performs the Sign test
-#' @param sequence Sequence of data
+#' @param matrix Sequence of data
 #' @return A htest object with pvalues and statistics
-sign.test <- function(sequence){
-  java.test.object <- .jnew("javanpst.tests.oneSample.signTest.SignTest",
-                            numericSequence(sequence))
-  report <- runTest(java.test.object)
-  statistic <- c(k = .jcall(java.test.object, "D", "getK"),
-                    k2 = .jcall(java.test.object, "D", "getK2"))
-  pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
-                 exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
-                 exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),
-                 asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
-                 asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
-                 asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
-  htest <- make.htest(data.name = deparse(substitute(sequence)),
+sign.test <- function(matrix){
+  if(length(dim(matrix)) == 1)
+    java.test.object <- .jnew("javanpst.tests.oneSample.signTest.SignTest",
+                              numericSequence(matrix))
+  else
+    java.test.object <- .jnew("javanpst.tests.oneSample.signTest.SignTest",
+                              dataTable(matrix))
+
+  .jcall(java.test.object, "V", "doTest")
+  statistic <- c("K" = .jcall(java.test.object, "D", "getK"),
+                 "K2" = .jcall(java.test.object, "D", "getK2"))
+  pvalue <- c("Exact P-Value (Left tail, Y > X)" = .jcall(java.test.object, "D", "getExactLeftPValue"),
+              "Exact P-Value (Right tail, Y < X)" = .jcall(java.test.object, "D", "getExactRightPValue"),
+              "Exact P-Value (Double tail, Y != X)" = .jcall(java.test.object, "D", "getExactDoublePValue"),
+              "Asymptotic P-Value (Left tail, Y > X)" = .jcall(java.test.object, "D", "getLeftPValue"),
+              "Asymptotic P-Value (Right tail, Y < X)" = .jcall(java.test.object, "D", "getRightPValue"),
+              "Asymptotic P-Value (Double tail, Y != X)" = .jcall(java.test.object, "D", "getDoublePValue"))
+  htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
                       method = "sign")
   return(htest)
@@ -428,7 +416,7 @@ sign.test <- function(sequence){
 davidBarton.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.scale.david_BartonTest.David_BartonTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(MNx = .jcall(java.test.object, "D", "getTestStatistic1"),
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
@@ -449,7 +437,7 @@ davidBarton.test <- function(matrix){
 freundAnsariBradley.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.scale.freund_Ansari_BradleyTest.Freund_Ansari_BradleyTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(MNx = .jcall(java.test.object, "D", "getTestStatistic1"),
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
@@ -470,7 +458,7 @@ freundAnsariBradley.test <- function(matrix){
 klotz.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.scale.klotzTest.KlotzTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(MNx = .jcall(java.test.object, "D", "getTestStatistic1"),
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(x.pvalue = .jcall(java.test.object, "D", "getPValue1"),
@@ -490,7 +478,7 @@ klotz.test <- function(matrix){
 mood.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.scale.moodTest.MoodTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(MNx = .jcall(java.test.object, "D", "getTestStatistic1"),
                     MNy = .jcall(java.test.object, "D", "getTestStatistic2"))
   pvalue <- c(x.pvalue = .jcall(java.test.object, "D", "getPValue1"),
@@ -510,7 +498,7 @@ mood.test <- function(matrix){
 sukhatme.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.scale.sukhatmeTest.SukhatmeTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   sukhatme <- .jcall(java.test.object, "D", "getTestStatistic")
   pvalue <- c(asymptotic.left = .jcall(java.test.object, "D", "getLeftPValue"),
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
@@ -530,7 +518,7 @@ sukhatme.test <- function(matrix){
 controlMedian.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.twoSample.controlMedianTest.ControlMedianTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(u = .jcall(java.test.object, "D", "getU"),
                     v = .jcall(java.test.object, "D", "getV"),
                     median = .jcall(java.test.object, "D", "getMedian"),
@@ -556,7 +544,7 @@ controlMedian.test <- function(matrix){
 median.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.twoSample.medianTest.MedianTest",
                             dataTable(matrix))
-  report <- runTest(java.test.object)
+  .jcall(java.test.object, "V", "doTest")
   statistic <- c(u = .jcall(java.test.object, "D", "getU"),
                     v = .jcall(java.test.object, "D", "getV"),
                     median = .jcall(java.test.object, "D", "getMedian"))

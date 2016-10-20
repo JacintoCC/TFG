@@ -4,10 +4,12 @@
 \alias{kruskalWallis.test}
 \title{Kruskal-Wallis est for equality}
 \usage{
-kruskalWallis.test(matrix)
+kruskalWallis.test(matrix, print.multiple = F)
 }
 \arguments{
 \item{matrix}{Matrix of data}
+
+\item{print.multiple}{If True, prints}
 }
 \value{
 A htest object with pvalues and statistics

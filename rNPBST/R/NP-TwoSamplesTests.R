@@ -35,8 +35,18 @@ computeKolmogorovAsymptoticProbability <- function(n, Dn){
   if(n < 21){
     data(KolmogorovTwoSampleAsymptotic)
     nmDn <- round(n * n * Dn)
-    pvalue <- KolmogorovTwoSampleAsymptotic
-    pvalue <- ifelse(pvalue == -1, 1, pvalue)
+    pvalue <- KolmogorovTwoSampleAsymptotic[which(rownames(KolmogorovTwoSampleAsymptotic) == n), 1]
+
+    if(pvalue == -1)
+      return(-1)
+
+    condition <- nmDn >= KolmogorovTwoSampleAsymptotic[which(rownames(KolmogorovTwoSampleAsymptotic) == n), 1]
+    possible.pvalues <- colnames(KolmogorovTwoSampleAsymptotic)[condition]
+
+    pvalue <- ifelse(length(possible.pvalues) > 0,
+                     as.numeric(possible.pvalues[length(possible.pvalues)]),
+                     1)
+
     return(pvalue)
   }
   else{
@@ -64,7 +74,7 @@ ksTwoSamples.test <- function(matrix){
   sample1 <- matrix[ ,1]
   sample2 <- matrix[ ,2]
   combined <- c(sample1, sample2)
-  n <- nrow(combined)
+  n <- length(combined)
 
   # Order data
   sample1 <- sample1[order(sample1)]
@@ -75,15 +85,17 @@ ksTwoSamples.test <- function(matrix){
   distinct <- length(unique(combined))
   increment <- 1 / distinct
 
-  combinedCdf <- vector("numeric", length = 2* n)
+  combinedCdf <- vector(mode = "numeric", length = n)
 
-  for(i in 2:(2*n))
-    combinedCdf[i] <- ifelse(combined[i] == combined[i-1], combinedCdf[i-1] + increment)
+  for(i in 2:n)
+    combinedCdf[i] <- ifelse(combined[i] == combined[i-1], combinedCdf[i-1],
+                             combinedCdf[i-1] + increment)
 
   # Sn and Sm arrays
-
-  Sn <- combinedCdf[combined %in% sample1]
-  Sm <- combinedCdf[combined %in% sample2]
+  # For each element in the sample vector get the element in the same position in the vector of
+  #   accumulated increments that it is in the combined vector
+  Sm <- sapply(1:(n/2), function(i) combinedCdf[combined == sample1[i] & 1:n >= i][1])
+  Sn <- sapply(1:(n/2), function(i) combinedCdf[combined == sample2[i] & 1:n >= i][1])
 
   # Diff
   diff <- Sm - Sn
@@ -92,12 +104,12 @@ ksTwoSamples.test <- function(matrix){
   DnNeg <- min(diff)
   Dn <- max(abs(c(DnPos, DnNeg)))
 
-  pvalue <- c("Exact Left Tail" = computeKolmogorovExactProbability(n, abs(DnNeg)),
-              "Exact Right Tail" = computeKolmogorovExactProbability(n, abs(DnPos)),
-              "Exact Double Tail" = computeKolmogorovExactProbability(n, Dn),
+  pvalue <- c("Exact P-Value (Left tail, Y > X)" = computeKolmogorovExactProbability(n, abs(DnNeg)),
+              "Exact P-Value (Right tail, Y < X)" = computeKolmogorovExactProbability(n, abs(DnPos)),
+              "Exact P-Value (Double tail, Y != X)" = computeKolmogorovExactProbability(n, Dn),
               "Asymptotic Left Tail" = computeKolmogorovAsymptoticProbability(n, abs(DnNeg)),
-              "Asymptotic Left Tail" = computeKolmogorovAsymptoticProbability(n, abs(DnPos)),
-              "Asymptotic Left Tail" = computeKolmogorovAsymptoticProbability(n, Dn))
+              "Asymptotic Right Tail" = computeKolmogorovAsymptoticProbability(n, abs(DnPos)),
+              "Asymptotic Double Tail" = computeKolmogorovAsymptoticProbability(n, Dn))
 
   htest <- list(data.name = deparse(substitute(sequence)),
                 statistic = c("DnPos" = DnPos, "DnNeg" = DnNeg, "Dn" = Dn),
@@ -106,10 +118,10 @@ ksTwoSamples.test <- function(matrix){
   return(htest)
 }
 
-
 ############
 # WALD WOLFOWITZ TEST
 ############
+
 #' @title Wald-Wolfowitz char vector construction
 #'
 #' @description Get sequence for Wald-Wolfowitz test
@@ -124,7 +136,7 @@ waldWolfowitzSequence <- function(sample1, sample2){
   n <- length(sample1) + length(sample2)
 
   combined <- c(sample1, sample2)
-  combined <- combined[combined]
+  combined <- combined[order(combined)]
   sequence <- sapply(combined, function(i){
       if(i %in% sample1 & !(i %in% sample2))
         return(1)
@@ -135,13 +147,13 @@ waldWolfowitzSequence <- function(sample1, sample2){
     })
 
   for(i in 1:n){
-    if(sequence[i] == 0){
+    if(sequence[i] == 0)
       sequence[i] <- ifelse(sequence[i-1] == 1, -1, 1)
-    }
   }
 
   return(sequence)
 }
+
 
 #' @title Wald-Wolfowitz test for compare two samples
 #'
@@ -154,8 +166,8 @@ waldWolfowitz.test <- function(matrix){
     stop("Wald-Wolfowitz test only can be employed with two samples")
 
   # Remove NA numbers
-  sample1 <- matrix[1, !is.NA(matrix[1, ])]
-  sample2 <- matrix[2, !is.NA(matrix[2, ])]
+  sample1 <- matrix[!is.na(matrix[ ,1]), 1]
+  sample2 <- matrix[!is.na(matrix[ ,2]), 2]
 
   sequence <- waldWolfowitzSequence(sample1, sample2)
   rle <- rle(sequence)
@@ -166,9 +178,9 @@ waldWolfowitz.test <- function(matrix){
   asymptotic.pvalue <- computeNumberOfRunsAsymptoticProbability(length(sample1),
                                   length(sample2), runs)["Asymptotic Left Tail"]
   pvalue <- c("Exact p-value" = exact.pvalue,
-              "Asymptotic p-value" = asymptotic.pvalue)
+              asymptotic.pvalue)
 
   htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = runs, p.value = pvalue, method = "Wald-Wolfowitz")
+                statistic = c("R" = runs), p.value = pvalue, method = "Wald-Wolfowitz")
   return(htest)
 }

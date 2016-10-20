@@ -4,10 +4,14 @@
 \alias{chiSquare.test}
 \title{Chi square test for goodness of fit}
 \usage{
-chiSquare.test(sequence)
+chiSquare.test(matrix, n, p = NULL)
 }
 \arguments{
-\item{sequence}{Sequence of data}
+\item{matrix}{Matrix of data}
+
+\item{n}{N parameter for Uniform distribution}
+
+\item{p}{P parameter for uniform distribution}
 }
 \value{
 A htest object with pvalues and statistics

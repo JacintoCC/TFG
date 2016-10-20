@@ -23,6 +23,10 @@ computeNumberOfRunsLeftTailProbability <- function(a, b, runs){
   right.tail <- TotalNumberOfRuns.Right$distribution[TotalNumberOfRuns.Right$x == n1 &
                                                      TotalNumberOfRuns.Right$y == n2 &
                                                      TotalNumberOfRuns.Right$z == runs+1]
+  if(length(left.tail) == 0 || is.null(left.tail) || is.na(left.tail))
+    left.tail <- -1
+  if(length(right.tail) == 0 || is.null(right.tail) || is.na(right.tail))
+    right.tail <- -1
 
   if(left.tail == -1 & right.tail == -1)
     return(-1)
@@ -32,6 +36,7 @@ computeNumberOfRunsLeftTailProbability <- function(a, b, runs){
 
   return(left.tail)
 }
+
 
 #' @title Exact Left tail probability fo number of runs distribution
 #'
@@ -54,6 +59,10 @@ computeNumberOfRunsRightTailProbability <- function(a, b, runs){
   right.tail <- TotalNumberOfRuns.Right$distribution[TotalNumberOfRuns.Right$x == n1 &
                                                      TotalNumberOfRuns.Right$y == n2 &
                                                      TotalNumberOfRuns.Right$z == runs]
+   if(length(left.tail) == 0 || is.null(left.tail) || is.na(left.tail))
+     left.tail <- -1
+   if(length(right.tail) == 0 || is.null(right.tail) || is.na(right.tail))
+     right.tail <- -1
 
   if(left.tail == -1 & right.tail == -1)
     return(-1)
@@ -78,20 +87,21 @@ computeNumberOfRunsAsymptoticProbability <- function(a, b, runs){
   n <- n1 + n2
 
   denominator <- sqrt(2 * n1 * n2 * (2* n1 * n2 - n) / (n * n * (n-1)))
-  numerator <- R - 0.5 - 1 - 2 * n1 * n2 / n
+  numerator <- runs - 0.5 - 1 - 2 * n1 * n2 / n
   z <- numerator / denominator
   right.pvalue <- 1 - pnorm(z)
 
-  numerator <- R + 0.5 - 1 - 2 * n1 * n2 / n
+  numerator <- runs + 0.5 - 1 - 2 * n1 * n2 / n
   z <- numerator / denominator
   left.pvalue <- pnorm(z)
 
-  double.pvalue <-doubleTailProbability(left.pvalue,right.pvalue)
+  double.pvalue <- doubleTailProbability(left.pvalue,right.pvalue)
 
   return(c("Asymptotic Left Tail" = left.pvalue,
            "Asymptotic Right Tail" = right.pvalue,
            "Asymptotic Double Tail" = double.pvalue))
 }
+
 
 #' @title Number of runs test for randomness
 #'
