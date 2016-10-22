@@ -4,29 +4,17 @@
 \alias{computeRunsUpDownExactProbability}
 \title{Exact tail probability fo number of runs distribution}
 \usage{
-computeRunsUpDownExactProbability(n, NM, RVN)
-
-computeRunsUpDownExactProbability(n, NM, RVN)
+computeRunsUpDownExactProbability(n, R)
 }
 \arguments{
 \item{n}{Number of elements}
 
-\item{NM}{NM statistic}
-
-\item{RVN}{RVN statistic}
-
 \item{R}{Runs up down statistic}
-
-\item{n}{Number of elements}
 }
 \value{
-pvalue computed
-
 pvalue computed
 }
 \description{
 Computes exact p-value of the Runs up down distribution
-
-Computes exact p-value of the Von Neumann distribution
 }
 

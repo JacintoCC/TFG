@@ -67,7 +67,7 @@ computeNumberOfRunsRightTailProbability <- function(a, b, runs){
   if(left.tail == -1 & right.tail == -1)
     return(-1)
 
-  if(left.tail == -1)
+  if(right.tail == -1)
     right.tail <- 1 - left.tail
 
   return(right.tail)
@@ -110,6 +110,7 @@ computeNumberOfRunsAsymptoticProbability <- function(a, b, runs){
 #' @param sequence Sequence of data
 #' @return A htest object with pvalues and statistics
 numberRuns.test <- function(sequence){
+  data.name <- deparse(substitute(sequence))
   sequence <- as.factor(sequence)
 
   if(length(levels(sequence)) != 2)
@@ -119,7 +120,7 @@ numberRuns.test <- function(sequence){
   n1 <- sum(sequence == levels(sequence)[1])
   n2 <- sum(sequence == levels(sequence)[2])
 
-  runs <- sum(rle(as.numeric(sequence))$lengths)
+  runs <- length(rle(as.numeric(sequence))$lengths)
 
   exact.left.tail <- computeNumberOfRunsLeftTailProbability(n1, n2, runs)
   exact.right.tail <- computeNumberOfRunsRightTailProbability(n1, n2, runs)
@@ -132,8 +133,8 @@ numberRuns.test <- function(sequence){
                "Exact Double Tail" = exact.double.tail,
                asymptotic.values)
 
-  htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = runs, p.value = pvalues,
+  htest <- list(data.name = data.name,
+                statistic = c("Runs" = runs), p.value = pvalues,
                 method = "Number of runs")
   return(htest)
 }
@@ -161,6 +162,12 @@ numberRunsUpDownMedian.test <- function(sequence){
 
   exact.left.tail <- computeNumberOfRunsLeftTailProbability(n1, n2, runs)
   exact.right.tail <- computeNumberOfRunsRightTailProbability(n1, n2, runs)
+
+  if(exact.left.tail == -1)
+    exact.left.tail <- 1
+  if(exact.right.tail == -1)
+    exact.right.tail <- 1
+
   exact.double.tail <- doubleTailProbability(exact.left.tail,exact.right.tail)
 
   asymptotic.values <- computeNumberOfRunsAsymptoticProbability(n1, n2, runs)
@@ -171,7 +178,10 @@ numberRunsUpDownMedian.test <- function(sequence){
                asymptotic.values)
 
   htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = runs, p.value = pvalues,
+                statistic = c("Number of elements" = n,
+                              "Number of runs" = runs,
+                              "Median" = median),
+                p.value = pvalues,
                 method = "Runs Up and Down With respect of the median")
   return(htest)
 }
@@ -189,8 +199,10 @@ numberRunsUpDownMedian.test <- function(sequence){
 #' @return pvalue computed
 computeRunsUpDownExactProbability <- function(n, R){
 
-  if(n < 3 | n > 25 | n >= R | R < 1)
-    return(c(-1, -1))
+  if(n < 3 | n > 25 | R >= n | R < 1)
+    return(c("Exact Left Tail" = -1,
+             "Exact Right Tail" = -1,
+             "Exact Double Tail" = -1))
 
 
   left.limits <- c(0,0,0,1,1,2,3,3,4,5,5,6,7,7,8,9,9,10,11,11,12,13,13,14,15,15)
@@ -208,7 +220,8 @@ computeRunsUpDownExactProbability <- function(n, R){
   }
 
   return(c("Exact Left Tail" = left,
-           "Exact Right Tail" = right))
+           "Exact Right Tail" = right,
+           "Exact Double Tail" = doubleTailProbability(left, right)))
 }
 
 
@@ -222,7 +235,7 @@ computeNumberOfRunsAsymptoticProbability <- function(n, R){
   denominator <- sqrt((16 * n - 29) / 90)
   numerator <- R - 0.5 - (2 * n - 1) / 3
   z <- numerator / denominator
-  right.pvalue <- 1 - pnorm(z)
+  right.pvalue <- pnorm(z)
 
   numerator <- R + 0.5 - (2 * n - 1) / 3
   z <- numerator / denominator
@@ -249,7 +262,7 @@ numberRunsUpDown.test <- function(sequence){
   runs <- length(rle$values[rle$values != 0])
 
   exact.values <- computeRunsUpDownExactProbability(n, runs)
-  asymptotic.values <- computeNumberOfRunsAsymptoticProbability(n1, n2, runs)
+  asymptotic.values <- computeNumberOfRunsAsymptoticProbability(n, runs)
 
   pvalues <- c(exact.values, asymptotic.values)
 
@@ -273,7 +286,7 @@ numberRunsUpDown.test <- function(sequence){
 #' @param NM NM statistic
 #' @param RVN RVN statistic
 #' @return pvalue computed
-computeRunsUpDownExactProbability <- function(n, NM, RVN){
+computeVonNewmannExactProbability <- function(n, NM, RVN){
 
   if(n < 10){
     data(NMRanksLeft)
@@ -301,8 +314,13 @@ computeRunsUpDownExactProbability <- function(n, NM, RVN){
     data(RanksVonNeumann)
 
     row <- RanksVonNeumann[n, ]
-    left <- colnames(row[row >= RVN])[1]
-    right <- colnames(row[4 - row <= RVN])[1]
+    left <- as.numeric(names(row[row >= RVN])[1])
+    right <- as.numeric(names(row[4 - row <= RVN])[1])
+
+    if(is.null(left) || is.na(left))
+      left <- 1
+    if(is.null(right) || is.na(right))
+      right <- 1
   }
 
   return(c("Exact Left Tail" = left,

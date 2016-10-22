@@ -216,16 +216,65 @@ kruskalWallis.test <- function(matrix, print.multiple = F){
 #'
 #' @export
 #' @description This function performs the Anderson-Darling test
-#' @param matrix Matrix of data
+#' @param sequence Sequence of data
+#' @param distribution Distribution name to perform test
 #' @return A htest object with pvalues and statistics
-ad.test <- function(matrix){
+ad.test <- function(sequence, distribution = "NORMAL", mean = NULL, sd = NULL,
+                    start = NULL, end = NULL, freedom = NULL, k = NULL,
+                    lambda = NULL, scale = NULL, s = NULL){
   java.test.object <- .jnew("javanpst.tests.goodness.A_DTest.A_DTest",
-                            numericSequence(matrix))
+                            numericSequence(sequence))
+
+  switch(distribution,
+    NORMAL = {
+      if(is.null(mean) & is.null(sd))
+        .jcall(java.test.object, "V", "adjustNormal")
+      else if(is.null(sd))
+        .jcall(java.test.object, "V", "adjustNormalMean", mean)
+      else if(is.null(mean))
+        .jcall(java.test.object, "V", "adjustNormalVariance", sd)
+      else if(is.null(mean))
+        .jcall(java.test.object, "V", "adjustNormal", mean, sd)
+    },
+    EXPONENTIAL = {
+      if(is.null(mean))
+        .jcall(java.test.object, "V", "adjustExponential")
+      else
+        .jcall(java.test.object, "V", "adjustExponential", mean)
+    },
+    UNIFORM = {
+      .jcall(java.test.object, "V", "adjustUniform", start, end)
+    },
+    CHI_SQUARE = {
+      .jcall(java.test.object, "V", "adjustChiSquare", as.integer(freedom))
+    },
+    GAMMA = {
+      .jcall(java.test.object, "V", "adjustGamma", k, lambda)
+    },
+    LAPLACE = {
+      .jcall(java.test.object, "V", "adjustLaplace", mean, scale)
+    },
+    LOGISTIC= {
+      .jcall(java.test.object, "V", "adjustLogistic", mean, s)
+    },
+    WEIBULL = {
+      .jcall(java.test.object, "V", "adjustWeibull", k, lambda)
+    },
+      stop("Not supported distribution in this test")
+  )
+
   .jcall(java.test.object, "V", "doTest")
+  w2 <- .jcall(java.test.object, "D", "W2")
   a <- .jcall(java.test.object, "D", "getA")
   pvalue <- .jcall(java.test.object, "D", "getPValue")
   htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = a, p.value = pvalue,
+                      statistic = c("A" = a, "W2" = w2),
+                      parameters = c("Mean" = mean, "Var" = sd,
+                                     "Start" = start, "End" = end,
+                                     "Freedom" = freedom, "K" = k,
+                                     "Lambda" = lambda, "Scale" = scale,
+                                     "S" = s),
+                      p.value = c("Exact pvalue <= " = pvalue),
                       method = "AD")
   return(htest)
 }
@@ -504,8 +553,9 @@ sukhatme.test <- function(matrix){
                  asymptotic.right = .jcall(java.test.object, "D", "getRightPValue"),
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
   htest <- make.htest(data.name = deparse(substitute(matrix)),
-                      statistic = sukhatme, p.value = pvalue,
-                      method = "sukhatme")
+                      statistic = c("Sukhatme statistic" = sukhatme),
+                      p.value = pvalue,
+                      method = "Sukhatme")
   return(htest)
 }
 
@@ -546,8 +596,8 @@ median.test <- function(matrix){
                             dataTable(matrix))
   .jcall(java.test.object, "V", "doTest")
   statistic <- c(u = .jcall(java.test.object, "D", "getU"),
-                    v = .jcall(java.test.object, "D", "getV"),
-                    median = .jcall(java.test.object, "D", "getMedian"))
+                 v = .jcall(java.test.object, "D", "getV"),
+                 median = .jcall(java.test.object, "D", "getMedian"))
   pvalue <- c(exact.left = .jcall(java.test.object, "D", "getExactLeftPValue"),
                  exact.right = .jcall(java.test.object, "D", "getExactRightPValue"),
                  exact.double = .jcall(java.test.object, "D", "getExactDoublePValue"),

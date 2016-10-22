@@ -24,7 +24,7 @@ computeWilcoxonRankLeftProbability <- function(n, m, R){
 #' @param R rank associated
 #' @return pvalue associated
 computeWilcoxonRankRightProbability <- function(n, m, R){
-  data(WilcoxonRankSumTable)
+  data(WilcoxonRanksSumTable)
 
   if(n > 10 | m > 10 | R > 105)
     return(NULL)
@@ -47,7 +47,8 @@ computeWilcoxonRankRightProbability <- function(n, m, R){
     return(NULL)
 
   trueR <- ifelse(max%%2 == 0, 2 * max - R, 2 * max - (R-1))
-  data(WilcoxonRanksSumTable)
+  data("WilcoxonRanksSumTable")
+
   return(WilcoxonRanksSumTable$distribution[WilcoxonRanksSumTable$x == n &
                                             WilcoxonRanksSumTable$y == m &
                                             WilcoxonRanksSumTable$z == trueR])
@@ -69,9 +70,15 @@ computeWilcoxonRankPValues <- function(combined, n1, n2, WRank){
   pvalues <- c()
 
   if(n1 <= 10 & n2 <= 10){
-    rank = WRank
+    rank <- WRank
     exact.left.tail <- computeWilcoxonRankLeftProbability(n2, n1, rank)
     exact.right.tail <- computeWilcoxonRankRightProbability(n2, n1, rank)
+
+    if(is.null(exact.right.tail) || exact.right.tail == -1)
+      exact.right.tail <- 1 - exact.left.tail
+    if(is.null(exact.left.tail) || exact.left.tail == -1)
+      exact.right.tail <- 1 - exact.right.tail
+
     exact.double.tail <- doubleTailProbability(exact.left.tail, exact.right.tail)
     pvalues <- c("Exact Left Tail" = exact.left.tail,
                  "Exact Right Tail" = exact.right.tail,
@@ -82,22 +89,22 @@ computeWilcoxonRankPValues <- function(combined, n1, n2, WRank){
   sum.ties <- 0
   actual.tie <- 0
 
-  for(y in ties){
-    if(t)
+  for(i in ties){
+    if(i)
       actual.tie <- actual.tie + 1
     else{
-      if(actualTie > 0){
-        sumTies <- sumTies + actualTie * (actualTie * actualTie - 1)
-        actualTie <- 0
+      if(actual.tie > 0){
+        sum.ties <- sum.ties + actual.tie * (actual.tie * actual.tie - 1)
+        actual.tie <- 0
       }
     }
   }
 
   if(ties[n])
-    sumTies <- sumTies + actualTie * (actualTie * actualTie - 1)
+    sum.ties <- sum.ties + actual.tie * (actual.tie * actual.tie - 1)
 
   # Compute variance
-  denominator <- sqrt(n1 * n2 * (n1 + n2 + 1) / 12 - (n1 * n2 *sumTies) / (12 * (n1 + n2) * (n1 + n2 - 1)))
+  denominator <- sqrt(n1 * n2 * (n1 + n2 + 1) / 12 - (n1 * n2 *sum.ties) / (12 * (n1 + n2) * (n1 + n2 - 1)))
   numerator <- WRank - 0.5 - n1 * (n1 + n2 + 1) / 2
 
   z <- numerator / denominator
@@ -133,8 +140,8 @@ wilcoxonRankSum.test <- function(matrix){
   sample1 <- matrix[ ,1]
   sample2 <- matrix[ ,2]
 
-  sample1 <- sample1[!is.na(sample1) & !is.NULL(sample1)]
-  sample2 <- sample2[!is.na(sample2) & !is.NULL(sample2)]
+  sample1 <- sample1[!is.na(sample1) & !is.null(sample1)]
+  sample2 <- sample2[!is.na(sample2) & !is.null(sample2)]
 
   n1 <- length(sample1)
   n2 <- length(sample2)
@@ -150,25 +157,30 @@ wilcoxonRankSum.test <- function(matrix){
   # Create rank vector
   rank.combined <- rank(combined)
 
-  pointer1 <- 0
-  pointer2 <- 0
+  pointer1 <- 1
+  pointer2 <- 1
   WRank <- 0
 
-  shorter.sample <- ifelse(n1 <= n2, sample1, sample2)
-  shorter.n <- min(n1, n2)
+  if(n1 <= n2)
+    shorter.sample <- sample1
+  else
+    shorter.sample <- sample2
 
-  while(pointer1 < shorter.n){
-    while(combined[pointer2] != shorter.sample[pointer1])
+  shorter.n <- min(n1, n2)
+  larger.n <- max(n1, n2)
+
+  while(pointer1 <= shorter.n){
+    while(combined[pointer2] != shorter.sample[pointer1] && pointer2 <= larger.n)
       pointer2 <- pointer2 + 1
 
     WRank <- WRank + rank.combined[pointer2]
     pointer1 <- pointer1 + 1
   }
 
-  pvalues <- computeWilcoxonRankPValues(sample1, sample2, WRank)
+  pvalues <- computeWilcoxonRankPValues(combined, n1, n2, WRank)
 
   htest <- list(data.name = deparse(substitute(matrix)),
-                statistic = Wrank, p.value = pvalues,
+                statistic = WRank, p.value = pvalues,
                 method = "Wilcoxon Rank Sum")
   return(htest)
 }

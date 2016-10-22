@@ -7,8 +7,8 @@
 #' @param length Number values per sample
 #' @return p-value computed
 computeCDExactProbability <- function(W, N, populations, length){
-  pvalue <- length / N * combn(N - length, W) * combn(length - 1, populations - 1)
-  pvalue <- pvalue / combn(N - 1, W + populations - 1)
+  pvalue <- length / N * choose(N - length, W) * choose(length - 1, populations - 1)
+  pvalue <- pvalue / choose(N - 1, W + populations - 1)
   return(pvalue)
 }
 
@@ -25,7 +25,7 @@ computeCDAsymtoticProbability <- function(W, N, populations, length){
 
   stDev <- populations * (length - populations + 1) * (N + 1) * (N - length)
   stDev <- sqrt(stDev / ((length + 1) * (length + 1) * (length + 2)))
-  Z <- (W - stDev + 0.5) / stDev
+  Z <- (W - stMean + 0.5) / stDev
 
   return(pnorm(Z))
 }

@@ -4,10 +4,14 @@
 \alias{ad.test}
 \title{Anderson-Darling test for goodness of fit}
 \usage{
-ad.test(matrix)
+ad.test(sequence, distribution = "NORMAL", mean = NULL, sd = NULL,
+  start = NULL, end = NULL, freedom = NULL, k = NULL, lambda = NULL,
+  scale = NULL, s = NULL)
 }
 \arguments{
-\item{matrix}{Matrix of data}
+\item{sequence}{Sequence of data}
+
+\item{distribution}{Distribution name to perform test}
 }
 \value{
 A htest object with pvalues and statistics

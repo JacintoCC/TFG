@@ -120,6 +120,7 @@ computeAproximatedProbability <- function(table, n, T){
 
 #' @title Kolmogorov probability
 #'
+#' @export
 #' @description Computes p-value of the Kolmogorov distribution
 #' @param n Size of the population
 #' @param Dn Kolmogorov statistic

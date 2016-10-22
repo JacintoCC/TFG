@@ -21,7 +21,7 @@ ks.test <- function(sequence, distribution = "NORMAL", ...){
   pvalue <- pkolmogorov(n, Dn)
 
   htest <- list(data.name = deparse(substitute(sequence)),
-                statistic = Dn,
+                statistic = c(Dn=Dn),
                 p.value = pvalue,
                 method = "Kolmogorov-Smirnov")
   return(htest)
@@ -51,7 +51,7 @@ lilliefors.test <- function(sequence, distribution = "NORMAL"){
   else if(distribution == "EXPONENTIAL"){
     mean <- mean(sequence)
     parameters <- c(mean = mean)
-    cumulative.probability.fun <- function(x) pexp(x, mean = mean)
+    cumulative.probability.fun <- function(x) pexp(x, rate = 1/mean)
   }
   else{
     stop("Not supported distribution in this test")
@@ -67,8 +67,8 @@ lilliefors.test <- function(sequence, distribution = "NORMAL"){
 
   htest <- list(data.name = deparse(substitute(sequence)),
                 parameters = parameters,
-                statistic = Dn,
-                p.value = pvalue,
+                statistic = c("Dn" = Dn),
+                p.value = c("Asymptotic p-value <= " = pvalue),
                 method = "Lilliefors")
   return(htest)
 }

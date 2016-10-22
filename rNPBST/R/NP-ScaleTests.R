@@ -8,8 +8,8 @@ siegelTukey.test <- function(matrix){
   if(ncol(matrix) != 2)
     stop("Siegel-Tukey test only can be employed with two samples")
 
-  sample1 <- matrix[1, !is.na(matrix[1, ])]
-  sample2 <- matrix[2, !is.na(matrix[2, ])]
+  sample1 <- matrix[!is.na(matrix[ ,1]),1]
+  sample2 <- matrix[!is.na(matrix[ ,2]),2]
   n1 <- length(sample1)
   n2 <- length(sample2)
   n <- n1 + n2
