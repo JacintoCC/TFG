@@ -6,6 +6,7 @@
 #' @param distribution Distribution name to perform test
 #' @return A htest object with pvalues and statistics
 ks.test <- function(sequence, distribution = "NORMAL", ...){
+  data.name <-  deparse(substitute(sequence))
   # Order sequence
   sequence <- sequence[order(sequence)]
 
@@ -20,7 +21,7 @@ ks.test <- function(sequence, distribution = "NORMAL", ...){
   Dn <- max(c(abs.dif, abs.dif.2))
   pvalue <- pkolmogorov(n, Dn)
 
-  htest <- list(data.name = deparse(substitute(sequence)),
+  htest <- list(data.name = data.name,
                 statistic = c(Dn=Dn),
                 p.value = pvalue,
                 method = "Kolmogorov-Smirnov")

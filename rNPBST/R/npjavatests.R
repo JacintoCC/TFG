@@ -11,71 +11,6 @@ runTest <- function(java.test.object){
   return(out)
 }
 
-#' @title Carry out a test introducing name and data
-#'
-#' @description Function to make a non-parametric test
-#' @param test.name Name of the test.
-#' @return The function returns the report of the test in a string
-doTest <- function(test.name, ...){
-  java.t.classes <- c("javanpst.tests.countData.contingencyCoefficient.ContingencyCoefficient",
-                      "javanpst.tests.countData.multinomialEqualityTest.MultinomialEqualityTest",
-                      "javanpst.tests.countData.orderedEqualityTest.OrderedEqualityTest",
-                      "javanpst.tests.equality.extendedMedianTest.ExtendedMedianTest",
-                      "javanpst.tests.equality.JTTest.JTTest",
-                      "javanpst.tests.equality.kruskalWallisTest.KruskalWallisTest",
-                      "javanpst.tests.goodness.A_DTest.A_DTest",
-                      "javanpst.tests.goodness.chiSquareTest.ChiSquareTest",
-                      "javanpst.tests.location.normalScoresTest.NormalScoresTest",
-                      "javanpst.tests.multiple.concordanceCoefficient.ConcordanceCoefficient",
-                      "javanpst.tests.multiple.friedmanTest.FriedmanTest",
-                      "javanpst.tests.multiple.incompleteConcordance.IncompleteConcordance",
-                      "javanpst.tests.multiple.partialCorrelationTest.PartialCorrelationTest",
-                      "javanpst.tests.oneSample.confidenceQuantile.ConfidenceQuantile",
-                      "javanpst.tests.oneSample.populationQuantile.PopulationQuantile",
-                      "javanpst.tests.oneSample.signTest.SignTest",
-                      "javanpst.tests.scale.david_BartonTest.David_BartonTest",
-                      "javanpst.tests.scale.freund_Ansari_BradleyTest.Freund_Ansari_BradleyTest",
-                      "javanpst.tests.scale.klotzTest.KlotzTest",
-                      "javanpst.tests.scale.moodTest.MoodTest",
-                      "javanpst.tests.scale.sukhatmeTest.SukhatmeTest",
-                      "javanpst.tests.twoSample.controlMedianTest.ControlMedianTest",
-                      "javanpst.tests.twoSample.medianTest.MedianTest")
-
-  names(java.t.classes) <-  c("contingency coeff",
-                              "multinomial equality",
-                              "ordered equality",
-                              "extended median",
-                              "JT",
-                              "kruskal",
-                              "AD",
-                              "chi square",
-                              "normal scores",
-                              "concordance coeff",
-                              "friedman",
-                              "incomplete concordance",
-                              "partial correlation",
-                              "confidence quantile",
-                              "population quantile",
-                              "sign",
-                              "david barton",
-                              "freud ansari bradley",
-                              "klotz",
-                              "mood",
-                              "sukhatme",
-                              "control median",
-                              "median")
-
-  if(test.name %in% names(java.t.classes)){
-    # Create Java object
-    java.test.object <- .jnew(java.t.classes[test.names], ...)
-    return(runTest(java.test.object))
-  }
-  else{
-    return("Test name is not supported\n")
-  }
-}
-
-
 #' @title Make a htest object
 #'
 #' @export
@@ -433,13 +368,17 @@ populationQuantile.test <- function(sequence, quantile, value){
 #' @description This function performs the Sign test
 #' @param matrix Sequence of data
 #' @return A htest object with pvalues and statistics
-sign.test <- function(matrix){
-  if(length(dim(matrix)) == 1)
+binomialSign.test <- function(matrix){
+  if(length(dim(matrix)) == 1){
     java.test.object <- .jnew("javanpst.tests.oneSample.signTest.SignTest",
                               numericSequence(matrix))
-  else
+    method <- "Binomial Sign test for One Sample"
+  }
+  else{
     java.test.object <- .jnew("javanpst.tests.oneSample.signTest.SignTest",
                               dataTable(matrix))
+    method <- "Binomial Sign test"
+  }
 
   .jcall(java.test.object, "V", "doTest")
   statistic <- c("K" = .jcall(java.test.object, "D", "getK"),
@@ -452,7 +391,7 @@ sign.test <- function(matrix){
               "Asymptotic P-Value (Double tail, Y != X)" = .jcall(java.test.object, "D", "getDoublePValue"))
   htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
-                      method = "sign")
+                      method = method)
   return(htest)
 }
 
@@ -591,7 +530,7 @@ controlMedian.test <- function(matrix){
 #' @description This function performs the Median test
 #' @param matrix Matrix of data
 #' @return A htest object with pvalues and statistics
-median.test <- function(matrix){
+twoSamplesMedian.test <- function(matrix){
   java.test.object <- .jnew("javanpst.tests.twoSample.medianTest.MedianTest",
                             dataTable(matrix))
   .jcall(java.test.object, "V", "doTest")
@@ -606,6 +545,6 @@ median.test <- function(matrix){
                  asymptotic.double = .jcall(java.test.object, "D", "getDoublePValue"))
   htest <- make.htest(data.name = deparse(substitute(matrix)),
                       statistic = statistic, p.value = pvalue,
-                      method = "median")
+                      method = "Two Samples Median test")
   return(htest)
 }

@@ -139,7 +139,7 @@ pkolmogorov <- function(n, Dn){
     size <- sqrt(n)
     for(i in ncol(KolmogorovTable):1){
       if(Dn >= asymptoticValues[i]/size)
-        return(colnames(table)[i])
+        return(colnames(KolmogorovTable)[i])
     }
   }
 
